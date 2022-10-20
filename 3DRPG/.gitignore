@@ -58,3 +58,13 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+/3DRPG/Packages
+/3DRPG/Library
+/3DRPG/UserSettings
+/3DRPG/UnityPlayerStub
+/3DRPG/UnityCommon.props
+/3DRPG/ProjectSettings
+/3DRPG/obj/Debug
+/3DRPG/Logs
+/3DRPG/build/bin
+/3DRPG/.vsconfig
