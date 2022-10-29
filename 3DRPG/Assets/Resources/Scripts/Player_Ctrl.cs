@@ -112,7 +112,6 @@ public class Player_Ctrl : MonoBehaviour
 
     bool Attack()
     {
-        
 
         //Debug.Log("Check");
         if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle_SwordShield") || animator.GetCurrentAnimatorStateInfo(0).IsName("Run_SwordShield"))

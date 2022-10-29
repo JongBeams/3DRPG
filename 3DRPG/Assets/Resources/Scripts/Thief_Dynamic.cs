@@ -201,7 +201,7 @@ public class Thief_Dynamic : MonoBehaviour
                     {
                         hitcol[0].GetComponent<Enemy_Ctrl>().GetDamage(CharStatus.Damage*2);
                         m_bBackPos = true;
-                        Debug.Log("BackHit");
+                        //Debug.Log("BackHit");
                     }
                     else
                     {
@@ -306,7 +306,7 @@ public class Thief_Dynamic : MonoBehaviour
                     {
                         hitcol[0].GetComponent<Enemy_Ctrl>().GetDamage(CharStatus.Damage * 4);
                         m_bBackPos = true;
-                        Debug.Log("BackHit");
+                        //Debug.Log("BackHit");
                     }
                     else
                     {
@@ -315,7 +315,7 @@ public class Thief_Dynamic : MonoBehaviour
                     }
 
 
-                    Debug.Log(hitcol[0].GetComponent<Enemy_Ctrl>().m_nEnemy_HP);
+                    //Debug.Log(hitcol[0].GetComponent<Enemy_Ctrl>().m_nEnemy_HP);
                 }
 
 

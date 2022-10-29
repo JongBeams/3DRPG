@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Char_Status : MonoBehaviour
 {
     public GameManager.CharState CS;
@@ -71,7 +72,8 @@ public class Char_Status : MonoBehaviour
             if (gameObject.layer == 9)
             {
                 m_nPlayerHP -= totalDamage;
-                CS = GameManager.CharState.Hit;
+                gameObject.GetComponent<Partner_Dynamics>().SetPartnerStatus(GameManager.CharState.Hit);
+                //CS = GameManager.CharState.Hit;
                 //if (this.gameObject.name =="Thief")
                 //{
                 //    Thief_Dynamic td =GetComponent<Thief_Dynamic>();

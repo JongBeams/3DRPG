@@ -10,10 +10,17 @@ public class HealerBullet : MonoBehaviour
 
     public ParticleSystem Explosion;
 
+    int Damage=0;
+
     public void SelectTarget(GameObject _Target)
     {
         Target = _Target;
 
+    }
+
+    public void SetDamage(int _Damage)
+    {
+        Damage = _Damage;
     }
 
     // Start is called before the first frame update
@@ -48,7 +55,7 @@ public class HealerBullet : MonoBehaviour
         {
             this.gameObject.GetComponent<MeshRenderer>().enabled = false;
             Explosion.Play();
-            other.gameObject.GetComponent<Enemy_Ctrl>().GetDamage(2);
+            other.gameObject.GetComponent<Enemy_Ctrl>().GetDamage(Damage);
             Destroy(this.gameObject, 1f);
 
         }

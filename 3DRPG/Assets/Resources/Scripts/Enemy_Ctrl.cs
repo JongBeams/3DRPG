@@ -88,7 +88,7 @@ public class Enemy_Ctrl : MonoBehaviour
             count++;
         }
 
-        Debug.Log(i+","+count + "," + hitcol.Length);
+        //Debug.Log(i+","+count + "," + hitcol.Length);
 
         if (i == hitcol.Length)
         {
@@ -320,7 +320,7 @@ public class Enemy_Ctrl : MonoBehaviour
                 //Debug.Log(hitcol[0].gameObject);
                 if (hitcol.Length != 0)
                 {
-                    Debug.Log(hitcol[0].gameObject);
+                    //Debug.Log(hitcol[0].gameObject);
                     hitcol[0].GetComponent<Char_Status>().GetDamage(9);
 
                 }
@@ -441,7 +441,7 @@ public class Enemy_Ctrl : MonoBehaviour
                     float angle = Vector3.Angle(targetDir, this.transform.forward);
                     if (angle <= 35)
                     {
-                        Debug.Log(angle+""+ hitcol[count].gameObject.name);
+                        //Debug.Log(angle+""+ hitcol[count].gameObject.name);
                         hitcol[count].gameObject.GetComponent<Char_Status>().GetDamage(10);
                     }
 

@@ -41,6 +41,8 @@ public class Parter_Dynamic : MonoBehaviour
         PartnerTarget = null;
         objShootingPoint = this.transform.GetChild(2).gameObject;
         CharStatus.setPlayerStatus(20,150,3,2,0);
+
+        
     }
 
     private void OnDrawGizmos()

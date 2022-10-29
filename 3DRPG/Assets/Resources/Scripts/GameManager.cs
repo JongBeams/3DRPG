@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
         Hit,
         Death,
         Stay,
+        Delay,
     }
 
    
@@ -39,10 +40,6 @@ public class GameManager : MonoBehaviour
         FireBall,
         FireBreath,
     }
-
-
-   
-
 
 
     public static GameManager instance;
@@ -68,6 +65,10 @@ public class GameManager : MonoBehaviour
     public Slider PlayerSkillRCoolTime;
 
 
+    //Manager
+    SkillManager SM;
+
+
     //Mouse
     public GameObject MBTarget;
     public Vector3 MBPoint;
@@ -86,6 +87,14 @@ public class GameManager : MonoBehaviour
     public GameObject objGameEnd;
     public Text objGameEndMessage;
     bool m_bGameEnd = false;
+
+
+    //get
+    public SkillManager getSM()
+    {
+        return SM;
+    }
+
 
     void MouseTargetRay()
     {
@@ -139,6 +148,9 @@ public class GameManager : MonoBehaviour
     public void GoMain()
     {
         SceneManager.LoadScene("MainScence");
+        
+
+
     }
 
 
@@ -358,8 +370,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         EnemyHPBar.maxValue = Enemy.GetComponent<Enemy_Ctrl>().m_nEnemy_HPMax;
+        SM = this.GetComponent<SkillManager>();
         
-
     }
 
     // Update is called once per frame
