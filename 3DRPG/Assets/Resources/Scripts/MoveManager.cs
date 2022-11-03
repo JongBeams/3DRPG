@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public static class MoveManager 
 {
-
+    //리스트 이용
 
     public static void SetMove(int _id, Partner_Dynamics _PD)
     {
@@ -14,7 +15,7 @@ public static class MoveManager
                 HealerMoving(_id,_PD);
                 break;
             case 1:
-                HealerMoving(_id, _PD);
+                ThiefMoving(_id, _PD);
                 break;
         }
     }
@@ -70,8 +71,8 @@ public static class MoveManager
             }
             else
             {
-                //PD.SetPartnerStatus(GameManager.CharState.Attack);
-                AlgorithmManager.SetAlgorithm(_id,_PD);
+                PD.SetPartnerStatus(GameManager.CharState.Attack);
+                //AlgorithmManager.SetAlgorithm(_id,_PD);
                 return false;
             }
         }
@@ -97,7 +98,6 @@ public static class MoveManager
 
     static bool ThiefMoving(int _id, Partner_Dynamics _PD)
     {
-
 
         //파트너 정보
         Partner_Dynamics PD = _PD;

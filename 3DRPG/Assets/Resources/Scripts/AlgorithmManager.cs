@@ -13,7 +13,7 @@ public static class AlgorithmManager
                 HealerPatternSetting(_PD);
                 break;
             case 1:
-                HealerPatternSetting(_PD);
+                ThiefPatternSetting(_PD);
                 break;
 
         }
@@ -50,18 +50,20 @@ public static class AlgorithmManager
         //    charstatus.CS = GameManager.CharState.Stay;
         //}
 
+
         //탐색 콜라이더 선별
         while (count < hitcol.Length)
         {
             if (hitcol[count].gameObject.layer == 6 || hitcol[count].gameObject.layer == 9)// 플레이어 또는 동료일때
             {
-                if (hitcol[count].gameObject.GetComponent<Char_Status>().m_nPlayerHP <= hitcol[count].gameObject.GetComponent<Char_Status>().m_nPlayerHPMax / 2)//체력이 반이하일때
+                Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
+                if (cs.m_nPlayerHP <= cs.m_nPlayerHPMax / 2 && cs.CS!=GameManager.CharState.Death)//체력이 반이하일때
                 {
                     if (charstatus.m_nPlayerMP >= 50 && PD.getSkill1On())// 스킬 사용가능 여부 확인
                     {
                         PD.SetObjTarget(hitcol[count].gameObject);// 타겟지정
                         Target = hitcol[count].gameObject;
-                        PD.setCheck02(false);//아군 체크
+                        PD.setCheck02(false);//아군 체크 (적이 아니다)
                         break;
                     }
 
@@ -72,7 +74,7 @@ public static class AlgorithmManager
                 PD.SetObjTarget(hitcol[count].gameObject);
                 Target = hitcol[count].gameObject;
                 //PartnerTarget = hitcol[count].gameObject;
-                PD.setCheck02(true);
+                PD.setCheck02(true);// 적 체크
                 //setEnemy = true;
             }
             count++;
@@ -162,16 +164,17 @@ public static class AlgorithmManager
         GameObject TargetObj = PD.getObjTarget();
 
 
-         // 범위 탐색
+
+        // 범위 탐색
         int m_nMask = 0;
-        m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner")) | 1 << (LayerMask.NameToLayer("Enemy"));
+        m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
         Collider[] hitcol = Physics.OverlapSphere(PD.gameObject.transform.position, 30f, m_nMask);
-        int count = 0;
+
 
         //공격 딜레이 타임
         PD.setAttackDelayTimer(PD.getAttackDelayTime());
-
-
+        //타겟지정
+        GameObject Target = null;
 
         //if (hitcol[0].GetComponent<Enemy_Ctrl>().ES == GameManager.EnemyState.Death && hitcol != null&& hitcol[0].gameObject.layer==8)
         //{
@@ -180,11 +183,16 @@ public static class AlgorithmManager
 
         if (hitcol != null)
         {
-            TargetObj = hitcol[0].gameObject;
+            PD.SetObjTarget(hitcol[0].gameObject);
+            Target = hitcol[0].gameObject;
         }
 
 
-        if (Vector3.Distance(TargetObj.transform.position, PD.transform.position) > 3.5f)
+        Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, PD.gameObject.transform.position.y, Target.transform.position.z);
+        float dis = Vector3.Distance(PD.gameObject.transform.position, vecEnemyLookingPoint);
+
+
+        if (dis > 3.5f)
         {
             PD.SetPartnerStatus(GameManager.CharState.Move);
         }
@@ -205,10 +213,10 @@ public static class AlgorithmManager
 
         }
 
-        if (TargetObj == null || TargetObj.activeSelf == false)
-        {
-            PD.SetPartnerStatus(GameManager.CharState.Idle);
-        }
+        //if (Target == null || Target.activeSelf == false)
+        //{
+        //    PD.SetPartnerStatus(GameManager.CharState.Idle);
+        //}
     }
 
 
