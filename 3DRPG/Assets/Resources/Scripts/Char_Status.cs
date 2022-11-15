@@ -58,10 +58,10 @@ public class Char_Status : MonoBehaviour
 
 
     //스킬 쿨 타임
-    float m_fSkill1CoolTimer = 3;
-    float m_fSkill2CoolTimer = 10;
-    float m_fSkill3CoolTimer = 10;
-    float m_fSkill4CoolTimer = 10;
+    float m_fSkill1CoolTimer = 0;
+    float m_fSkill2CoolTimer = 0;
+    float m_fSkill3CoolTimer = 0;
+    float m_fSkill4CoolTimer = 0;
 
     //Skill 사용 가능 여부
     bool m_bSkill1On = false;
@@ -70,6 +70,14 @@ public class Char_Status : MonoBehaviour
     bool m_bSkill4On = false;
 
     bool m_bIdentitySkillOn = false;
+
+
+    //Skill 사용중 상태 체크
+    bool m_bSkill1Using = false;
+    bool m_bSkill2Using = false;
+    bool m_bSkill3Using = false;
+    bool m_bSkill4Using = false;
+
 
 
     //bool Check : 캐릭터 별 체크 사함
@@ -205,6 +213,25 @@ public class Char_Status : MonoBehaviour
     }
 
 
+    //get Skill Using Checking State
+    public bool getSkill1Using()
+    {
+        return m_bSkill1Using;
+    }
+    public bool getSkill2Using()
+    {
+        return m_bSkill2Using;
+    }
+    public bool getSkill3Using()
+    {
+        return m_bSkill3Using;
+    }
+    public bool getSkill4Using()
+    {
+        return m_bSkill4Using;
+    }
+
+
     //get bool Check
     public bool getCheck01()
     {
@@ -314,6 +341,14 @@ public class Char_Status : MonoBehaviour
     {
         m_fSkill2CoolTimer = _Timer;
     }
+    public void setSkill3CoolTimer(float _Timer)
+    {
+        m_fSkill3CoolTimer = _Timer;
+    }
+    public void setSkill4CoolTimer(float _Timer)
+    {
+        m_fSkill4CoolTimer = _Timer;
+    }
 
     //set Skill On
     public void setSkill1On(bool _check)
@@ -339,6 +374,25 @@ public class Char_Status : MonoBehaviour
     public void setIdentitySkillOn(bool _IdentitySkillOn)
     {
         m_bIdentitySkillOn = _IdentitySkillOn;
+    }
+
+
+    //set Skill Using Checking State
+    public void setSkill1Using(bool Using)
+    {
+        m_bSkill1Using = Using;
+    }
+    public void setSkill2Using(bool Using)
+    {
+        m_bSkill2Using = Using;
+    }
+    public void setSkill3Using(bool Using)
+    {
+        m_bSkill3Using = Using;
+    }
+    public void setSkill4Using(bool Using)
+    {
+        m_bSkill4Using = Using;
     }
 
 

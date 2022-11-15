@@ -39,10 +39,10 @@ public class SkillManager : MonoBehaviour
                 KnightShieldRush(_CS);
                 break;
             case 9:
-                ThiefBackStep(_CS);
+                ProtectZone(_CS);
                 break;
             case 10:
-                ThiefBackStep(_CS);
+                Taunt(_CS);
                 break;
         }
     }
@@ -367,92 +367,136 @@ public class SkillManager : MonoBehaviour
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
 
-        // 타깃 바라보기
-        Vector3 vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
-        CS.transform.LookAt(vecEnemyLookingPoint);
+        
 
-        //공격 애니메이션 조건 활성
-        animator.SetBool("Skill2", true);
-
-        float m_fRustDist = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
-
-        while (m_fRustDist < 30)
+        if (!CS.getSkill2Using())
         {
-            this.transform.Translate(Vector3.forward * CS.getSpeed() * 3.5f * Time.deltaTime);
+            // 타깃 바라보기
+            Vector3 vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
+            CS.transform.LookAt(vecEnemyLookingPoint);
 
-            int m_nMask = 0;
-            m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
-            Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 1f, m_nMask);
+            CD.setStartPos();
+            CS.setSkill2Using(true);
+        }
+        else
+        {
+            //공격 애니메이션 조건 활성
+            animator.SetBool("Skill2", true);
 
-            if (hitcol.Length != 0)
+
+            float m_fRustDist = Vector3.Distance(CS.gameObject.transform.position, CD.getStartPos());
+
+
+            if (m_fRustDist < 30)
             {
-                hitcol[0].GetComponent<Enemy_Ctrl>().GetDamage((int)(CS.getIdentityPoint() * ((m_fRustDist / 30) / 2)));
-                break;
-            }
 
-            m_fRustDist = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
+                CS.gameObject.transform.Translate(Vector3.forward * CS.getSpeed() * 3.5f * Time.deltaTime);
+
+                int m_nMask = 0;
+                m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
+                Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 1f, m_nMask);
+
+                if (hitcol.Length != 0)
+                {
+                    hitcol[0].GetComponent<Enemy_Ctrl>().GetDamage((int)(CS.getIdentityPoint() * ((m_fRustDist / 30) / 2)));
+                    CS.setSkill2Using(false);
+                    CS.setSkill2CoolTimer(7f);
+                    CS.setSkill2On(false);
+                    CD.SetCharStatus(GameManager.CharState.Idle);
+                }
+
+
+            }
+            else
+            {
+                CS.setSkill2Using(false);
+                CS.setSkill2CoolTimer(7f);
+                CS.setSkill2On(false);
+                CD.SetCharStatus(GameManager.CharState.Idle);
+            }
 
         }
 
 
 
-        CS.setSkill1CoolTimer(7f);
-        CS.setSkill1On(false);
 
 
-        //animator.Play("Idle_SwordShield");
-        //        if (CharStatus.CS == GameManager.CharState.Skill2)
-        //        {
-        //            collision.gameObject.GetComponent<Enemy_Ctrl>().GetDamage((int)(m_nPlayerShieldPoint * ((m_fRustDist / 30) / 2)));
-        //            Debug.Log("EnemyHP : " + collision.gameObject.GetComponent<Enemy_Ctrl>().m_nEnemy_HP);
-        //            Debug.Log("ShieldRush Damage : " + (int)(m_nPlayerShieldPoint * ((m_fRustDist / 30) / 2)) + ", Dist : " + m_fRustDist + "/30");
-        //        }
-        //        CharStatus.CS = GameManager.CharState.Idle;
+
+
+
+
     }
 
-    //void ProtectZone()
-    //{
+    void ProtectZone(Char_Status _CS)
+    {
+        //파트너 정보
+        Char_Status CS = _CS;
+        Animator animator = CS.getAnimator();
+        Transform AttackPos = CS.getAttackPos();
+
+        Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
+        Vector3 MousePoint = CD.getMovePoint();
+
+        // 타깃 바라보기
+        Vector3 vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
+        CS.transform.LookAt(vecEnemyLookingPoint);
+
+        //공격 애니메이션 조건 활성
+        animator.SetBool("Skill3", true);
+
+        GameObject objProtectZone = Instantiate(Resources.Load<GameObject>("Prefabs/Protectzone"), CS.gameObject.transform.position, Quaternion.identity);
+        objProtectZone.transform.parent = CS.gameObject.transform;
+        objProtectZone.GetComponent<ParticleSystem>().Play();
+        Destroy(objProtectZone,13f);
+
+        int m_nMask = 0;
+        m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
+        Collider[] hitcol = Physics.OverlapSphere(transform.position, 10f, m_nMask);
+        int count = 0;
+
+        while (count < hitcol.Length)
+        {
+            hitcol[count].gameObject.GetComponent<Char_Status>().onProtectBuff();
+            count++;
+        }
 
 
-    //    ProtectZoneEffect.Play();
-    //    int m_nMask = 0;
-    //    m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
-    //    Collider[] hitcol = Physics.OverlapSphere(transform.position, 10f, m_nMask);
-    //    int count = 0;
+        CS.setSkill3CoolTimer(15f);
+        CS.setSkill3On(false);
 
-    //    while (count < hitcol.Length)
-    //    {
-    //        hitcol[count].gameObject.GetComponent<Char_Status>().onProtectBuff();
-    //        count++;
-    //    }
+    }
 
 
+    void Taunt(Char_Status _CS)
+    {
+        //파트너 정보
+        Char_Status CS = _CS;
+        Animator animator = CS.getAnimator();
+        Transform AttackPos = CS.getAttackPos();
 
-    //    m_fESkillCoolTimer = 15f;
-    //    m_bESkillOn = false;
+        Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
+        Vector3 MousePoint = CD.getMovePoint();
 
-    //    CharStatus.CS = GameManager.CharState.Idle;
+        // 타깃 바라보기
+        Vector3 vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
+        CS.transform.LookAt(vecEnemyLookingPoint);
 
-    //}
+        //공격 애니메이션 조건 활성
+        animator.SetBool("Skill4", true);
+
+        if (GameManager.instance.MBTarget.gameObject.layer == 8)
+        {
+            GameManager.instance.MBTarget.gameObject.GetComponent<Enemy_Ctrl>().objTarget = CS.gameObject;
+            //Debug.Log("TauntTarget : " + GameManager.instance.MBTarget);
+            CS.setSkill4CoolTimer(5f);
+            CS.setSkill4On(false);
+        }
 
 
-    //void Taunt()
-    //{
+        
 
 
-    //    if (GameManager.instance.MBTarget.gameObject.layer == 8)
-    //    {
-    //        GameManager.instance.MBTarget.gameObject.GetComponent<Enemy_Ctrl>().objTarget = this.gameObject;
-    //        Debug.Log("TauntTarget : " + GameManager.instance.MBTarget);
-    //    }
-
-
-    //    m_fRSkillCoolTimer = 5f;
-    //    m_bRSkillOn = false;
-
-    //    CharStatus.CS = GameManager.CharState.Idle;
-
-    //}
+    }
 
 
 

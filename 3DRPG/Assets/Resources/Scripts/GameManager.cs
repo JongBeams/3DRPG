@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviour
 
     void CtrlPlayer()
     {
-        if (objPlayer != null || objPlayer.activeSelf != false && !m_bGameEnd)
+        if (objPlayer != null || objPlayer.activeSelf != false)
         {
             Char_Status CS = objPlayer.GetComponent<Char_Status>();
             Char_Dynamics CD = objPlayer.GetComponent<Char_Dynamics>();
@@ -241,7 +241,6 @@ public class GameManager : MonoBehaviour
 
                     if (CS.getMP() >= 20 && CS.getSkill1On())
                     {
-                        CS.UseMana(20);
                         CD.setMovePoint(MBPoint);
                         CD.SetCharStatus(CharState.Skill1);
                     }
@@ -252,7 +251,6 @@ public class GameManager : MonoBehaviour
                 {
                     if (CS.getMP() >= 30 && CS.getSkill2On())
                     {
-                        CS.UseMana(30);
                         CD.setMovePoint(MBPoint);
                         CD.SetCharStatus(CharState.Skill2);
                     }
@@ -262,7 +260,6 @@ public class GameManager : MonoBehaviour
                 {
                     if (CS.getMP() >= 40 && CS.getSkill3On())
                     {
-                        CS.UseMana(40);
                         CD.setMovePoint(MBPoint);
                         CD.SetCharStatus(CharState.Skill3);
                     }
@@ -272,7 +269,6 @@ public class GameManager : MonoBehaviour
                 {
                     if (CS.getMP() >= 10 && CS.getSkill4On())
                     {
-                        CS.UseMana(10);
                         CD.setMovePoint(MBPoint);
                         CD.SetCharStatus(CharState.Skill4);
                     }
@@ -356,13 +352,15 @@ public class GameManager : MonoBehaviour
 
         MouseTargetRay();
 
-        CtrlPlayer();
+        if(!m_bGameEnd)
+            CtrlPlayer();
 
         GameEndText();
 
 
 
-        //Debug.DrawLine(objPlayer.transform.position, objPlayer.GetComponent<Player_Ctrl>().PlayerLookingPoint) ;
+        Debug.DrawLine(objPlayer.transform.position, objPlayer.GetComponent<Char_Dynamics>().getStartPos());
+
 
 
     }

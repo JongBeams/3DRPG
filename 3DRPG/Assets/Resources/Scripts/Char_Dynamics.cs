@@ -8,7 +8,7 @@ public class Char_Dynamics : MonoBehaviour
 
     Vector3 vecMovePoint = Vector3.zero;
 
-
+    Vector3 vecStartPos = Vector3.zero;
 
 
     private void OnDrawGizmos()
@@ -28,10 +28,19 @@ public class Char_Dynamics : MonoBehaviour
     {
         return vecMovePoint;
     }
+    public Vector3 getStartPos()
+    {
+        return vecStartPos;
+    }
+
     //set
     public void setMovePoint(Vector3 _MousePoint)
     {
         vecMovePoint = _MousePoint;
+    }
+    public void setStartPos()
+    {
+        vecStartPos = this.transform.position;
     }
 
     public Vector3 PlayerLookingPoint()
@@ -48,6 +57,9 @@ public class Char_Dynamics : MonoBehaviour
                 CharStatus.getAnimator().SetBool("Move", false);
                 CharStatus.getAnimator().SetBool("Attack", false);
                 CharStatus.getAnimator().SetBool("Skill1", false);
+                CharStatus.getAnimator().SetBool("Skill2", false);
+                CharStatus.getAnimator().SetBool("Skill3", false);
+                CharStatus.getAnimator().SetBool("Skill4", false);
                 CharStatus.getAnimator().SetBool("Hit", false);
                 break;
             case GameManager.CharState.Move:
@@ -99,8 +111,6 @@ public class Char_Dynamics : MonoBehaviour
 
     void UpdateCharStatus()// 지속 실행
     {
-        //Partner_Dynamics PD = this.GetComponent<Partner_Dynamics>();
-        Char_Status CS = this.GetComponent<Char_Status>();
 
 
         switch (CharStatus.getCS())
@@ -113,12 +123,12 @@ public class Char_Dynamics : MonoBehaviour
                 if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Idle") &&
                     CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                 {
-                    AlgorithmManager.SetAlgorithm(CharStatus.getID(), CS);
+                    AlgorithmManager.SetAlgorithm(CharStatus.getID(), CharStatus);
                     //Debug.Log(this.gameObject.name+","+this.gameObject.layer);
                 }
                 break;
             case GameManager.CharState.Move:
-                MoveManager.SetMove(CharStatus.getID(), CS);
+                MoveManager.SetMove(CharStatus.getID(), CharStatus);
                 break;
             case GameManager.CharState.Attack:
                 if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Attack") &&
@@ -128,34 +138,65 @@ public class Char_Dynamics : MonoBehaviour
                 }
                 break;
             case GameManager.CharState.IdentitySkill:
-                MoveManager.SetMove(CharStatus.getID(), CS);
+                MoveManager.SetMove(CharStatus.getID(), CharStatus);
                 break;
             case GameManager.CharState.Skill1:
-                if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill1") &&
-                    CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                if (CharStatus.getSkill1Using())
                 {
-                    SetCharStatus(GameManager.CharState.Idle);
+                    GameManager.instance.getSM().SetPartnerSkill(CharStatus.getSkill1ID(), CharStatus);
                 }
+                else {
+                    if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill1") &&
+                    CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                    {
+                        SetCharStatus(GameManager.CharState.Idle);
+                    }
+                }
+                
                 break;
             case GameManager.CharState.Skill2:
-                if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill2") &&
-                    CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                if (CharStatus.getSkill2Using())
                 {
-                    SetCharStatus(GameManager.CharState.Idle);
+                    GameManager.instance.getSM().SetPartnerSkill(CharStatus.getSkill2ID(), CharStatus);
                 }
+                else
+                {
+                    if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill2") &&
+                       CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                    {
+                        SetCharStatus(GameManager.CharState.Idle);
+                    }
+
+                }
+                
                 break;
             case GameManager.CharState.Skill3:
-                if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill3") &&
-                    CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                if (CharStatus.getSkill3Using())
                 {
-                    SetCharStatus(GameManager.CharState.Idle);
+                    GameManager.instance.getSM().SetPartnerSkill(CharStatus.getSkill3ID(), CharStatus);
                 }
+                else
+                {
+                    if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill3") &&
+                    CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                    {
+                        SetCharStatus(GameManager.CharState.Idle);
+                    }
+                }
+                
                 break;
             case GameManager.CharState.Skill4:
-                if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill4") &&
-                    CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                if (CharStatus.getSkill4Using())
                 {
-                    SetCharStatus(GameManager.CharState.Idle);
+                    GameManager.instance.getSM().SetPartnerSkill(CharStatus.getSkill4ID(), CharStatus);
+                }
+                else
+                {
+                    if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill4") &&
+                    CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
+                    {
+                        SetCharStatus(GameManager.CharState.Idle);
+                    }
                 }
                 break;
             case GameManager.CharState.Hit:
@@ -193,6 +234,10 @@ public class Char_Dynamics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
+
+
     }
 
     private void FixedUpdate()
