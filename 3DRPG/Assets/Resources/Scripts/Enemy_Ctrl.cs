@@ -77,7 +77,7 @@ public class Enemy_Ctrl : MonoBehaviour
 
         while (count<hitcol.Length)
         {
-            if (hitcol[count].GetComponent<Char_Status>().CS != GameManager.CharState.Death)
+            if (hitcol[count].GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
             {
                 break;
             }
@@ -99,7 +99,7 @@ public class Enemy_Ctrl : MonoBehaviour
             while (true)
             {
                 objTarget = hitcol[Random.Range(0, hitcol.Length)].gameObject;
-                if (objTarget.GetComponent<Char_Status>().CS != GameManager.CharState.Death)
+                if (objTarget.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
                 {
                     break;
                 }
@@ -530,7 +530,7 @@ public class Enemy_Ctrl : MonoBehaviour
                     
                         if (angle <= 20)
                         {
-                            Debug.Log(angle + "" + hitcol[count].gameObject.name);
+                            //Debug.Log(angle + "" + hitcol[count].gameObject.name);
                             hitcol[count].gameObject.GetComponent<Char_Status>().GetDamage(10);
                         }
 

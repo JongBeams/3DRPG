@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
         Idle,
         Move,
         Attack,
-        Skill0,
+        IdentitySkill,
         Skill1,
         Skill2,
         Skill3,
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
     //Keyboard
     public bool m_bKeySpaceOn = false;
 
-    public GameObject Enemy;
+    public GameObject objEnemy;
 
     public Slider EnemyHPBar;
 
@@ -93,6 +93,31 @@ public class GameManager : MonoBehaviour
     public SkillManager getSM()
     {
         return SM;
+    }
+    public bool getGameEnd()
+    {
+        return m_bGameEnd;
+    }
+
+
+
+    private void Awake()
+    {
+        if (GameManager.instance == null)
+            GameManager.instance = this;
+
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        EnemyHPBar.maxValue = objEnemy.GetComponent<Enemy_Ctrl>().m_nEnemy_HPMax;
+        SM = this.GetComponent<SkillManager>();
+
+        objPlayer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPlayerDB[0]);
+        objHealer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[0]);
+        objThief.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[1]);
+
     }
 
 
@@ -153,226 +178,176 @@ public class GameManager : MonoBehaviour
 
     }
 
-
-
-    void ClickActive()
+    void CtrlPlayer()
     {
-        if (objPlayer != null||objPlayer.activeSelf!=false||!m_bGameEnd)
+        if (objPlayer != null || objPlayer.activeSelf != false && !m_bGameEnd)
         {
-            Player_Ctrl PC = objPlayer.GetComponent<Player_Ctrl>();
             Char_Status CS = objPlayer.GetComponent<Char_Status>();
-            if (CS.CS == CharState.Idle || CS.CS == CharState.Move || CS.CS == CharState.Skill0)
+            Char_Dynamics CD = objPlayer.GetComponent<Char_Dynamics>();
+
+            //CS.SetObjTarget(objEnemy);
+            // 키 조작 조건
+            /*
+            이동 : 대기, 이동, 고유
+            공격 : 대기, 이동
+            고유 : 대기, 이동, 고유
+            스킬1 : 대기, 이동 
+            스킬2 : 대기, 이동
+            스킬3 : 대기, 이동
+            스킬4 : 대기, 이동
+            
+            이동 = 고유 같은 취급
+             */
+
+            if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move || CS.getCS() == CharState.IdentitySkill)
             {
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    if (PC.m_nPlayerShieldPoint>0)
+                    if (CS.getIdentityPoint() > 0)
                     {
-                        m_bKeySpaceOn = true;
-                        if (CS.CS == CharState.Move)
-                        {
-                            PC.m_bGuardMoving = true;
-                        }
-                        //PC.PS = PlayerState.Idle;
-
-                        //PC.GetPlayerLP(PlayerLookingPoint);
-                        PC.gameObject.transform.LookAt(MBPoint);
-
-                        CS.CS = CharState.Skill0;
+                        CD.setMovePoint(MBPoint);
+                        CD.SetCharStatus(CharState.IdentitySkill);
                     }
-                    
 
                 }
                 if (Input.GetKeyUp(KeyCode.Space))
                 {
-                    m_bKeySpaceOn = false;
-                    CS.CS = CharState.Idle;
+                    CD.SetCharStatus(CharState.Idle);
                 }
 
 
                 if (Input.GetMouseButtonDown(1))
                 {
-                    if (CS.CS == CharState.Skill0 && PC.m_nPlayerShieldPoint != 0)
+                    CD.setMovePoint(MBPoint);
+                    if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move || CS.getIdentityPoint() == 0)
                     {
-                        //MouseMovingPointRay();
-
-                        PC.GetPlayerLP(MBPoint);
-                        PC.m_bGuardMoving = true;
-                        //PC.PS = PlayerState.OnShield;
-                    }
-                    else
-                    {
-                        //MouseMovingPointRay();
-                        CS.CS = CharState.Idle;
-                       
-                        PC.GetPlayerLP(MBPoint);
-                        CS.CS = CharState.Move;
+                        CD.SetCharStatus(CharState.Move);
                     }
 
                 }
 
-                if (!m_bKeySpaceOn)
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    
+                    CD.setMovePoint(MBPoint);
+                    CD.SetCharStatus(CharState.Attack);
+
+                }
+
+                if (Input.GetKeyDown(KeyCode.Q))
                 {
 
-
-                    if (Input.GetMouseButtonDown(0))
+                    if (CS.getMP() >= 20 && CS.getSkill1On())
                     {
-                        if (CS.CS == CharState.Idle || CS.CS == CharState.Move)
-                        {
-
-                            CS.CS = CharState.Idle;
-                            //Debug.Log("Check");
-                           
-                            PC.GetPlayerLP(MBPoint);
-
-                            CS.CS = CharState.Attack;
-                        }
-
+                        CS.UseMana(20);
+                        CD.setMovePoint(MBPoint);
+                        CD.SetCharStatus(CharState.Skill1);
                     }
-
-                    if (Input.GetKeyDown(KeyCode.Q))
-                    {
-                        if (CS.CS == CharState.Idle || CS.CS == CharState.Move)
-                        {
-
-                            CS.CS = CharState.Idle;
-                            //Debug.Log("Check");
-                           
-                            PC.GetPlayerLP(MBPoint);
-                           
-                            if(CS.m_nPlayerMP >= 20&&PC.m_bQSkillOn)
-                            {
-                                CS.UseMana(20);
-                                CS.CS = CharState.Skill1;
-                            }
-                            
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.W))
-                    {
-                        if (CS.CS == CharState.Idle || CS.CS == CharState.Move)
-                        {
-
-                            CS.CS = CharState.Idle;
-                            //Debug.Log("Check");
-                           
-                            PC.GetPlayerLP(MBPoint);
-
-                            
-                            if (CS.m_nPlayerMP>=30 && PC.m_bWSkillOn)
-                            {
-                                CS.UseMana(30);
-                                CS.CS = CharState.Skill2;
-                            }
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.E))
-                    {
-                        if (CS.CS == CharState.Idle || CS.CS == CharState.Move)
-                        {
-
-                            CS.CS = CharState.Idle;
-                            //Debug.Log("Check");
-                            
-                            PC.GetPlayerLP(MBPoint);
-
-                            
-                            if (CS.m_nPlayerMP >= 40 && PC.m_bESkillOn)
-                            {
-                                CS.UseMana(40);
-                                CS.CS = CharState.Skill3;
-                            }
-                        }
-                    }
-
-                    if (Input.GetKeyDown(KeyCode.R))
-                    {
-                        if (CS.CS == CharState.Idle || CS.CS == CharState.Move)
-                        {
-
-                            CS.CS = CharState.Idle;
-                            //Debug.Log("Check");
-                            
-                            PC.GetPlayerLP(MBPoint);
-
-                            
-                            if (CS.m_nPlayerMP >= 10 && PC.m_bRSkillOn)
-                            {
-                                CS.UseMana(10);
-                                CS.CS = CharState.Skill4;
-                            }
-                        }
-                    }
-
-
+                    
                 }
 
+                if (Input.GetKeyDown(KeyCode.W))
+                {
+                    if (CS.getMP() >= 30 && CS.getSkill2On())
+                    {
+                        CS.UseMana(30);
+                        CD.setMovePoint(MBPoint);
+                        CD.SetCharStatus(CharState.Skill2);
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (CS.getMP() >= 40 && CS.getSkill3On())
+                    {
+                        CS.UseMana(40);
+                        CD.setMovePoint(MBPoint);
+                        CD.SetCharStatus(CharState.Skill3);
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    if (CS.getMP() >= 10 && CS.getSkill4On())
+                    {
+                        CS.UseMana(10);
+                        CD.setMovePoint(MBPoint);
+                        CD.SetCharStatus(CharState.Skill4);
+                    }
+                }
+
+
+
+
             }
-
-            
-
-
 
         }
     }
 
-
     void HPMPBar()
     {
+        Char_Status CS = objPlayer.GetComponent<Char_Status>();
 
-            //Debug.Log("check");
-            PlayerHPBar.value = objPlayer.GetComponent<Char_Status>().m_nPlayerHP;
-            PlayerMPBar.value = objPlayer.GetComponent<Char_Status>().m_nPlayerMP;
-            PlayerShieldBar.value = objPlayer.GetComponent<Player_Ctrl>().m_nPlayerShieldPoint;
-            PlayerHPBar.maxValue = objPlayer.GetComponent<Char_Status>().m_nPlayerHPMax;
-            PlayerMPBar.maxValue = objPlayer.GetComponent<Char_Status>().m_nPlayerMPMax;
-            PlayerShieldBar.maxValue = objPlayer.GetComponent<Player_Ctrl>().m_nPlayerShieldPointMax;
+        //Debug.Log("check");
+        PlayerHPBar.value = CS.getHP();
+        PlayerMPBar.value = CS.getMP();
+        PlayerShieldBar.value = CS.getIdentityPoint();
+        PlayerHPBar.maxValue = CS.getHPMax();
+        PlayerMPBar.maxValue = CS.getMPMax();
+        PlayerShieldBar.maxValue = CS.getIdentityPointMax();
 
-            PlayerSkillQCoolTime.value = 100 - objPlayer.GetComponent<Player_Ctrl>().m_fQSkillCoolTimer / 5 * 100;
-            PlayerSkillWCoolTime.value = 100 - objPlayer.GetComponent<Player_Ctrl>().m_fWSkillCoolTimer / 7 * 100;
-            PlayerSkillECoolTime.value = 100 - objPlayer.GetComponent<Player_Ctrl>().m_fESkillCoolTimer / 15 * 100;
-            PlayerSkillRCoolTime.value = 100 - objPlayer.GetComponent<Player_Ctrl>().m_fRSkillCoolTimer / 5 * 100;
+        PlayerSkillQCoolTime.value = 100 - CS.getSkill1CoolTimer() / 5 * 100;
+        PlayerSkillWCoolTime.value = 100 - CS.getSkill2CoolTimer() / 7 * 100;
+        PlayerSkillECoolTime.value = 100 - CS.getSkill3CoolTimer() / 15 * 100;
+        PlayerSkillRCoolTime.value = 100 - CS.getSkill4CoolTimer() / 5 * 100;
 
-            PlayerSkillQCoolTime.maxValue = 100;
-            PlayerSkillWCoolTime.maxValue = 100;
-            PlayerSkillECoolTime.maxValue = 100;
-            PlayerSkillRCoolTime.maxValue = 100;
+        PlayerSkillQCoolTime.maxValue = 100;
+        PlayerSkillWCoolTime.maxValue = 100;
+        PlayerSkillECoolTime.maxValue = 100;
+        PlayerSkillRCoolTime.maxValue = 100;
 
-            //Debug.Log("check");
-            HealerHPBar.value = objHealer.GetComponent<Char_Status>().m_nPlayerHP;
-            HealerMPBar.value = objHealer.GetComponent<Char_Status>().m_nPlayerMP;
-            HealerHPBar.maxValue = objHealer.GetComponent<Char_Status>().m_nPlayerHPMax;
-            HealerMPBar.maxValue = objHealer.GetComponent<Char_Status>().m_nPlayerMPMax;
+        //Debug.Log("check");
+        HealerHPBar.value = objHealer.GetComponent<Char_Status>().getHP();
+        HealerMPBar.value = objHealer.GetComponent<Char_Status>().getMP();
+        HealerHPBar.maxValue = objHealer.GetComponent<Char_Status>().getHPMax();
+        HealerMPBar.maxValue = objHealer.GetComponent<Char_Status>().getMPMax();
 
-   
-            //Debug.Log("check");
-            ThiefHPBar.value = objThief.GetComponent<Char_Status>().m_nPlayerHP;
-            ThiefMPBar.value = objThief.GetComponent<Char_Status>().m_nPlayerMP;
-            ThiefHPBar.maxValue = objThief.GetComponent<Char_Status>().m_nPlayerHPMax;
-            ThiefMPBar.maxValue = objThief.GetComponent<Char_Status>().m_nPlayerMPMax;
 
-            EnemyHPBar.value = Enemy.GetComponent<Enemy_Ctrl>().m_nEnemy_HP;
-            Target.text = "Target : " + Enemy.GetComponent<Enemy_Ctrl>().objTarget.name + "\n NextPattern : " + Enemy.GetComponent<Enemy_Ctrl>().EA;
+        //Debug.Log("check");
+        ThiefHPBar.value = objThief.GetComponent<Char_Status>().getHP();
+        ThiefMPBar.value = objThief.GetComponent<Char_Status>().getMP();
+        ThiefHPBar.maxValue = objThief.GetComponent<Char_Status>().getHPMax();
+        ThiefMPBar.maxValue = objThief.GetComponent<Char_Status>().getMPMax();
+
+        EnemyHPBar.value = objEnemy.GetComponent<Enemy_Ctrl>().m_nEnemy_HP;
+            Target.text = "Target : " + objEnemy.GetComponent<Enemy_Ctrl>().objTarget.name + "\n NextPattern : " + objEnemy.GetComponent<Enemy_Ctrl>().EA;
     }
 
 
-
-
-    private void Awake()
+     void GameEndText()
     {
-        if (GameManager.instance == null)
-            GameManager.instance = this;
+        if (objPlayer.GetComponent<Char_Status>().getCS() == CharState.Death &&
+            objHealer.GetComponent<Char_Status>().getCS() == CharState.Death &&
+            objThief.GetComponent<Char_Status>().getCS() == CharState.Death)
+        {
+            m_bGameEnd = true;
+            objGameEnd.SetActive(true);
+            objGameEndMessage.text = "Game Over";
+        }
+        if (objEnemy.GetComponent<Enemy_Ctrl>().ES == EnemyState.Death)
+        {
+            m_bGameEnd = true;
+            objGameEnd.SetActive(true);
+            objGameEndMessage.text = "Game Clear";
+        }
+    }
 
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        EnemyHPBar.maxValue = Enemy.GetComponent<Enemy_Ctrl>().m_nEnemy_HPMax;
-        SM = this.GetComponent<SkillManager>();
-        
-    }
+
+
+
+
 
     // Update is called once per frame
     void Update()
@@ -381,27 +356,13 @@ public class GameManager : MonoBehaviour
 
         MouseTargetRay();
 
-        ClickActive();
+        CtrlPlayer();
 
-        if (objPlayer.GetComponent<Char_Status>().CS == CharState.Death &&
-            objHealer.GetComponent<Char_Status>().CS == CharState.Death &&
-            objThief.GetComponent<Char_Status>().CS == CharState.Death)
-        {
-            m_bGameEnd = true;
-            objGameEnd.SetActive(true);
-            objGameEndMessage.text = "Game Over";
-        }
-        if (Enemy.GetComponent<Enemy_Ctrl>().ES==EnemyState.Death)
-        {
-            m_bGameEnd = true;
-            objGameEnd.SetActive(true);
-            objGameEndMessage.text = "Game Clear";
-        }
+        GameEndText();
 
-        
-        
 
-        Debug.DrawLine(objPlayer.transform.position, objPlayer.GetComponent<Player_Ctrl>().PlayerLookingPoint) ;
+
+        //Debug.DrawLine(objPlayer.transform.position, objPlayer.GetComponent<Player_Ctrl>().PlayerLookingPoint) ;
 
 
     }

@@ -29,7 +29,21 @@ public class SkillManager : MonoBehaviour
             case 5:
                 ThiefBackStep(_CS);
                 break;
-
+            case 6:
+                KnightBaseAttack(_CS);
+                break;
+            case 7:
+                KnightShieldBash(_CS);
+                break;
+            case 8:
+                KnightShieldRush(_CS);
+                break;
+            case 9:
+                ThiefBackStep(_CS);
+                break;
+            case 10:
+                ThiefBackStep(_CS);
+                break;
         }
     }
 
@@ -49,7 +63,7 @@ public class SkillManager : MonoBehaviour
         CS.transform.LookAt(vecEnemyLookingPoint);
 
         //공격 애니메이션 조건 활성
-        animator.SetBool("Skill0", true);
+        animator.SetBool("Attack", true);
 
         //원거리 공격 투사체 생성
         GameObject objFireBall = Instantiate(Resources.Load<GameObject>("Prefabs/HealerBullet"), AttackPos.position, Quaternion.identity);
@@ -57,7 +71,7 @@ public class SkillManager : MonoBehaviour
         objFireBall.GetComponent<HealerBullet>().SetDamage(CS.getATK());
 
         //애니메이션이 끝날때까지 기다리기
-        //PD.setDelayAniName("Skill0");
+        //PD.setDelayAniName("Attack");
         //PD.SetPartnerStatus(GameManager.CharState.Delay);
         //charstatus.CS = GameManager.CharState.Delay;
 
@@ -151,12 +165,12 @@ public class SkillManager : MonoBehaviour
         CS.transform.LookAt(vecEnemyLookingPoint);
 
         //공격 애니메이션 조건 활성
-        animator.SetBool("Skill0", true);
+        animator.SetBool("Attack", true);
 
         //공격 범위
         int m_nMask = 0;
         m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
-        Collider[] hitcol = Physics.OverlapBox(AttackPos.transform.position, new Vector3(1, 1, 1),
+        Collider[] hitcol = Physics.OverlapBox(AttackPos.position, new Vector3(1, 1, 1),
             Quaternion.Euler(new Vector3(0, GetAngle(CS.transform.position, vecEnemyLookingPoint), 0)), m_nMask);
 
         if (hitcol.Length != 0)
@@ -240,7 +254,7 @@ public class SkillManager : MonoBehaviour
         //공격 범위
         int m_nMask = 0;
         m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
-        Collider[] hitcol = Physics.OverlapBox(AttackPos.transform.position, new Vector3(1, 1, 1),
+        Collider[] hitcol = Physics.OverlapBox(AttackPos.position, new Vector3(1, 1, 1),
             Quaternion.Euler(new Vector3(0, GetAngle(CS.transform.position, vecEnemyLookingPoint), 0)), m_nMask);
 
         if (hitcol.Length != 0)
@@ -272,47 +286,206 @@ public class SkillManager : MonoBehaviour
     }
 
 
-    //bool Attack()
+    void KnightBaseAttack(Char_Status _CS)
+    {
+        //파트너 정보
+        Char_Status CS = _CS;
+        Animator animator = CS.getAnimator();
+        Transform AttackPos = CS.getAttackPos();
+
+        Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
+        Vector3 MousePoint = CD.getMovePoint();
+
+        // 타깃 바라보기
+        Vector3 vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
+        CS.transform.LookAt(vecEnemyLookingPoint);
+
+        //공격 애니메이션 조건 활성
+        animator.SetBool("Attack", true);
+
+        int m_nMask = 0;
+        m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
+        Collider[] hitcol = Physics.OverlapBox(AttackPos.position, new Vector3(1, 1, 1),
+            Quaternion.Euler(new Vector3(0, GetAngle(CS.transform.position, vecEnemyLookingPoint), 0)), m_nMask);
+
+        //Debug.Log(hitcol[0].gameObject);
+        if (hitcol.Length != 0)
+        {
+            hitcol[0].GetComponent<Enemy_Ctrl>().GetDamage(CS.getATK());
+            //Debug.Log(hitcol[0].GetComponent<Enemy_Ctrl>().m_nEnemy_HP);
+        }
+
+
+    }
+
+
+    void KnightShieldBash(Char_Status _CS)
+    {
+        //파트너 정보
+        Char_Status CS = _CS;
+        Animator animator = CS.getAnimator();
+        Transform AttackPos = CS.getAttackPos();
+
+        Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
+        Vector3 MousePoint = CD.getMovePoint();
+
+        // 타깃 바라보기
+        Vector3 vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
+        CS.transform.LookAt(vecEnemyLookingPoint);
+
+        //공격 애니메이션 조건 활성
+        animator.SetBool("Skill1", true);
+
+
+        int m_nMask = 0;
+        m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
+        Collider[] hitcol = Physics.OverlapBox(AttackPos.position, new Vector3(1, 1, 1),
+            Quaternion.Euler(new Vector3(0, GetAngle(CS.transform.position, vecEnemyLookingPoint), 0)), m_nMask);
+
+        //Debug.Log(hitcol[0].gameObject);
+        if (hitcol.Length != 0)
+        {
+            hitcol[0].GetComponent<Enemy_Ctrl>().GetDamage((int)(CS.getIdentityPoint() / 3));
+            //Debug.Log(hitcol[0].GetComponent<Enemy_Ctrl>().m_nEnemy_HP);
+        }
+
+        CS.setSkill1CoolTimer(5f);
+        CS.setSkill1On(false);
+
+        
+
+    }
+
+
+    void KnightShieldRush(Char_Status _CS)
+    {
+        //파트너 정보
+        Char_Status CS = _CS;
+        Animator animator = CS.getAnimator();
+        Transform AttackPos = CS.getAttackPos();
+
+        Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
+        Vector3 MousePoint = CD.getMovePoint();
+
+        // 타깃 바라보기
+        Vector3 vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
+        CS.transform.LookAt(vecEnemyLookingPoint);
+
+        //공격 애니메이션 조건 활성
+        animator.SetBool("Skill2", true);
+
+        float m_fRustDist = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
+
+        while (m_fRustDist < 30)
+        {
+            this.transform.Translate(Vector3.forward * CS.getSpeed() * 3.5f * Time.deltaTime);
+
+            int m_nMask = 0;
+            m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
+            Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 1f, m_nMask);
+
+            if (hitcol.Length != 0)
+            {
+                hitcol[0].GetComponent<Enemy_Ctrl>().GetDamage((int)(CS.getIdentityPoint() * ((m_fRustDist / 30) / 2)));
+                break;
+            }
+
+            m_fRustDist = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
+
+        }
+
+
+
+        CS.setSkill1CoolTimer(7f);
+        CS.setSkill1On(false);
+
+
+        //animator.Play("Idle_SwordShield");
+        //        if (CharStatus.CS == GameManager.CharState.Skill2)
+        //        {
+        //            collision.gameObject.GetComponent<Enemy_Ctrl>().GetDamage((int)(m_nPlayerShieldPoint * ((m_fRustDist / 30) / 2)));
+        //            Debug.Log("EnemyHP : " + collision.gameObject.GetComponent<Enemy_Ctrl>().m_nEnemy_HP);
+        //            Debug.Log("ShieldRush Damage : " + (int)(m_nPlayerShieldPoint * ((m_fRustDist / 30) / 2)) + ", Dist : " + m_fRustDist + "/30");
+        //        }
+        //        CharStatus.CS = GameManager.CharState.Idle;
+    }
+
+    //void ProtectZone()
     //{
 
-    //    //Debug.Log("Check");
-    //    if (animator.GetCurrentAnimatorStateInfo(0).IsName("Idle_SwordShield") || animator.GetCurrentAnimatorStateInfo(0).IsName("Run_SwordShield"))
+
+    //    ProtectZoneEffect.Play();
+    //    int m_nMask = 0;
+    //    m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
+    //    Collider[] hitcol = Physics.OverlapSphere(transform.position, 10f, m_nMask);
+    //    int count = 0;
+
+    //    while (count < hitcol.Length)
     //    {
-    //        Vector3 AttackArea = PlayerLookingPoint - this.transform.position;
-    //        transform.LookAt(PlayerLookingPoint);
-    //        animator.Play("NormalAttack01_SwordShield");
-
-
-    //        int m_nMask = 0;
-    //        m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
-    //        Collider[] hitcol = Physics.OverlapBox(objMeleeAttackPoint.transform.position, new Vector3(1, 1, 1),
-    //            Quaternion.Euler(new Vector3(0, GetAngle(this.transform.position, PlayerLookingPoint), 0)), m_nMask);
-
-    //        //Debug.Log(hitcol[0].gameObject);
-    //        if (hitcol.Length != 0)
-    //        {
-    //            hitcol[0].GetComponent<Enemy_Ctrl>().GetDamage(CharStatus.Damage);
-    //            //Debug.Log(hitcol[0].GetComponent<Enemy_Ctrl>().m_nEnemy_HP);
-    //        }
-
-    //        return true;
-    //    }
-    //    else if (animator.GetCurrentAnimatorStateInfo(0).IsName("NormalAttack01_SwordShield") &&
-    //        animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
-    //    {
-    //        return true;
+    //        hitcol[count].gameObject.GetComponent<Char_Status>().onProtectBuff();
+    //        count++;
     //    }
 
-    //    //Vector3 AttackArea = PlayerLookingPoint - this.transform.position;
-    //    //AttackRange.transform.position = transform.position + AttackArea.normalized+new Vector3(0,0.5f,0);
-    //    //AttackRange.transform.rotation = Quaternion.Euler(new Vector3(0, GetAngle(this.transform.position, PlayerLookingPoint), 0));
 
 
-    //    //animator.Play("Idle_SwordShield");
+    //    m_fESkillCoolTimer = 15f;
+    //    m_bESkillOn = false;
+
     //    CharStatus.CS = GameManager.CharState.Idle;
-    //    return false;
 
     //}
+
+
+    //void Taunt()
+    //{
+
+
+    //    if (GameManager.instance.MBTarget.gameObject.layer == 8)
+    //    {
+    //        GameManager.instance.MBTarget.gameObject.GetComponent<Enemy_Ctrl>().objTarget = this.gameObject;
+    //        Debug.Log("TauntTarget : " + GameManager.instance.MBTarget);
+    //    }
+
+
+    //    m_fRSkillCoolTimer = 5f;
+    //    m_bRSkillOn = false;
+
+    //    CharStatus.CS = GameManager.CharState.Idle;
+
+    //}
+
+
+
+    //bool OnShield()
+    //{
+    //    animator.Play("Walk_SwordShield");
+    //    if (m_bGuardMoving)
+    //    {
+    //        float dis = Vector3.Distance(transform.position, PlayerLookingPoint);
+    //        if (dis >= 0.02f)
+    //        {
+
+    //            transform.position = Vector3.MoveTowards(transform.position, PlayerLookingPoint, CharStatus.getSpeed() / 2 * Time.deltaTime);
+
+    //            return true;
+    //        }
+    //        m_bGuardMoving = false;
+    //        return true;
+    //        //animator.Play("Idle_SwordShield");
+    //    }
+    //    else
+    //    {
+    //        return true;
+    //    }
+
+
+    //    return false;
+    //}
+
+
+
+
+
 
 
 }

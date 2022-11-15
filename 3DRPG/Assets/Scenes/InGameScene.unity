@@ -717,6 +717,7 @@ GameObject:
   m_Component:
   - component: {fileID: 406626313}
   - component: {fileID: 406626314}
+  - component: {fileID: 406626317}
   - component: {fileID: 406626316}
   m_Layer: 0
   m_Name: GameManager
@@ -769,7 +770,7 @@ MonoBehaviour:
   MBTarget: {fileID: 0}
   MBPoint: {x: 0, y: 0, z: 0}
   m_bKeySpaceOn: 0
-  Enemy: {fileID: 1933548931}
+  objEnemy: {fileID: 1933548931}
   EnemyHPBar: {fileID: 1803448883}
   Target: {fileID: 1613743972}
   objGameEnd: {fileID: 430516120}
@@ -786,6 +787,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df2773dd132b4f74ba27d625c7b9778c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &406626317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406626312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fbbfb97ce34aef4b86aee24f0dec975, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_lPlayerDB: []
+  m_lPartnerDB: []
+  m_lEnemyDB: []
 --- !u!1 &410467890
 GameObject:
   m_ObjectHideFlags: 0
@@ -5721,20 +5737,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aeb4794909bc89d43b72ad784903e0f5, type: 3}
---- !u!114 &2065731535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7702757378927882164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b469a73ba5da400459db44331180f2b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_nCharID: 0
-  objTarget: {fileID: 0}
 --- !u!1 &2076760305
 GameObject:
   m_ObjectHideFlags: 0
@@ -7307,7 +7309,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2867106112470738230}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!137 &2867106112137778641
 SkinnedMeshRenderer:
@@ -7956,14 +7958,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CS: 0
-  m_fPlayerSpeed: 4
-  Damage: 4
-  m_nPlayerHP: 25
-  m_nPlayerHPMax: 25
-  m_nPlayerMP: 100
-  m_nPlayerMPMax: 100
-  m_nPlayerMPRecoveryTimer: 3
-  m_nPlayerAumor: 5
+  objTarget: {fileID: 0}
 --- !u!95 &2867106112470738185
 Animator:
   serializedVersion: 4
@@ -8026,9 +8021,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2867106112984282856}
   - {fileID: 2867106112810038991}
   - {fileID: 2867106112137778640}
-  - {fileID: 2867106112984282856}
   - {fileID: 2867106114128277547}
   m_Father: {fileID: 0}
   m_RootOrder: 14
@@ -8063,23 +8058,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2867106112470738239}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa03e58e07777494883456156301bfa8, type: 3}
+  m_Script: {fileID: 11500000, guid: 36ace79889ef65e49b684836715697e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerLookingPoint: {x: 0, y: 0, z: 0}
-  m_nPlayerShieldPoint: 30
-  m_nPlayerShieldPointMax: 30
-  m_fShieldChargeTimer: 5
-  m_bGuardMoving: 0
-  m_bRushOn: 0
-  m_fQSkillCoolTimer: 0
-  m_fWSkillCoolTimer: 0
-  m_fESkillCoolTimer: 0
-  m_fRSkillCoolTimer: 0
-  m_bQSkillOn: 0
-  m_bWSkillOn: 0
-  m_bESkillOn: 0
-  m_bRSkillOn: 0
 --- !u!4 &2867106112485829152
 Transform:
   m_ObjectHideFlags: 0
@@ -8430,7 +8411,7 @@ Transform:
   - {fileID: 2867106112690272846}
   - {fileID: 2867106113685653126}
   m_Father: {fileID: 2867106112470738230}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2867106112812002992
 GameObject:
@@ -8576,7 +8557,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2867106112470738230}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2867106113065505943
 GameObject:
@@ -18889,14 +18870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CS: 0
-  m_fPlayerSpeed: 5
-  Damage: 2
-  m_nPlayerHP: 20
-  m_nPlayerHPMax: 20
-  m_nPlayerMP: 50
-  m_nPlayerMPMax: 100
-  m_nPlayerMPRecoveryTimer: 3
-  m_nPlayerAumor: 1
+  objTarget: {fileID: 0}
 --- !u!4 &6524513760250237431
 Transform:
   m_ObjectHideFlags: 0
@@ -19568,14 +19542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CS: 0
-  m_fPlayerSpeed: 3
-  Damage: 2
-  m_nPlayerHP: 20
-  m_nPlayerHPMax: 20
-  m_nPlayerMP: 150
-  m_nPlayerMPMax: 150
-  m_nPlayerMPRecoveryTimer: 3
-  m_nPlayerAumor: 0
+  objTarget: {fileID: 0}
 --- !u!1 &7701723417521311380
 GameObject:
   m_ObjectHideFlags: 0
@@ -20378,7 +20345,7 @@ GameObject:
   - component: {fileID: 7711742133054831056}
   - component: {fileID: 7701681806896814192}
   - component: {fileID: 7701681806896814197}
-  - component: {fileID: 2065731535}
+  - component: {fileID: 7760464425959534749}
   m_Layer: 9
   m_Name: Healer
   m_TagString: Untagged
@@ -22013,6 +21980,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7760464425959534749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7702757378927882164}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ace79889ef65e49b684836715697e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &7793091454892106877
 Transform:
   m_ObjectHideFlags: 0
@@ -22485,11 +22464,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2975281917008867107}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b469a73ba5da400459db44331180f2b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 36ace79889ef65e49b684836715697e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_nCharID: 1
-  objTarget: {fileID: 0}
 --- !u!1001 &8461602941770628166
 PrefabInstance:
   m_ObjectHideFlags: 0

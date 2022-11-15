@@ -23,23 +23,23 @@ public class CameraPos : MonoBehaviour
 
         
         
-        if (GameManager.instance.objPlayer.GetComponent<Char_Status>().CS != GameManager.CharState.Death||
-            GameManager.instance.objHealer.GetComponent<Char_Status>().CS != GameManager.CharState.Death ||
-            GameManager.instance.objThief.GetComponent<Char_Status>().CS != GameManager.CharState.Death)
+        if (GameManager.instance.objPlayer.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death||
+            GameManager.instance.objHealer.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death ||
+            GameManager.instance.objThief.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
         {
             Pos = new Vector3(Target.transform.position.x, Height, Target.transform.position.z - Distance);
             this.gameObject.transform.position = Vector3.Lerp(this.gameObject.transform.position, Pos, Speed * Time.deltaTime);
         }
 
-        if (GameManager.instance.objPlayer.GetComponent<Char_Status>().CS != GameManager.CharState.Death)
+        if (GameManager.instance.objPlayer.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
         {
             Target = GameManager.instance.objPlayer;
         }
-        else if (GameManager.instance.objHealer.GetComponent<Char_Status>().CS != GameManager.CharState.Death)
+        else if (GameManager.instance.objHealer.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
         {
             Target = GameManager.instance.objHealer;
         }
-        else if (GameManager.instance.objThief.GetComponent<Char_Status>().CS != GameManager.CharState.Death)
+        else if (GameManager.instance.objThief.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
         {
             Target = GameManager.instance.objThief;
         }
