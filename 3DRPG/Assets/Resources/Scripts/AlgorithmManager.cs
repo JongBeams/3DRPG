@@ -18,6 +18,9 @@ public static class AlgorithmManager
             case 2:
                 ThiefPatternSetting(_CS);
                 break;
+            case 10:
+                EnemyPatternSetting(_CS);
+                break;
 
         }
     }
@@ -235,6 +238,129 @@ public static class AlgorithmManager
         //    PD.SetPartnerStatus(GameManager.CharState.Idle);
         //}
     }
+
+
+
+
+    static void EnemyPatternSetting(Char_Status _CS)
+    {
+        //파트너 정보
+        Char_Status CS = _CS;
+        Animator animator = CS.getAnimator();
+        GameObject TargetObj = CS.getObjTarget();
+        Transform AttackPos = CS.getAttackPos();
+
+        //캐릭터 상태 머신
+        Char_Dynamics CD = _CS.GetComponent<Char_Dynamics>();
+
+
+        int m_nMask = 0;
+        m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
+        Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 30f, m_nMask);
+        int count = 0;
+        int i = 0;
+        //m_fActionDelayTimer = 3f;
+
+        //animator.Play("Idle01");
+
+
+        while (count < hitcol.Length)
+        {
+            if (hitcol[count].GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
+            {
+                break;
+            }
+            else
+            {
+                i++;
+            }
+            count++;
+        }
+
+        //Debug.Log(i+","+count + "," + hitcol.Length);
+
+        if (i == hitcol.Length)
+        {
+            CD.SetCharStatus(GameManager.CharState.Stay);
+        }
+        else
+        {
+            while (true)
+            {
+                TargetObj = hitcol[Random.Range(0, hitcol.Length)].gameObject;
+                if (TargetObj.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
+                {
+                    break;
+                }
+
+            }
+
+
+            int random = Random.Range(0, 100);
+
+            if (Vector3.Distance(TargetObj.transform.position, CS.gameObject.transform.position) < 8f)
+            {
+                if (random < 75)
+                {
+
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        //AttackDelayTimer = AttackDelayTime;
+                        CD.SetCharStatus(GameManager.CharState.Skill1);
+                    }
+                    else
+                    {
+                        //AttackDelayTimer = AttackDelayTime * 2;
+                        CD.SetCharStatus(GameManager.CharState.Skill2);
+                    }
+
+                }
+                else
+                {
+                    //AttackDelayTimer = AttackDelayTime * 2;
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        CD.SetCharStatus(GameManager.CharState.Skill3);
+                    }
+                    else
+                    {
+                        CD.SetCharStatus(GameManager.CharState.Skill4);
+                    }
+
+                }
+
+            }
+            else if (Vector3.Distance(TargetObj.transform.position, CS.gameObject.transform.position) < 20f)
+            {
+                if (random < 75)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        CD.SetCharStatus(GameManager.CharState.Skill3);
+                    }
+                    else
+                    {
+                        CD.SetCharStatus(GameManager.CharState.Skill4);
+                    }
+                }
+                else
+                {
+                    CD.SetCharStatus(GameManager.CharState.Move);
+                }
+            }
+            else
+            {
+
+                    CD.SetCharStatus(GameManager.CharState.Move);
+
+            }
+            //Debug.Log("Dist : " + Vector3.Distance(objTarget.transform.position, this.transform.position));
+            //Debug.Log("AttackPattern : " + EA);
+            // Debug.Log("ActionPattern : " + ES);
+
+        }
+    }
+
 
 
 }

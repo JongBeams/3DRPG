@@ -122,7 +122,7 @@ public static class MoveManager
 
         if (dis > 3.5f)
         {
-            animator.Play("Run");
+            
             CS.transform.LookAt(vecEnemyLookingPoint);
 
             CS.transform.position = Vector3.MoveTowards(CS.transform.position, vecEnemyLookingPoint, CS.getSpeed() * Time.deltaTime);
@@ -164,4 +164,46 @@ public static class MoveManager
         return false;
     }
 
+
+    static bool EnemyMoving(int _id, Char_Status _CS)
+    {
+
+        //파트너 정보
+        Char_Status CS = _CS;
+        Animator animator = CS.getAnimator();
+        GameObject TargetObj = CS.getObjTarget();
+        Transform AttackPos = CS.getAttackPos();
+
+        //캐릭터 상태 머신
+        Char_Dynamics CD = _CS.GetComponent<Char_Dynamics>();
+
+        // 타겟과의 거리
+        Vector3 vecEnemyLookingPoint = new Vector3(TargetObj.transform.position.x, CS.gameObject.transform.position.y, TargetObj.transform.position.z);
+        float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
+
+
+        float Range = 8f;
+        if (CS.getCS() == GameManager.CharState.Skill3 || CS.getCS() == GameManager.CharState.Skill4)
+        {
+            Range = 15f;
+        }
+
+
+
+        if (dis > Range)
+        {
+            CS.gameObject.transform.position = Vector3.MoveTowards(CS.gameObject.transform.position, vecEnemyLookingPoint, CS.getSpeed() * Time.deltaTime);
+            //Debug.Log(dis);
+            return true;
+        }
+        else
+        {
+            AlgorithmManager.SetAlgorithm(_id, _CS);
+            return false;
+        }
+
+        //ES = GameManager.EnemyState.Attack;
+        //animator.Play("Idle01");
+        //return false;
+    }
 }

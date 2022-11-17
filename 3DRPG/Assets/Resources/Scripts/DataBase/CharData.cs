@@ -9,6 +9,8 @@ public class CharData
 {
     //ID
     protected int ID;
+    //캐릭터명
+    protected string Name;
     //공격력
     protected int ATK;
     //방어력
@@ -41,6 +43,7 @@ public class CharData
     // 플레이어 사용
     protected int IdentitySkillID;
 
+
     
 
     public CharData()
@@ -52,6 +55,11 @@ public class CharData
     public int getID()
     {
         return ID;
+    }
+    //캐릭터명
+    public string getName()
+    {
+        return Name;
     }
     //공격력
     public int getATK()
@@ -140,11 +148,12 @@ public class CharData
 public class PlayerCharData : CharData
 {
     public PlayerCharData(
-        int _ID, int _ATK, int _DEF,int _HP,int _MP,float _Speed,float _MP_Recovery,int _Layer,
+        int _ID, string _Name, int _ATK, int _DEF,int _HP,int _MP,float _Speed,float _MP_Recovery,int _Layer,
         int _AttackID,int _Skill1ID,int _Skill2ID,int _Skill3ID,int _Skill4ID,
         int _IdentitySkillID,int _IdentitySkillPoint, int _IdentitySkillPointRecovery,float _IdentityPointRecoveryTime)
     {
         ID = _ID;
+        Name = _Name;
         ATK = _ATK;
         DEF = _DEF;
         HP = _HP;
@@ -170,9 +179,10 @@ public class PlayerCharData : CharData
 [System.Serializable]
 public class PartnerCharData : CharData
 {
-    public PartnerCharData(int _ID, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer, int _AttackID, int _Skill1ID, int _Skill2ID)
+    public PartnerCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer, int _AttackID, int _Skill1ID, int _Skill2ID)
     {
         ID = _ID;
+        Name = _Name;
         ATK = _ATK;
         DEF = _DEF;
         HP = _HP;
@@ -191,9 +201,10 @@ public class PartnerCharData : CharData
 [System.Serializable]
 public class EnemyCharData : CharData
 {
-    public EnemyCharData(int _ID, int _ATK, int _DEF, int _HP, float _Speed, int _Layer, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID)
+    public EnemyCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, float _Speed, int _Layer, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID)
     {
         ID = _ID;
+        Name = _Name;
         ATK = _ATK;
         DEF = _DEF;
         HP = _HP;

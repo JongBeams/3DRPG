@@ -6,27 +6,39 @@ public class HealerBullet : MonoBehaviour
 {
     float m_fSpeed = 6;
 
-    public GameObject Target;
+    GameObject Target;
 
     public ParticleSystem Explosion;
 
     int Damage=0;
 
-    public void SelectTarget(GameObject _Target)
-    {
-        Target = _Target;
+    bool FirstSetting = true;
 
-    }
+    bool EnemyCheck=false;
 
-    public void SetDamage(int _Damage)
+    float LifeTime;
+
+
+    public void Setting(GameObject _Target,int _Damage,float _Speed,bool _EnemyCheck,float _LifeTime)
     {
-        Damage = _Damage;
+        if (FirstSetting)
+        {
+            Target = _Target;
+            Damage = _Damage;
+            m_fSpeed = _Speed;
+            FirstSetting = false;
+            EnemyCheck = _EnemyCheck;
+            LifeTime = _LifeTime;
+        }
+        
+
     }
 
     // Start is called before the first frame update
     void Start()
     {
         Explosion = this.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
+        Destroy(this.gameObject, LifeTime);
     }
 
     // Update is called once per frame
@@ -35,6 +47,7 @@ public class HealerBullet : MonoBehaviour
         transform.LookAt(Target.transform.position);
         Vector3 vecTraget = new Vector3(Target.transform.position.x, 1, Target.transform.position.z);
         transform.position = Vector3.MoveTowards(transform.position, vecTraget, m_fSpeed * Time.deltaTime);
+
     }
 
     //private void OnCollisionEnter(Collision collision)
@@ -51,13 +64,28 @@ public class HealerBullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 8)
+        if (EnemyCheck)
         {
-            this.gameObject.GetComponent<MeshRenderer>().enabled = false;
-            Explosion.Play();
-            other.gameObject.GetComponent<Enemy_Ctrl>().GetDamage(Damage);
-            Destroy(this.gameObject, 1f);
+            if (other.gameObject.layer == 8)
+            {
+                this.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                Explosion.Play();
+                other.gameObject.GetComponent<Enemy_Ctrl>().GetDamage(Damage);
+                Destroy(this.gameObject, 1f);
 
+            }
         }
+        else
+        {
+            if (other.gameObject.layer == 6 || other.gameObject.layer == 9)
+            {
+                this.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                Explosion.Play();
+                other.gameObject.GetComponent<Enemy_Ctrl>().GetDamage(Damage);
+                Destroy(this.gameObject, 1f);
+
+            }
+        }
+        
     }
 }

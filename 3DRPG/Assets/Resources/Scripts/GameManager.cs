@@ -239,7 +239,7 @@ public class GameManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
 
-                    if (CS.getMP() >= 20 && CS.getSkill1On())
+                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())
                     {
                         CD.setMovePoint(MBPoint);
                         CD.SetCharStatus(CharState.Skill1);
@@ -249,7 +249,7 @@ public class GameManager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.W))
                 {
-                    if (CS.getMP() >= 30 && CS.getSkill2On())
+                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())
                     {
                         CD.setMovePoint(MBPoint);
                         CD.SetCharStatus(CharState.Skill2);
@@ -258,7 +258,7 @@ public class GameManager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (CS.getMP() >= 40 && CS.getSkill3On())
+                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill3ID()].getSkillUsingMana() && CS.getSkill3On())
                     {
                         CD.setMovePoint(MBPoint);
                         CD.SetCharStatus(CharState.Skill3);
@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-                    if (CS.getMP() >= 10 && CS.getSkill4On())
+                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill4ID()].getSkillUsingMana() && CS.getSkill4On())
                     {
                         CD.setMovePoint(MBPoint);
                         CD.SetCharStatus(CharState.Skill4);
@@ -318,7 +318,7 @@ public class GameManager : MonoBehaviour
         ThiefMPBar.maxValue = objThief.GetComponent<Char_Status>().getMPMax();
 
         EnemyHPBar.value = objEnemy.GetComponent<Enemy_Ctrl>().m_nEnemy_HP;
-            Target.text = "Target : " + objEnemy.GetComponent<Enemy_Ctrl>().objTarget.name + "\n NextPattern : " + objEnemy.GetComponent<Enemy_Ctrl>().EA;
+        Target.text = "Target : " + objEnemy.GetComponent<Enemy_Ctrl>().objTarget.name + "\n NextPattern : " + objEnemy.GetComponent<Enemy_Ctrl>().EA;
     }
 
 

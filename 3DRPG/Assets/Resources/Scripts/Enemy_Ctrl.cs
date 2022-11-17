@@ -109,11 +109,6 @@ public class Enemy_Ctrl : MonoBehaviour
 
 
 
-
-
-
-
-
             int random = Random.Range(0, 100);
 
             if (Vector3.Distance(objTarget.transform.position, this.transform.position) < 8f)

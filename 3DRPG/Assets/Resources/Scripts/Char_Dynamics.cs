@@ -54,6 +54,7 @@ public class Char_Dynamics : MonoBehaviour
         switch (_CS)
         {
             case GameManager.CharState.Idle:
+                CharStatus.SetObjTarget(null);
                 CharStatus.getAnimator().SetBool("Move", false);
                 CharStatus.getAnimator().SetBool("Attack", false);
                 CharStatus.getAnimator().SetBool("Skill1", false);
@@ -66,21 +67,30 @@ public class Char_Dynamics : MonoBehaviour
                 CharStatus.getAnimator().SetBool("Move", true);
                 break;
             case GameManager.CharState.Attack:
+                CharStatus.getAnimator().SetBool("Attack", true);
                 GameManager.instance.getSM().SetPartnerSkill(CharStatus.getAttackID(), CharStatus);
                 break;
             case GameManager.CharState.IdentitySkill:
                 transform.LookAt(PlayerLookingPoint());
                 break;
             case GameManager.CharState.Skill1:
+                CharStatus.getAnimator().SetBool("Skill1", true);
+                CharStatus.UseMana(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillUsingMana());
                 GameManager.instance.getSM().SetPartnerSkill(CharStatus.getSkill1ID(), CharStatus);
                 break;
             case GameManager.CharState.Skill2:
+                CharStatus.getAnimator().SetBool("Skill2", true);
+                CharStatus.UseMana(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill2ID()].getSkillUsingMana());
                 GameManager.instance.getSM().SetPartnerSkill(CharStatus.getSkill2ID(), CharStatus);
                 break;
             case GameManager.CharState.Skill3:
+                CharStatus.getAnimator().SetBool("Skill3", true);
+                CharStatus.UseMana(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill3ID()].getSkillUsingMana());
                 GameManager.instance.getSM().SetPartnerSkill(CharStatus.getSkill3ID(), CharStatus);
                 break;
             case GameManager.CharState.Skill4:
+                CharStatus.getAnimator().SetBool("Skill4", true);
+                CharStatus.UseMana(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill4ID()].getSkillUsingMana());
                 GameManager.instance.getSM().SetPartnerSkill(CharStatus.getSkill4ID(), CharStatus);
                 break;
             case GameManager.CharState.Hit:
@@ -88,7 +98,10 @@ public class Char_Dynamics : MonoBehaviour
                 CharStatus.getAnimator().SetBool("Move", false);
                 CharStatus.getAnimator().SetBool("Attack", false);
                 CharStatus.getAnimator().SetBool("Skill1", false);
-                //animator.Play("Hit");
+                if (CharStatus.getHP() <= 0)
+                {
+                    SetCharStatus(GameManager.CharState.Death);
+                }
                 break;
             case GameManager.CharState.Death:
                 CharStatus.getAnimator().SetBool("Death", true);
@@ -149,6 +162,9 @@ public class Char_Dynamics : MonoBehaviour
                     if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill1") &&
                     CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
+                        
+                        CharStatus.setSkill1CoolTimer(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillCoolTime());
+                        CharStatus.setSkill1On(false);
                         SetCharStatus(GameManager.CharState.Idle);
                     }
                 }
@@ -164,6 +180,9 @@ public class Char_Dynamics : MonoBehaviour
                     if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill2") &&
                        CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
+                        
+                        CharStatus.setSkill2CoolTimer(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillCoolTime());
+                        CharStatus.setSkill2On(false);
                         SetCharStatus(GameManager.CharState.Idle);
                     }
 
@@ -180,6 +199,9 @@ public class Char_Dynamics : MonoBehaviour
                     if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill3") &&
                     CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
+                        
+                        CharStatus.setSkill3CoolTimer(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillCoolTime());
+                        CharStatus.setSkill3On(false);
                         SetCharStatus(GameManager.CharState.Idle);
                     }
                 }
@@ -192,19 +214,23 @@ public class Char_Dynamics : MonoBehaviour
                 }
                 else
                 {
+
                     if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill4") &&
                     CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
+                       
+                        CharStatus.setSkill4CoolTimer(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillCoolTime());
+                        CharStatus.setSkill4On(false);
                         SetCharStatus(GameManager.CharState.Idle);
                     }
                 }
                 break;
             case GameManager.CharState.Hit:
-                Hit();
-                if (CharStatus.getHP() <= 0)
-                {
-                    SetCharStatus(GameManager.CharState.Death);
-                }
+                    if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Hit") &&
+                        CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f && CharStatus.getHP() > 0)
+                    {
+                        SetCharStatus(GameManager.CharState.Idle);
+                    }
                 break;
             case GameManager.CharState.Death:
 
@@ -214,18 +240,6 @@ public class Char_Dynamics : MonoBehaviour
 
         }
 
-
-    }
-
-
-    void Hit()
-    {
-        if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Hit") &&
-            CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f && CharStatus.getHP() > 0)
-        {
-
-            SetCharStatus(GameManager.CharState.Idle);
-        }
 
     }
 

@@ -7,6 +7,8 @@ public class Char_Status : MonoBehaviour
 {
     //ID
     int m_nCharID = 0;
+    //캐릭터명
+    string m_sName = "";
     //공격력
     int m_nATK = 3;
     //방어력
@@ -52,9 +54,13 @@ public class Char_Status : MonoBehaviour
     //애니메이션(메카님 애니메이션을 통한 제어)
     Animator animator;
 
-    //버프 상태
+    // 상태 체크
     bool m_bProtectBuff = false;
+    int m_nProtectPer = 0;
     float m_fProtectBuffTimer = 0;
+
+    bool m_bSuperArmor = false;
+
 
 
     //스킬 쿨 타임
@@ -83,6 +89,7 @@ public class Char_Status : MonoBehaviour
     //bool Check : 캐릭터 별 체크 사함
     bool m_bCheck01 = false; //Healer = RunAway Dist Check //Thief = BackPos
     bool m_bCheck02 = false; //Healer = Target Enemy Check
+
 
 
     //get
@@ -135,6 +142,10 @@ public class Char_Status : MonoBehaviour
     public int getATK()
     {
         return m_nATK;
+    }
+    public int getDEF()
+    {
+        return m_nDEF;
     }
     public int getHP()
     {
@@ -255,6 +266,8 @@ public class Char_Status : MonoBehaviour
     {
         //ID
         m_nCharID = _chardata.getID();
+        //캐릭터명
+        m_sName = _chardata.getName();
         //공격력
         m_nATK = _chardata.getATK();
         //방어력
@@ -432,10 +445,22 @@ public class Char_Status : MonoBehaviour
         if (CS !=GameManager.CharState.Death)
         {
             int totalDamage = (_Damege - m_nDEF);
+
             if (m_bProtectBuff)
             {
-                totalDamage = totalDamage / 2;
+                totalDamage = totalDamage * (m_nProtectPer / 100);
             }
+            if (!m_bSuperArmor)
+            {
+                gameObject.GetComponent<Char_Dynamics>().SetCharStatus(GameManager.CharState.Hit);
+                iTween.ShakePosition(Camera.main.gameObject, iTween.Hash("x", 0.2, "y", 0.2, "time", 0.3f));
+            }
+
+
+
+            m_nPlayerHP -= totalDamage;
+            
+                
 
             if (this.gameObject.layer == 6)
             {
@@ -464,9 +489,7 @@ public class Char_Status : MonoBehaviour
                     }
                     else
                     {
-                        iTween.ShakePosition(Camera.main.gameObject, iTween.Hash("x", 0.2, "y", 0.2, "time", 0.3f));
-                        m_nPlayerHP -= totalDamage;
-                        gameObject.GetComponent<Char_Dynamics>().SetCharStatus(GameManager.CharState.Hit);
+                        
                     }
 
                 }
@@ -507,11 +530,11 @@ public class Char_Status : MonoBehaviour
         }
     }
 
-    public void onProtectBuff()
+    public void onProtectBuff(int per,float Time)
     {
-        Debug.Log("onBuff");
         m_bProtectBuff = true;
-        m_fProtectBuffTimer = 10;
+        m_nProtectPer = per;
+        m_fProtectBuffTimer = Time;
     }
 
     void SkillCoolTimer()
@@ -582,6 +605,21 @@ public class Char_Status : MonoBehaviour
         }
     }
 
+    void SkillEffectTimer()
+    {
+        if (m_bProtectBuff)
+        {
+            if (m_fProtectBuffTimer <= 0)
+            {
+                //Debug.Log("offBuff");
+                m_nProtectPer = 0;
+                m_bProtectBuff = false;
+            }
+            m_fProtectBuffTimer -= Time.deltaTime;
+        }
+    }
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -600,17 +638,9 @@ public class Char_Status : MonoBehaviour
 
         SkillCoolTimer();
         Recovery();
+        SkillEffectTimer();
 
-
-        if (m_bProtectBuff)
-        {
-            if (m_fProtectBuffTimer <= 0)
-            {
-                Debug.Log("offBuff");
-                m_bProtectBuff = false;
-            }
-            m_fProtectBuffTimer -= Time.deltaTime;  
-        }
+        
 
         
 

@@ -9,7 +9,7 @@ public class MainScenceManager : MonoBehaviour
 
     public void GameStart()
     {
-        SceneManager.LoadScene("InGameScence");
+        SceneManager.LoadScene("InGameScene");
     }
 
 
