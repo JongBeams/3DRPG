@@ -111,13 +111,15 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EnemyHPBar.maxValue = objEnemy.GetComponent<Enemy_Ctrl>().m_nEnemy_HPMax;
+        EnemyHPBar.maxValue = objEnemy.GetComponent<Char_Status>().getHPMax();
         SM = this.GetComponent<SkillManager>();
 
         objPlayer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPlayerDB[0]);
-        objHealer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[0]);
+        objHealer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[2]);
         objThief.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[1]);
 
+        objEnemy.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lEnemyDB[0]);
+        objEnemy.GetComponent<Char_Status>().SetSuperArmor(true);
     }
 
 
@@ -149,26 +151,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    //void MouseMovingPointRay()
-    //{
-    //    RaycastHit hit;
-    //    var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-
-    //    int m_nLayerMask = 1 << LayerMask.NameToLayer("Floor");
-    //    //m_nLayerMask = ~m_nLayerMask;
-
-
-    //    if (Physics.Raycast(ray, out hit, Mathf.Infinity, m_nLayerMask))
-    //    {
-    //        //Curser.transform.position = new Vector3(hit.point.x,hit.point.y+1f, hit.point.z);
-
-    //        MBTarget = hit.collider.gameObject;
-    //        MBPoint = new Vector3(hit.point.x, hit.point.y, hit.point.z);
-
-    //    }
-
-    //}
+   
 
     public void GoMain()
     {
@@ -213,14 +196,19 @@ public class GameManager : MonoBehaviour
                 }
                 if (Input.GetKeyUp(KeyCode.Space))
                 {
-                    CD.SetCharStatus(CharState.Idle);
+                    if (CS.getCS()==CharState.IdentitySkill)
+                    {
+                        CS.delGetDamae = CS.GetDamage;
+                        CD.SetCharStatus(CharState.Idle);
+                        CS.setIdentitySkillUsing(false);
+                    }
                 }
 
 
                 if (Input.GetMouseButtonDown(1))
                 {
                     CD.setMovePoint(MBPoint);
-                    if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move || CS.getIdentityPoint() == 0)
+                    if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move && !CS.getIdentitySkillUsing())
                     {
                         CD.SetCharStatus(CharState.Move);
                     }
@@ -232,6 +220,7 @@ public class GameManager : MonoBehaviour
                 {
                     
                     CD.setMovePoint(MBPoint);
+                    CS.SetObjTarget(MBTarget);
                     CD.SetCharStatus(CharState.Attack);
 
                 }
@@ -242,6 +231,7 @@ public class GameManager : MonoBehaviour
                     if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())
                     {
                         CD.setMovePoint(MBPoint);
+                        CS.SetObjTarget(MBTarget);
                         CD.SetCharStatus(CharState.Skill1);
                     }
                     
@@ -252,6 +242,7 @@ public class GameManager : MonoBehaviour
                     if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())
                     {
                         CD.setMovePoint(MBPoint);
+                        CS.SetObjTarget(MBTarget);
                         CD.SetCharStatus(CharState.Skill2);
                     }
                 }
@@ -261,6 +252,7 @@ public class GameManager : MonoBehaviour
                     if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill3ID()].getSkillUsingMana() && CS.getSkill3On())
                     {
                         CD.setMovePoint(MBPoint);
+                        CS.SetObjTarget(MBTarget);
                         CD.SetCharStatus(CharState.Skill3);
                     }
                 }
@@ -270,6 +262,7 @@ public class GameManager : MonoBehaviour
                     if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill4ID()].getSkillUsingMana() && CS.getSkill4On())
                     {
                         CD.setMovePoint(MBPoint);
+                        CS.SetObjTarget(MBTarget);
                         CD.SetCharStatus(CharState.Skill4);
                     }
                 }
@@ -317,8 +310,11 @@ public class GameManager : MonoBehaviour
         ThiefHPBar.maxValue = objThief.GetComponent<Char_Status>().getHPMax();
         ThiefMPBar.maxValue = objThief.GetComponent<Char_Status>().getMPMax();
 
-        EnemyHPBar.value = objEnemy.GetComponent<Enemy_Ctrl>().m_nEnemy_HP;
-        Target.text = "Target : " + objEnemy.GetComponent<Enemy_Ctrl>().objTarget.name + "\n NextPattern : " + objEnemy.GetComponent<Enemy_Ctrl>().EA;
+        EnemyHPBar.value = objEnemy.GetComponent<Char_Status>().getHP();
+        EnemyHPBar.maxValue = objEnemy.GetComponent<Char_Status>().getHPMax();
+        if(objEnemy.GetComponent<Char_Status>().getObjTarget()!=null)
+            Target.text = "Target : " + objEnemy.GetComponent<Char_Status>().objTarget.GetComponent<Char_Status>().getName() 
+                + "\n NextPattern : " + objEnemy.GetComponent<Char_Status>().getCS();
     }
 
 
@@ -332,7 +328,7 @@ public class GameManager : MonoBehaviour
             objGameEnd.SetActive(true);
             objGameEndMessage.text = "Game Over";
         }
-        if (objEnemy.GetComponent<Enemy_Ctrl>().ES == EnemyState.Death)
+        if (objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death)
         {
             m_bGameEnd = true;
             objGameEnd.SetActive(true);

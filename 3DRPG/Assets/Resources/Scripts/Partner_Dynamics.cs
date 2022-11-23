@@ -98,13 +98,13 @@ public class Partner_Dynamics : MonoBehaviour
                 CharStatus.getAnimator().SetBool("Move", true);
                 break;
             case GameManager.CharState.Attack:
-                GameManager.instance.getSM().SetPartnerSkill(0, CharStatus);
+                GameManager.instance.getSM().SetCharSkill(0, CharStatus);
                 break;
             case GameManager.CharState.Skill1:
-                GameManager.instance.getSM().SetPartnerSkill(0, CharStatus);
+                GameManager.instance.getSM().SetCharSkill(0, CharStatus);
                 break;
             case GameManager.CharState.Skill2:
-                GameManager.instance.getSM().SetPartnerSkill(0, CharStatus);
+                GameManager.instance.getSM().SetCharSkill(0, CharStatus);
                 break;
             case GameManager.CharState.Hit:
                 CharStatus.getAnimator().SetBool("Hit", true);

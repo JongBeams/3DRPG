@@ -18,6 +18,9 @@ public static class AlgorithmManager
             case 2:
                 ThiefPatternSetting(_CS);
                 break;
+            case 3:
+                MagicianPatternSetting(_CS);
+                break;
             case 10:
                 EnemyPatternSetting(_CS);
                 break;
@@ -31,11 +34,12 @@ public static class AlgorithmManager
         //파트너 정보
         Char_Status CS = _CS;
         Animator animator = CS.getAnimator();
-        GameObject TargetObj = CS.getObjTarget();
         Transform AttackPos = CS.getAttackPos();
 
         //캐릭터 상태 머신
         Char_Dynamics CD = _CS.GetComponent<Char_Dynamics>();
+
+        
 
         //Debug.Log("Check");
 
@@ -62,41 +66,68 @@ public static class AlgorithmManager
         else
         {
 
-
-
-
             //탐색 콜라이더 선별
             while (count < hitcol.Length)
             {
-                if (hitcol[count].gameObject.layer == 6 || hitcol[count].gameObject.layer == 9)// 플레이어 또는 동료일때
+                if (CS.getLayer() == 9)// 캐릭터가 동료 일때
                 {
-                    Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
-                    if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
+                    if (hitcol[count].gameObject.layer == 6 || hitcol[count].gameObject.layer == 9)// 플레이어 또는 동료일때
                     {
-                        if (CS.getMP() >= 50 && CS.getSkill1On())// 스킬 사용가능 여부 확인
+                        Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
+                        if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
                         {
-                            CS.SetObjTarget(hitcol[count].gameObject);// 타겟지정
-                            Target = hitcol[count].gameObject;
-                            CS.setCheck02(false);//아군 체크 (적이 아니다)
-                            break;
-                        }
+                            if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
+                            {
+                                CS.SetObjTarget(hitcol[count].gameObject);// 타겟지정
+                                Target = hitcol[count].gameObject;
+                                CS.setCheck02(false);//아군 체크 (적이 아니다)
+                                break;
+                            }
 
+                        }
+                    }
+                    else //몬스터일때
+                    {
+                        CS.SetObjTarget(hitcol[count].gameObject);
+                        Target = hitcol[count].gameObject;
+                        //PartnerTarget = hitcol[count].gameObject;
+                        CS.setCheck02(true);// 적 체크
+                                            //setEnemy = true;
                     }
                 }
-                else //몬스터일때
+                else
                 {
-                    CS.SetObjTarget(hitcol[count].gameObject);
-                    Target = hitcol[count].gameObject;
-                    //PartnerTarget = hitcol[count].gameObject;
-                    CS.setCheck02(true);// 적 체크
-                                        //setEnemy = true;
+                    if (hitcol[count].gameObject.layer == 8 )// 플레이어 또는 동료일때
+                    {
+                        Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
+                        if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
+                        {
+                            if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
+                            {
+                                CS.SetObjTarget(hitcol[count].gameObject);// 타겟지정
+                                Target = hitcol[count].gameObject;
+                                CS.setCheck02(false);//아군 체크 (적이 아니다)
+                                break;
+                            }
+
+                        }
+                    }
+                    else //몬스터일때
+                    {
+                        CS.SetObjTarget(hitcol[count].gameObject);
+                        Target = hitcol[count].gameObject;
+                        //PartnerTarget = hitcol[count].gameObject;
+                        CS.setCheck02(true);// 적 체크
+                                            //setEnemy = true;
+                    }
                 }
+                
                 count++;
 
             }
 
             // 자신의 체력 상태에 때른 타겟 변화
-            if (CS.getHP() <= CS.getHPMax() / 2 && CS.getMP() >= 50) // 자신이 회복이 필요할때
+            if (CS.getHP() <= CS.getHPMax() / 2 && CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana()) // 자신이 회복이 필요할때
             {
                 CS.SetObjTarget(CS.gameObject);// 타겟을 자신으로
 
@@ -107,6 +138,7 @@ public static class AlgorithmManager
                 }
 
             }
+
             //타겟과의 거리
             Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, CS.gameObject.transform.position.y, Target.transform.position.z);
             float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
@@ -148,7 +180,7 @@ public static class AlgorithmManager
                             }
                             else //치료해야할 동료가 있을때
                             {
-                                if (CS.getMP() >= 100 && CS.getSkill2On())//전체힐 사용 조건
+                                if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())//전체힐 사용 조건
                                 {
                                     CD.SetCharStatus(GameManager.CharState.Skill2);
                                 }
@@ -174,7 +206,6 @@ public static class AlgorithmManager
         //파트너 정보
         Char_Status CS = _CS;
         Animator animator = CS.getAnimator();
-        GameObject TargetObj = CS.getObjTarget();
         Transform AttackPos = CS.getAttackPos();
 
         //캐릭터 상태 머신
@@ -183,7 +214,15 @@ public static class AlgorithmManager
 
         // 범위 탐색
         int m_nMask = 0;
-        m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
+        if (CS.getLayer() == 9)
+        {
+            m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
+        }
+        else
+        {
+            m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
+        }
+        
         Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 30f, m_nMask);
 
 
@@ -218,11 +257,11 @@ public static class AlgorithmManager
             }
             else
             {
-                if (CS.getMP() >= 50 && CS.getCheck01() && CS.getSkill2On())
+                if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getCheck01() && CS.getSkill2On())
                 {
                     CD.SetCharStatus(GameManager.CharState.Skill2);
                 }
-                else if (CS.getMP() >= 40 && !CS.getCheck01() && CS.getSkill1On())
+                else if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && !CS.getCheck01() && CS.getSkill1On())
                 {
                     CD.SetCharStatus(GameManager.CharState.Skill1);
                 }
@@ -240,6 +279,112 @@ public static class AlgorithmManager
     }
 
 
+    static void MagicianPatternSetting(Char_Status _CS)
+    {
+        //파트너 정보
+        Char_Status CS = _CS;
+        Animator animator = CS.getAnimator();
+        Transform AttackPos = CS.getAttackPos();
+
+        //캐릭터 상태 머신
+        Char_Dynamics CD = _CS.GetComponent<Char_Dynamics>();
+
+
+
+        //Debug.Log("Check");
+
+        // 범위 탐색
+        int m_nMask = 0;
+        if (CS.getLayer() == 9)
+        {
+            m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
+        }
+        else
+        {
+            m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
+        }
+        Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 30f, m_nMask);
+        int count = 0;
+
+        //공격 딜레이 타임
+        //PD.setAttackDelayTimer(PD.getAttackDelayTime());
+        //타겟지정
+        GameObject Target = null;
+
+
+        if (GameManager.instance.getGameEnd())
+        {
+            CD.SetCharStatus(GameManager.CharState.Stay);
+        }
+        else
+        {
+
+            if (hitcol != null)
+            {
+                CS.SetObjTarget(hitcol[0].gameObject);
+                Target = hitcol[0].gameObject;
+            }
+
+
+            //타겟과의 거리
+            Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, CS.gameObject.transform.position.y, Target.transform.position.z);
+            float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
+
+            // 행동 설정
+            if (CS.getObjTarget() != null)// 타겟이 존재할때
+            {
+
+                if (dis > 20f)//거리 20 보다 멀때
+                {
+                    CS.setCheck01(false);// RunAway Dist Check
+                    CD.SetCharStatus(GameManager.CharState.Move);
+                }
+                else if (dis < 15f) //거리 15보다 가까울때
+                {
+                    CS.setCheck01(true);// RunAway Dist Check
+                    CD.SetCharStatus(GameManager.CharState.Move);
+                }
+                else //적정거리
+                {
+                    int ran = Random.Range(0, 3);
+                    if (ran == 2) 
+                    {
+                        if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())
+                        {
+                            CD.SetCharStatus(GameManager.CharState.Skill2);
+                        }
+                        else
+                        {
+                            CD.SetCharStatus(GameManager.CharState.Attack);
+                        }
+                    }
+                    else if (ran == 1)
+                    {
+                        if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())
+                        {
+                            CD.SetCharStatus(GameManager.CharState.Skill1);
+                        }
+                        else
+                        {
+                            CD.SetCharStatus(GameManager.CharState.Attack);
+                        }
+                    }
+                    else
+                    {
+                        CD.SetCharStatus(GameManager.CharState.Attack);
+                    }
+
+                    
+                }
+
+
+
+            }
+        }
+
+    }
+
+
 
 
     static void EnemyPatternSetting(Char_Status _CS)
@@ -247,7 +392,6 @@ public static class AlgorithmManager
         //파트너 정보
         Char_Status CS = _CS;
         Animator animator = CS.getAnimator();
-        GameObject TargetObj = CS.getObjTarget();
         Transform AttackPos = CS.getAttackPos();
 
         //캐릭터 상태 머신
@@ -255,7 +399,14 @@ public static class AlgorithmManager
 
 
         int m_nMask = 0;
-        m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
+        if (CS.getLayer() == 9)
+        {
+            m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
+        }
+        else
+        {
+            m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
+        }
         Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 30f, m_nMask);
         int count = 0;
         int i = 0;
@@ -263,42 +414,45 @@ public static class AlgorithmManager
 
         //animator.Play("Idle01");
 
-
+        int TargetRan = Random.Range(0, hitcol.Length);
         while (count < hitcol.Length)
         {
-            if (hitcol[count].GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
+            if (hitcol[TargetRan].GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
             {
+                CS.SetObjTarget(hitcol[TargetRan].gameObject);
                 break;
             }
             else
             {
+                TargetRan = Random.Range(0, hitcol.Length);
                 i++;
             }
             count++;
         }
 
         //Debug.Log(i+","+count + "," + hitcol.Length);
-
         if (i == hitcol.Length)
         {
             CD.SetCharStatus(GameManager.CharState.Stay);
         }
         else
         {
-            while (true)
-            {
-                TargetObj = hitcol[Random.Range(0, hitcol.Length)].gameObject;
-                if (TargetObj.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
-                {
-                    break;
-                }
-
-            }
+            //int TargetRan = 0;
+            ////CS.SetObjTarget(hitcol[Random.Range(0, hitcol.Length)].gameObject);
+            //while (TargetRan<hitcol.Length)
+            //{
+            //    CS.SetObjTarget(hitcol[Random.Range(0, hitcol.Length)].gameObject);
+            //    //TargetObj = hitcol[Random.Range(0, hitcol.Length)].gameObject;
+            //    if (TargetObj != null && TargetObj.GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
+            //    {
+            //        break;
+            //    }
+            //    TargetRan++;
+            //}
 
 
             int random = Random.Range(0, 100);
-
-            if (Vector3.Distance(TargetObj.transform.position, CS.gameObject.transform.position) < 8f)
+            if (Vector3.Distance(CS.getObjTarget().transform.position, CS.gameObject.transform.position) < 8f)
             {
                 if (random < 75)
                 {
@@ -330,7 +484,7 @@ public static class AlgorithmManager
                 }
 
             }
-            else if (Vector3.Distance(TargetObj.transform.position, CS.gameObject.transform.position) < 20f)
+            else if (Vector3.Distance(CS.getObjTarget().transform.position, CS.gameObject.transform.position) < 20f)
             {
                 if (random < 75)
                 {

@@ -383,7 +383,7 @@ public class Enemy_Ctrl : MonoBehaviour
                 if(objTarget!=null|| objTarget.activeSelf == false)
                 {
                     GameObject objFireBall = Instantiate(Resources.Load<GameObject>("Prefabs/Fireball"), objMeleeAttackPoint.transform.position, Quaternion.identity);
-                    objFireBall.GetComponent<FireBall>().SelectTarget(objTarget);
+                    //objFireBall.GetComponent<FireBall>().SelectTarget(objTarget);
                 }
                 return true;
             }

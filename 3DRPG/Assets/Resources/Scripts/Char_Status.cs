@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class Char_Status : MonoBehaviour
 {
+    public delegate void Del(int Damage);
+    public Del delGetDamae = null;
+
+
     //ID
     int m_nCharID = 0;
     //캐릭터명
@@ -14,7 +18,7 @@ public class Char_Status : MonoBehaviour
     //방어력
     int m_nDEF = 0;
     //HP
-    int m_nPlayerHP = 10;
+    public int m_nPlayerHP = 10;
     int m_nPlayerHPMax = 10;
     //MP
     int m_nPlayerMP = 100;
@@ -22,7 +26,7 @@ public class Char_Status : MonoBehaviour
     //이동속도
     float m_fPlayerSpeed = 5;
     //마나 회복 속도
-    float m_nPlayerMPRecoveryTimer = 3;
+    float m_fPlayerMPRecoveryTimer = 3;
 
     //캐릭터 구분 레이어
     int m_nLayer = 0;
@@ -34,7 +38,10 @@ public class Char_Status : MonoBehaviour
 
     float m_fIdentityPointRecoveryTimer = 0;
     float m_fIdentityPointRecoveryTime = 0;
-    
+
+    //데미지 감소율
+    float m_fDRper = 0;
+
 
     //SkillID
     int m_nAttackID = 0;
@@ -43,6 +50,9 @@ public class Char_Status : MonoBehaviour
     int m_nSkill3ID=0;
     int m_nSkill4ID=0;
     int m_nIdentitySkillID=0;
+
+
+    //int m_nLastGetDamage=0;
 
     //캐릭터 상태
     public GameManager.CharState CS;
@@ -56,11 +66,8 @@ public class Char_Status : MonoBehaviour
 
     // 상태 체크
     bool m_bProtectBuff = false;
-    int m_nProtectPer = 0;
-    float m_fProtectBuffTimer = 0;
 
     bool m_bSuperArmor = false;
-
 
 
     //스킬 쿨 타임
@@ -75,7 +82,7 @@ public class Char_Status : MonoBehaviour
     bool m_bSkill3On = false;
     bool m_bSkill4On = false;
 
-    bool m_bIdentitySkillOn = false;
+
 
 
     //Skill 사용중 상태 체크
@@ -83,7 +90,7 @@ public class Char_Status : MonoBehaviour
     bool m_bSkill2Using = false;
     bool m_bSkill3Using = false;
     bool m_bSkill4Using = false;
-
+    bool m_bIdentitySkillUsing = false;
 
 
     //bool Check : 캐릭터 별 체크 사함
@@ -109,6 +116,10 @@ public class Char_Status : MonoBehaviour
     {
         return animator;
     }
+    //public int getLastGetDamage()
+    //{
+    //    return m_nLastGetDamage;
+    //}
 
 
     //get Skill On
@@ -129,9 +140,9 @@ public class Char_Status : MonoBehaviour
         return m_bSkill4On;
     }
 
-    public bool getIdentitySkillOn()
+    public bool getIdentitySkillUsing()
     {
-        return m_bIdentitySkillOn;
+        return m_bIdentitySkillUsing;
     }
 
     //get status
@@ -174,6 +185,16 @@ public class Char_Status : MonoBehaviour
     public int getIdentityPointMax()
     {
         return m_nIdentityPointtMax;
+    }
+
+    public int getLayer()
+    {
+        return m_nLayer;
+    }
+
+    public string getName()
+    {
+        return m_sName;
     }
 
 
@@ -254,6 +275,7 @@ public class Char_Status : MonoBehaviour
     }
 
 
+
     //set
     public void setCS(GameManager.CharState _CS)
     {
@@ -289,8 +311,9 @@ public class Char_Status : MonoBehaviour
             m_nPlayerMPMax = _chardata.getMP();
             m_nPlayerMP = m_nPlayerMPMax;
 
+
             //마나 회복 속도
-            m_nPlayerMPRecoveryTimer = _chardata.getMP_Recovery();
+            m_fPlayerMPRecoveryTimer = _chardata.getMP_Recovery();
 
             //playerIdentitySkill
             m_nIdentityPointtMax = _chardata.getIdentitySkillPoint();
@@ -325,7 +348,7 @@ public class Char_Status : MonoBehaviour
             m_nPlayerMP = m_nPlayerMPMax;
 
             //마나 회복 속도
-            m_nPlayerMPRecoveryTimer = _chardata.getMP_Recovery();
+            m_fPlayerMPRecoveryTimer = _chardata.getMP_Recovery();
 
             //playerIdentitySkill
             m_nIdentityPointtMax = _chardata.getIdentitySkillPoint();
@@ -384,9 +407,9 @@ public class Char_Status : MonoBehaviour
 
     }
 
-    public void setIdentitySkillOn(bool _IdentitySkillOn)
+    public void setIdentitySkillUsing(bool _IdentitySkillUsing)
     {
-        m_bIdentitySkillOn = _IdentitySkillOn;
+        m_bIdentitySkillUsing = _IdentitySkillUsing;
     }
 
 
@@ -419,6 +442,11 @@ public class Char_Status : MonoBehaviour
         m_bCheck02 = _check;
     }
 
+    public void SetSuperArmor(bool _SuperArmor)
+    {
+        m_bSuperArmor = _SuperArmor;
+    }
+
 
 
     public void HealingHP(int HealingPoint)
@@ -444,77 +472,17 @@ public class Char_Status : MonoBehaviour
     {
         if (CS !=GameManager.CharState.Death)
         {
-            int totalDamage = (_Damege - m_nDEF);
+            int totalDamage = (int)((_Damege - m_nDEF)*(1-m_fDRper));
 
-            if (m_bProtectBuff)
-            {
-                totalDamage = totalDamage * (m_nProtectPer / 100);
-            }
-            if (!m_bSuperArmor)
+            if (!m_bSuperArmor && !m_bIdentitySkillUsing)
             {
                 gameObject.GetComponent<Char_Dynamics>().SetCharStatus(GameManager.CharState.Hit);
                 iTween.ShakePosition(Camera.main.gameObject, iTween.Hash("x", 0.2, "y", 0.2, "time", 0.3f));
             }
-
-
-
+            //m_nLastGetDamage = totalDamage;
             m_nPlayerHP -= totalDamage;
-            
-                
 
-            if (this.gameObject.layer == 6)
-            {
-                Player_Ctrl pc = GetComponent<Player_Ctrl>();
-                if (CS != GameManager.CharState.Death)
-                {
-                    if (CS == GameManager.CharState.IdentitySkill)
-                    {
-                        //iTween.ShakePosition(Camera.main.gameObject, iTween.Hash("x", 0.2, "y", 0.2, "time", 0.3f));
-                        //if (totalDamage > pc.m_nPlayerShieldPoint)
-                        //{
-                        //    pc.m_nPlayerShieldPoint -= totalDamage - pc.m_nPlayerShieldPoint;
-                        //    pc.m_nPlayerShieldPoint = 0;
-                        //    pc.m_fShieldChargeTimer = 5;
-                        //    CS = GameManager.CharState.Hit;
-                        //}
-                        //else
-                        //{
-                        //    pc.m_nPlayerShieldPoint -= totalDamage;
-                        //}
-
-                    }
-                    else if (CS == GameManager.CharState.Skill2)
-                    {
-                        m_nPlayerHP -= totalDamage / 2;
-                    }
-                    else
-                    {
-                        
-                    }
-
-                }
-            }
-            if (gameObject.layer == 9)
-            {
-                m_nPlayerHP -= totalDamage;
-                gameObject.GetComponent<Char_Dynamics>().SetCharStatus(GameManager.CharState.Hit);
-                //CS = GameManager.CharState.Hit;
-                //if (this.gameObject.name =="Thief")
-                //{
-                //    Thief_Dynamic td =GetComponent<Thief_Dynamic>();
-                //    td.PS = GameManager.PartnerState.Hit;
-                //}
-                //else
-                //{
-                //    Parter_Dynamic pd = GetComponent<Parter_Dynamic>();
-
-                //}
-
-            }
-            //Debug.Log(this.gameObject.name + " HP : " + m_nPlayerHP + "/" + m_nPlayerHPMax + "\n" + "GetDamage :" + totalDamage);
         }
-        
-
     }
 
 
@@ -530,11 +498,18 @@ public class Char_Status : MonoBehaviour
         }
     }
 
-    public void onProtectBuff(int per,float Time)
+    public void UseIdentitiy(int _Cost)
     {
-        m_bProtectBuff = true;
-        m_nProtectPer = per;
-        m_fProtectBuffTimer = Time;
+        
+        if (m_nIdentityPoint <= 0) 
+        {
+            m_nIdentityPoint = 0;
+        }
+        else
+        {
+            m_nIdentityPoint -= _Cost;
+        }
+
     }
 
     void SkillCoolTimer()
@@ -580,14 +555,14 @@ public class Char_Status : MonoBehaviour
     {
         if (m_nPlayerMP < m_nPlayerMPMax)
         {
-            if (m_nPlayerMPRecoveryTimer <= 0)
+            if (m_fPlayerMPRecoveryTimer <= 0)
             {
                 m_nPlayerMP += 10;
-                m_nPlayerMPRecoveryTimer = 3;
+                m_fPlayerMPRecoveryTimer = 3;
             }
             else
             {
-                m_nPlayerMPRecoveryTimer -= Time.deltaTime;
+                m_fPlayerMPRecoveryTimer -= Time.deltaTime;
             }
         }
 
@@ -605,19 +580,34 @@ public class Char_Status : MonoBehaviour
         }
     }
 
-    void SkillEffectTimer()
+    //void SkillEffectTimer()
+    //{
+    //    if (m_bProtectBuff)
+    //    {
+    //        if (m_fProtectBuffTimer <= 0)
+    //        {
+    //            //Debug.Log("offBuff");
+    //            m_nProtectPer = 0;
+    //            m_bProtectBuff = false;
+    //        }
+    //        m_fProtectBuffTimer -= Time.deltaTime;
+    //    }
+    //}
+
+    public void OnDrBuff(float _Time, float _DRper)
     {
-        if (m_bProtectBuff)
-        {
-            if (m_fProtectBuffTimer <= 0)
-            {
-                //Debug.Log("offBuff");
-                m_nProtectPer = 0;
-                m_bProtectBuff = false;
-            }
-            m_fProtectBuffTimer -= Time.deltaTime;
-        }
+        StartCoroutine(OnDRBuffCoroutine(_Time, _DRper));
     }
+
+    IEnumerator OnDRBuffCoroutine(float _Time,float _DRper)
+    {
+        m_bProtectBuff = true;
+        m_fDRper = _DRper;
+        yield return new WaitForSeconds(_Time);
+        m_fDRper = 0;
+        m_bProtectBuff = false;
+    }
+
 
 
 
@@ -630,6 +620,8 @@ public class Char_Status : MonoBehaviour
         //m_nPlayerHP = m_nPlayerHPMax;
         //m_nIdentityPoint = m_nIdentityPointtMax;
         CS=GameManager.CharState.Idle;
+
+        delGetDamae = GetDamage;
     }
 
     // Update is called once per frame
@@ -638,7 +630,7 @@ public class Char_Status : MonoBehaviour
 
         SkillCoolTimer();
         Recovery();
-        SkillEffectTimer();
+        //SkillEffectTimer();
 
         
 

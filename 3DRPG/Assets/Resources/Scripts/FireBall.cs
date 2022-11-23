@@ -9,6 +9,8 @@ public class FireBall : MonoBehaviour
 
     public GameObject Target;
 
+    int Damage=0;
+
     public ParticleSystem Burning;
     public ParticleSystem Explosion;
 
@@ -16,10 +18,25 @@ public class FireBall : MonoBehaviour
 
     bool end = false;
 
-    public void SelectTarget(GameObject _Target)
+    bool FirstSetting=true;
+
+    bool EnemyCheck=false;
+
+    float LifeTime=5;
+
+    public void Setting(GameObject _Target, int _Damage, float _Speed, bool _EnemyCheck, float _LifeTime)
     {
-        Target = _Target;
-        
+        if (FirstSetting)
+        {
+            Target = _Target;
+            Damage = _Damage;
+            m_fSpeed = _Speed;
+            FirstSetting = false;
+            EnemyCheck = _EnemyCheck;
+            LifeTime = _LifeTime;
+        }
+
+
     }
 
     // Start is called before the first frame update
@@ -28,6 +45,7 @@ public class FireBall : MonoBehaviour
         Burning = this.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
         //Debug.Log(this.transform.GetChild(1).gameObject);
         Explosion = this.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
+        Destroy(this.gameObject, LifeTime);
     }
 
     // Update is called once per frame
@@ -35,19 +53,23 @@ public class FireBall : MonoBehaviour
     {
         if (!hit)
         {
-            if (Target == null|| Target.activeSelf==false&& !end)
+            if (!FirstSetting)
             {
-                Burning.Stop();
-                Explosion.Play();
-                Destroy(this.gameObject, 1f);
-                end = true;
+                if (Target == null || Target.activeSelf == false && !end)
+                {
+                    Burning.Stop();
+                    Explosion.Play();
+                    Destroy(this.gameObject, 1f);
+                    end = true;
+                }
+                else
+                {
+                    transform.LookAt(Target.transform.position);
+                    Vector3 vecTraget = new Vector3(Target.transform.position.x, 1, Target.transform.position.z);
+                    transform.position = Vector3.MoveTowards(transform.position, vecTraget, m_fSpeed * Time.deltaTime);
+                }
             }
-            else
-            {
-                transform.LookAt(Target.transform.position);
-                Vector3 vecTraget = new Vector3(Target.transform.position.x, 1, Target.transform.position.z);
-                transform.position = Vector3.MoveTowards(transform.position, vecTraget, m_fSpeed * Time.deltaTime);
-            }
+            
 
         }
         
@@ -67,14 +89,31 @@ public class FireBall : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.layer==6|| other.gameObject.layer == 9)
+        if (EnemyCheck)
         {
-            hit = true;
-            Burning.Stop();
-            Explosion.Play();
-            other.gameObject.GetComponent<Char_Status>().GetDamage(15);
-            Destroy(this.gameObject, 1f);
+            if (other.gameObject.layer == 6 || other.gameObject.layer == 9)
+            {
+                hit = true;
+                Burning.Stop();
+                Explosion.Play();
+                //other.gameObject.GetComponent<Char_Status>().GetDamage(Damage);
+                other.gameObject.GetComponent<Char_Status>().delGetDamae(Damage);
+                Destroy(this.gameObject, 1f);
 
+            }
         }
+        else{
+            if (other.gameObject.layer == 8)
+            {
+                hit = true;
+                Burning.Stop();
+                Explosion.Play();
+                other.gameObject.GetComponent<Char_Status>().GetDamage(Damage);
+                other.gameObject.GetComponent<Char_Status>().delGetDamae(Damage);
+                Destroy(this.gameObject, 1f);
+
+            }
+        }
+        
     }
 }
