@@ -24,6 +24,9 @@ public static class AlgorithmManager
             case 10:
                 EnemyPatternSetting(_CS);
                 break;
+            case 11:
+                Enemy2PatternSetting(_CS);
+                break;
 
         }
     }
@@ -409,7 +412,7 @@ public static class AlgorithmManager
         }
         Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 30f, m_nMask);
         int count = 0;
-        int i = 0;
+
         //m_fActionDelayTimer = 3f;
 
         //animator.Play("Idle01");
@@ -425,13 +428,15 @@ public static class AlgorithmManager
             else
             {
                 TargetRan = Random.Range(0, hitcol.Length);
-                i++;
+
             }
             count++;
         }
 
         //Debug.Log(i+","+count + "," + hitcol.Length);
-        if (i == hitcol.Length)
+        if (GameManager.instance.objPlayer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
+            GameManager.instance.objHealer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
+            GameManager.instance.objThief.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death)
         {
             CD.SetCharStatus(GameManager.CharState.Stay);
         }
@@ -484,7 +489,7 @@ public static class AlgorithmManager
                 }
 
             }
-            else if (Vector3.Distance(CS.getObjTarget().transform.position, CS.gameObject.transform.position) < 20f)
+            else if (Vector3.Distance(CS.getObjTarget().transform.position, CS.gameObject.transform.position) >= 8f && Vector3.Distance(CS.getObjTarget().transform.position, CS.gameObject.transform.position) < 20f)
             {
                 if (random < 75)
                 {
@@ -515,6 +520,86 @@ public static class AlgorithmManager
         }
     }
 
+    static void Enemy2PatternSetting(Char_Status _CS)
+    {
+        //파트너 정보
+        Char_Status CS = _CS;
+        Animator animator = CS.getAnimator();
+        Transform AttackPos = CS.getAttackPos();
 
+        //캐릭터 상태 머신
+        Char_Dynamics CD = _CS.GetComponent<Char_Dynamics>();
+
+
+        int m_nMask = 0;
+        if (CS.getLayer() == 9)
+        {
+            m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
+        }
+        else
+        {
+            m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
+        }
+        Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 30f, m_nMask);
+        int count = 0;
+
+
+        int TargetRan = Random.Range(0, hitcol.Length);
+        while (count < hitcol.Length)
+        {
+            if (hitcol[TargetRan].GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
+            {
+                CS.SetObjTarget(hitcol[TargetRan].gameObject);
+                break;
+            }
+            else
+            {
+                TargetRan = Random.Range(0, hitcol.Length);
+            }
+            count++;
+        }
+
+        if (GameManager.instance.objPlayer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
+            GameManager.instance.objHealer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
+            GameManager.instance.objThief.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death)
+        {
+            CD.SetCharStatus(GameManager.CharState.Stay);
+        }
+        else
+        {
+
+            int random = Random.Range(0, 4);
+            if (Vector3.Distance(CS.getObjTarget().transform.position, CS.gameObject.transform.position) < 8f)
+            {
+                switch (random)
+                {
+                    case 0:
+                        CD.SetCharStatus(GameManager.CharState.Skill1);
+                        break;
+                    case 1:
+                        CD.SetCharStatus(GameManager.CharState.Skill2);
+                        break;
+                    case 2:
+                        CD.SetCharStatus(GameManager.CharState.Skill3);
+                        break;
+                    case 3:
+                        CD.SetCharStatus(GameManager.CharState.Skill4);
+                        break;
+                }
+                
+
+            }
+            else
+            {
+
+                CD.SetCharStatus(GameManager.CharState.Move);
+
+            }
+            //Debug.Log("Dist : " + Vector3.Distance(objTarget.transform.position, this.transform.position));
+            //Debug.Log("AttackPattern : " + EA);
+            // Debug.Log("ActionPattern : " + ES);
+
+        }
+    }
 
 }

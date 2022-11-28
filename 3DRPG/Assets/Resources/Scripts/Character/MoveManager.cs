@@ -26,7 +26,9 @@ public static class MoveManager
             case 10:
                 EnemyMoving(_id, _CS);
                 break;
-                
+            case 11:
+                EnemyMoving(_id, _CS);
+                break;
         }
     }
 
@@ -243,10 +245,6 @@ public static class MoveManager
 
 
         float Range = 8f;
-        if (CS.getCS() == GameManager.CharState.Skill3 || CS.getCS() == GameManager.CharState.Skill4)
-        {
-            Range = 15f;
-        }
 
 
 
@@ -267,4 +265,5 @@ public static class MoveManager
         //animator.Play("Idle01");
         //return false;
     }
+
 }

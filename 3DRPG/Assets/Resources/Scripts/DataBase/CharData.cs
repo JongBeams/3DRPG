@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEditor;
 
 
+
+
 [System.Serializable]
 public class CharData
 {
+
+
     //ID
     protected int ID;
     //캐릭터명
@@ -42,6 +46,9 @@ public class CharData
     protected int Skill4ID;
     // 플레이어 사용
     protected int IdentitySkillID;
+
+    //게임 오브젝트 프리펩 위치
+    protected string ObjPrefab;
 
 
     
@@ -141,6 +148,11 @@ public class CharData
         return IdentitySkillID;
     }
 
+    //게임 오브젝트 프리펩 위치
+    public string getObjPrefab()
+    {
+        return ObjPrefab;
+    }
 
 }
 
@@ -150,7 +162,7 @@ public class PlayerCharData : CharData
     public PlayerCharData(
         int _ID, string _Name, int _ATK, int _DEF,int _HP,int _MP,float _Speed,float _MP_Recovery,int _Layer,
         int _AttackID,int _Skill1ID,int _Skill2ID,int _Skill3ID,int _Skill4ID,
-        int _IdentitySkillID,int _IdentitySkillPoint, int _IdentitySkillPointRecovery,float _IdentityPointRecoveryTime)
+        int _IdentitySkillID,int _IdentitySkillPoint, int _IdentitySkillPointRecovery,float _IdentityPointRecoveryTime,string _ObjPrefab)
     {
         ID = _ID;
         Name = _Name;
@@ -170,6 +182,7 @@ public class PlayerCharData : CharData
         IdentitySkillPoint = _IdentitySkillPoint;
         IdentitySkillPointRecovery = _IdentitySkillPointRecovery;
         IdentityPointRecoveryTime = _IdentityPointRecoveryTime;
+        ObjPrefab = _ObjPrefab;
     }
 
     
@@ -179,7 +192,7 @@ public class PlayerCharData : CharData
 [System.Serializable]
 public class PartnerCharData : CharData
 {
-    public PartnerCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer, int _AttackID, int _Skill1ID, int _Skill2ID)
+    public PartnerCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer, int _AttackID, int _Skill1ID, int _Skill2ID, string _ObjPrefab)
     {
         ID = _ID;
         Name = _Name;
@@ -193,6 +206,7 @@ public class PartnerCharData : CharData
         AttackID = _AttackID;
         Skill1ID = _Skill1ID;
         Skill2ID = _Skill2ID;
+        ObjPrefab = _ObjPrefab;
     }
 
 }
@@ -201,7 +215,7 @@ public class PartnerCharData : CharData
 [System.Serializable]
 public class EnemyCharData : CharData
 {
-    public EnemyCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, float _Speed, int _Layer, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID)
+    public EnemyCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, float _Speed, int _Layer, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID, string _ObjPrefab)
     {
         ID = _ID;
         Name = _Name;
@@ -214,7 +228,53 @@ public class EnemyCharData : CharData
         Skill2ID = _Skill2ID;
         Skill3ID = _Skill3ID;
         Skill4ID = _Skill4ID;
+        ObjPrefab = _ObjPrefab;
     }
 
 
+}
+
+
+[System.Serializable]
+public class ItemData : CharData
+{
+    protected string ItemSprite;
+    protected GameManager.ItemType ItemType;
+    public ItemData()
+    {
+        ID = 0;
+        Name = "Empty";
+        ATK = 0;
+        DEF = 0;
+        HP = 0;
+        MP = 0;
+        Speed = 0;
+        MP_Recovery = 0;
+        ItemSprite = "";
+        ItemType = GameManager.ItemType.Wearable;
+    }
+
+    public ItemData(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery,string _ItemSprite,GameManager.ItemType _ItemType)
+    {
+        ID = _ID;
+        Name = _Name;
+        ATK = _ATK;
+        DEF = _DEF;
+        HP = _HP;
+        MP = _MP;
+        Speed = _Speed;
+        MP_Recovery = _MP_Recovery;
+        ItemSprite = _ItemSprite;
+        ItemType = _ItemType;
+    }
+
+    public string getItemSprite()
+    {
+        return ItemSprite;
+    }
+
+    public GameManager.ItemType getItemType()
+    {
+        return ItemType;
+    }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -22,23 +23,10 @@ public class GameManager : MonoBehaviour
         Delay,
     }
 
-   
-
-    public enum EnemyState
+    public enum ItemType
     {
-        Idle,
-        Move,
-        Attack,
-        Death,
-        Stay,
-    }
-
-    public enum EnemyAttack
-    {
-        MeleeTargetAttack,
-        MeleeRangeAttack,
-        FireBall,
-        FireBreath,
+        Wearable,
+        Expendalbe
     }
 
 
@@ -67,13 +55,14 @@ public class GameManager : MonoBehaviour
 
     //Manager
     SkillManager SM;
+    Player_Inventory PI;
 
 
     //Mouse
     public GameObject MBTarget;
     public Vector3 MBPoint;
 
-    //Keyboard
+
     public bool m_bKeySpaceOn = false;
 
     public GameObject objEnemy;
@@ -82,12 +71,24 @@ public class GameManager : MonoBehaviour
 
     public Text Target;
 
+    public GameObject objCanvas;
+
+
+    //UIMouse
+    GraphicRaycaster GR;
+    PointerEventData ped;
+    public GameObject UIObj;
+    public Vector3 UIMBPoint;
+    public ItemData ClickItem = new ItemData();
+    public GameObject DragingItem=null;
+    
 
     //gameend
     public GameObject objGameEnd;
     public Text objGameEndMessage;
     bool m_bGameEnd = false;
 
+    public int m_nEnemyID = 0;
 
     //get
     public SkillManager getSM()
@@ -111,18 +112,48 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        EnemyHPBar.maxValue = objEnemy.GetComponent<Char_Status>().getHPMax();
+        
         SM = this.GetComponent<SkillManager>();
+        PI = this.GetComponent<Player_Inventory>();
 
-        objPlayer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPlayerDB[0]);
-        objHealer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[2]);
-        objThief.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[1]);
+        getInstanceChar();
 
-        objEnemy.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lEnemyDB[0]);
+        //UI 등록
+        objCanvas = GameObject.FindGameObjectWithTag("Canvas");
+        GR = objCanvas.GetComponent<GraphicRaycaster>();
+        ped = new PointerEventData(null);//초기화
+
+        PI.RemoteStart();
+
+        
+    }
+
+
+    void getInstanceChar()
+    {
+        m_nEnemyID = PlayerPrefs.GetInt("EnemyID");
+
+        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(CharDataBase.instance.m_lPlayerDB[PlayerPrefs.GetInt("Player")].getObjPrefab()), new Vector3(0,0,-15), Quaternion.identity);
+        GameObject Partner1Obj = Instantiate(Resources.Load<GameObject>(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner1")].getObjPrefab()), new Vector3(5, 0, -17), Quaternion.identity);
+        GameObject Partner2Obj = Instantiate(Resources.Load<GameObject>(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner2")].getObjPrefab()), new Vector3(-5, 0, -17), Quaternion.identity);
+        GameObject EnemyObj = Instantiate(Resources.Load<GameObject>(CharDataBase.instance.m_lEnemyDB[m_nEnemyID].getObjPrefab()), new Vector3(0, 0, 15), Quaternion.identity);
+
+        objPlayer = PlayerObj;
+        objHealer = Partner1Obj;
+        objThief = Partner2Obj;
+        objEnemy = EnemyObj;
+
+        objPlayer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPlayerDB[PlayerPrefs.GetInt("Player")]);
+        objHealer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner1")]);
+        objThief.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner2")]);
+
+        objEnemy.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lEnemyDB[m_nEnemyID]);
         objEnemy.GetComponent<Char_Status>().SetSuperArmor(true);
     }
 
 
+
+    //게임 오브젝트 레이케스트
     void MouseTargetRay()
     {
         RaycastHit hit;
@@ -151,14 +182,40 @@ public class GameManager : MonoBehaviour
 
     }
 
+    void UIMouseRay()
+    {
+        ped.position = Input.mousePosition;//마우스 위치의 이벤트 실행
+        List<RaycastResult> rayResults = new List<RaycastResult>();
+        GR.Raycast(ped, rayResults);
+        //UIPos = ped.position;
+        UIMBPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (rayResults.Count > 0)
+        {
+            UIObj = rayResults[0].gameObject;
+        }
+        else
+        {
+            UIObj = null;
+        }
+    }
+
    
 
     public void GoMain()
     {
-        SceneManager.LoadScene("MainScence");
+
+        if (m_nEnemyID==1 ||(objPlayer.GetComponent<Char_Status>().getCS() == CharState.Death &&
+            objHealer.GetComponent<Char_Status>().getCS() == CharState.Death &&
+            objThief.GetComponent<Char_Status>().getCS() == CharState.Death))
+        {
+            SceneManager.LoadScene("MainScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("SelectScene");
+            PlayerPrefs.SetInt("EnemyID", 1);
+        }
         
-
-
     }
 
     void CtrlPlayer()
@@ -275,6 +332,45 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    void CtrlUI()
+    {
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (UIObj != null&&UIObj.tag == "ItemSlot")
+                {
+                    ClickItem = UIObj.GetComponent<ItemSlot>().item;
+                    DragingItem = UIObj.transform.GetChild(0).gameObject;
+                }
+
+            }
+            if (Input.GetMouseButton(0))
+            {
+                DragingItem.GetComponent<RectTransform>().anchoredPosition = UIMBPoint;
+
+            }
+            if (Input.GetMouseButtonUp(0))
+            {
+                if (DragingItem != null)
+                {
+                    if(UIObj == null || UIObj.tag != "ItemSlot")
+                    {
+                        DragingItem.GetComponent<RectTransform>().anchoredPosition = new Vector3(0,0,0);
+                    }
+                }
+
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+
+               
+
+            }
+        
+    }
+
     void HPMPBar()
     {
         Char_Status CS = objPlayer.GetComponent<Char_Status>();
@@ -347,15 +443,20 @@ public class GameManager : MonoBehaviour
         HPMPBar();
 
         MouseTargetRay();
+        UIMouseRay();
 
-        if(!m_bGameEnd)
+        if (!m_bGameEnd)
+        {
             CtrlPlayer();
+            CtrlUI();
+        }
+            
 
         GameEndText();
 
 
 
-        Debug.DrawLine(objPlayer.transform.position, objPlayer.GetComponent<Char_Dynamics>().getStartPos());
+        //Debug.DrawLine(objPlayer.transform.position, objPlayer.GetComponent<Char_Dynamics>().getStartPos());
 
 
 

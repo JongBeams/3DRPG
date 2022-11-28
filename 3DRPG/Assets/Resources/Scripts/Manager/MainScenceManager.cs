@@ -9,7 +9,7 @@ public class MainScenceManager : MonoBehaviour
 
     public void GameStart()
     {
-        SceneManager.LoadScene("InGameScene");
+        SceneManager.LoadScene("SelectScene");
     }
 
 
@@ -25,6 +25,7 @@ public class MainScenceManager : MonoBehaviour
         void Start()
     {
         SetResolution();
+        PlayerPrefs.SetInt("EnemyID",0);
     }
 
     // Update is called once per frame

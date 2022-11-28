@@ -30,7 +30,7 @@ public class SkillManager : MonoBehaviour
                 BackStep(_CS, _id);
                 break;
             case 6:
-                MeleeAttack(_CS, _id);
+                StartCoroutine(MeleeAttack(_CS, _id));
                 break;
             case 7:
                 ShieldBash(_CS, _id);
@@ -45,16 +45,16 @@ public class SkillManager : MonoBehaviour
                 TargetTaunt(_CS, _id);
                 break;
             case 11:
-                MeleeTargetAttack(_CS, _id);
+                StartCoroutine(MeleeTargetAttack(_CS, _id));
                 break;
             case 12:
-                RangeAngleAttack(_CS, _id);
+                StartCoroutine(RangeAngleAttack(_CS, _id));
                 break;
             case 13:
                 FireBall(_CS, _id);
                 break;
             case 14:
-                FireBreath(_CS, _id);
+                StartCoroutine(FireBreath(_CS, _id));
                 break;
             case 15:
                 OnShield(_CS, _id);
@@ -64,6 +64,15 @@ public class SkillManager : MonoBehaviour
                 break;
             case 17:
                 FireBreath(_CS, _id);
+                break;
+            case 18:
+                RangeAngleAttack(_CS, _id);
+                break;
+            case 19:
+                RangeAngleAttack(_CS, _id);
+                break;
+            case 20:
+                RangeAngleAttack(_CS, _id);
                 break;
 
         }
@@ -365,8 +374,10 @@ public class SkillManager : MonoBehaviour
     }
 
 
-    void MeleeAttack(Char_Status _CS, int SkillID)
+    IEnumerator MeleeAttack(Char_Status _CS, int SkillID)
     {
+
+        
         //파트너 정보
         Char_Status CS = _CS;
         Animator animator = CS.getAnimator();
@@ -375,6 +386,8 @@ public class SkillManager : MonoBehaviour
 
         //스킬 정보
         SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+
+
 
 
         // 타깃 바라보기
@@ -391,7 +404,7 @@ public class SkillManager : MonoBehaviour
         }
         CS.transform.LookAt(vecEnemyLookingPoint);
 
-
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length/2);
 
         int m_nMask = 0;
         m_nMask = SkillDB.getTargetSelect();
@@ -654,7 +667,7 @@ public class SkillManager : MonoBehaviour
 
 
         float dis = Vector3.Distance(CS.transform.position, CD.getMovePoint());
-
+        
 
         if (!CS.getIdentitySkillUsing())
         {
@@ -677,6 +690,7 @@ public class SkillManager : MonoBehaviour
             {
                 CS.delGetDamae = CS.UseIdentitiy;
                 CS.setIdentitySkillUsing(true);
+                //변동확인hp = 지금HP
             }
             else
             {
@@ -689,6 +703,10 @@ public class SkillManager : MonoBehaviour
         else
         {
             dis = Vector3.Distance(CS.transform.position, CD.getMovePoint());
+
+            //if(변동확인hp < 지금HP)
+
+            //체력이 맞아서 줄고 그체력을 다시 회복시키고 고유자원을 깐다
 
             if (CS.getIdentityPoint() <= 0)
             {
@@ -712,7 +730,7 @@ public class SkillManager : MonoBehaviour
 
 
 
-    void MeleeTargetAttack(Char_Status _CS, int SkillID)//vector 크기만다르다
+    IEnumerator MeleeTargetAttack(Char_Status _CS, int SkillID)//vector 크기만다르다
     {
         //파트너 정보
         Char_Status CS = _CS;
@@ -738,6 +756,7 @@ public class SkillManager : MonoBehaviour
         }
         CS.transform.LookAt(vecEnemyLookingPoint);
 
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length / 2);
 
         int m_nMask = 0;
         m_nMask = SkillDB.getTargetSelect();
@@ -757,9 +776,9 @@ public class SkillManager : MonoBehaviour
 
 
 
-    
 
-    void RangeAngleAttack(Char_Status _CS, int SkillID)
+
+    IEnumerator RangeAngleAttack(Char_Status _CS, int SkillID)
     {
         //파트너 정보
         Char_Status CS = _CS;
@@ -785,6 +804,8 @@ public class SkillManager : MonoBehaviour
         }
         CS.transform.LookAt(vecEnemyLookingPoint);
 
+
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length / 2);
 
         int m_nMask = 0;
         m_nMask = SkillDB.getTargetSelect();
@@ -854,7 +875,7 @@ public class SkillManager : MonoBehaviour
     }
 
 
-    void FireBreath(Char_Status _CS, int SkillID)
+    IEnumerator FireBreath(Char_Status _CS, int SkillID)
     {
         //파트너 정보
         Char_Status CS = _CS;
@@ -881,6 +902,7 @@ public class SkillManager : MonoBehaviour
         CS.transform.LookAt(vecEnemyLookingPoint);
 
 
+
         GameObject FireBreathEffect = Instantiate(Resources.Load<GameObject>(SkillDB.getSkillEffectResource()), AttackPos.position, Quaternion.identity, AttackPos);
         FireBreathEffect.transform.localPosition = Vector3.zero;
         FireBreathEffect.transform.localRotation = Quaternion.identity;
@@ -888,6 +910,8 @@ public class SkillManager : MonoBehaviour
 
         FireBreathEffect.GetComponent<ParticleSystem>().Play();
         Destroy(FireBreathEffect, SkillDB.getSkillUsingTime() + 3f);
+
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length / 2);
 
         int m_nMask = 0;
         m_nMask = SkillDB.getTargetSelect();

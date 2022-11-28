@@ -477,8 +477,9 @@ public class Char_Status : MonoBehaviour
             if (!m_bSuperArmor && !m_bIdentitySkillUsing)
             {
                 gameObject.GetComponent<Char_Dynamics>().SetCharStatus(GameManager.CharState.Hit);
-                iTween.ShakePosition(Camera.main.gameObject, iTween.Hash("x", 0.2, "y", 0.2, "time", 0.3f));
+                
             }
+            iTween.ShakePosition(Camera.main.gameObject, iTween.Hash("x", 0.2, "y", 0.2, "time", 0.3f));
             //m_nLastGetDamage = totalDamage;
             m_nPlayerHP -= totalDamage;
 
@@ -620,7 +621,7 @@ public class Char_Status : MonoBehaviour
         //m_nPlayerHP = m_nPlayerHPMax;
         //m_nIdentityPoint = m_nIdentityPointtMax;
         CS=GameManager.CharState.Idle;
-
+        
         delGetDamae = GetDamage;
     }
 

@@ -10,6 +10,7 @@ public class CharDataBase : MonoBehaviour
     public List<PartnerCharData> m_lPartnerDB = new List<PartnerCharData>();
     public List<EnemyCharData> m_lEnemyDB = new List<EnemyCharData>();
     public List<SkillData> m_lSkillDB = new List<SkillData>();
+    public List<ItemData> m_lItemDB = new List<ItemData>();
 
     private void Awake()
     {
@@ -20,17 +21,17 @@ public class CharDataBase : MonoBehaviour
     void AddPlayer(
         int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer,
         int _AttackID, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID,
-        int _IdentitySkillID,int _IdentitySkillPoint, int _IdentitySkillPointRecovery, float _IdentityPointRecoveryTime)
+        int _IdentitySkillID,int _IdentitySkillPoint, int _IdentitySkillPointRecovery, float _IdentityPointRecoveryTime, string _ObjPrefab)
     {
-        m_lPlayerDB.Add(new PlayerCharData(_ID,_Name, _ATK, _DEF, _HP, _MP, _Speed, _MP_Recovery, _Layer, _AttackID, _Skill1ID, _Skill2ID, _Skill3ID, _Skill4ID, _IdentitySkillID,_IdentitySkillPoint, _IdentitySkillPointRecovery, _IdentityPointRecoveryTime));
+        m_lPlayerDB.Add(new PlayerCharData(_ID,_Name, _ATK, _DEF, _HP, _MP, _Speed, _MP_Recovery, _Layer, _AttackID, _Skill1ID, _Skill2ID, _Skill3ID, _Skill4ID, _IdentitySkillID,_IdentitySkillPoint, _IdentitySkillPointRecovery, _IdentityPointRecoveryTime, _ObjPrefab));
     }
-    void AddPartner(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer, int _AttackID, int _Skill1ID, int _Skill2ID)
+    void AddPartner(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer, int _AttackID, int _Skill1ID, int _Skill2ID, string _ObjPrefab)
     {
-        m_lPartnerDB.Add(new PartnerCharData(_ID, _Name, _ATK, _DEF, _HP, _MP, _Speed, _MP_Recovery, _Layer, _AttackID, _Skill1ID, _Skill2ID));
+        m_lPartnerDB.Add(new PartnerCharData(_ID, _Name, _ATK, _DEF, _HP, _MP, _Speed, _MP_Recovery, _Layer, _AttackID, _Skill1ID, _Skill2ID, _ObjPrefab));
     }
-    void AddEnemy(int _ID, string _Name, int _ATK, int _DEF, int _HP, float _Speed, int _Layer, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID)
+    void AddEnemy(int _ID, string _Name, int _ATK, int _DEF, int _HP, float _Speed, int _Layer, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID, string _ObjPrefab)
     {
-        m_lEnemyDB.Add(new EnemyCharData(_ID, _Name, _ATK, _DEF, _HP, _Speed, _Layer, _Skill1ID, _Skill2ID, _Skill3ID, _Skill4ID));
+        m_lEnemyDB.Add(new EnemyCharData(_ID, _Name, _ATK, _DEF, _HP, _Speed, _Layer, _Skill1ID, _Skill2ID, _Skill3ID, _Skill4ID, _ObjPrefab));
     }
 
     void AddSkill(int _SkillID,string _SkillName, float _SkillCeofficientPer1, float _SkillCeofficientPer2, float _SkillCoolTime,int _SkillUsingMana, string _SkillEffectResource,int _TargetSelect, float _SkillRange1,float _SkillRange2,float _SkillSpeed,float _SkillUsingTime)
@@ -38,17 +39,23 @@ public class CharDataBase : MonoBehaviour
         m_lSkillDB.Add(new SkillData(_SkillID, _SkillName, _SkillCeofficientPer1, _SkillCeofficientPer2, _SkillCoolTime, _SkillUsingMana, _SkillEffectResource, _TargetSelect, _SkillRange1, _SkillRange2,_SkillSpeed, _SkillUsingTime));
     }
 
-    // Start is called before the first frame update
-    void Start()
+    void AddItem(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery,string _ItemSprite, GameManager.ItemType _ItemType)
+    {
+        m_lItemDB.Add(new ItemData(_ID, _Name, _ATK, _DEF, _HP, _MP, _Speed, _MP_Recovery, _ItemSprite, _ItemType));
+    }
+
+        // Start is called before the first frame update
+        void Start()
     {
         //플레이어 캐릭터
-        AddPlayer(0, "기사",2,5,25,100,4,3,6,6,7,8,9,10,15,30,10,10);
+        AddPlayer(0, "기사",2,5,25,100,4,3,6,6,7,8,9,10,15,30,10,10,"Prefabs/Character/Player");
         //AI동료 캐릭터
-        AddPartner(1,"사제", 2, 5, 15, 200, 4, 3, 9, 0, 1, 2);
-        AddPartner(2,"도적", 4, 5, 15, 100, 4, 3, 9, 3, 4, 5);
-        AddPartner(3,"마법사", 4, 5, 15, 100, 4, 3, 9, 0, 16, 17);
+        AddPartner(1,"사제", 2, 5, 15, 200, 4, 3, 9, 0, 1, 2, "Prefabs/Character/Healer");
+        AddPartner(2,"도적", 4, 5, 15, 100, 4, 3, 9, 3, 4, 5, "Prefabs/Character/Thief");
+        AddPartner(3,"마법사", 4, 5, 15, 100, 4, 3, 9, 0, 16, 17, "Prefabs/Magician");
         //적 캐릭터
-        AddEnemy(10,"붉은 용", 10, 0, 150, 8,8, 11, 12, 13, 14);
+        AddEnemy(10,"붉은 용", 10, 0, 150, 8,8, 11, 12, 13, 14, "Prefabs/Character/Enemy");
+        AddEnemy(11,"초록 용", 8, 0, 120, 12,8, 11, 18, 19, 20, "Prefabs/Green");
 
 
         //스킬 정보
@@ -72,6 +79,15 @@ public class CharDataBase : MonoBehaviour
         //임시
         AddSkill(16, "마법사_화염구", 2f, 0, 5, 50, "Prefabs/SkillEffect/FireBall", 1 << (LayerMask.NameToLayer("Enemy")), 0, 0, 6, 5);
         AddSkill(17, "마법사_화염숨결", 3f, 0, 7, 80, "Prefabs/SkillEffect/FireBreath", 1 << (LayerMask.NameToLayer("Enemy")), 20, 20, 0, 1);
+        AddSkill(18, "용_각도범위공격", 2, 0, 0, 0, "", 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner")), 10, 30, 0, 0);
+        AddSkill(19, "용_각도범위공격", 1.5f, 0, 0, 0, "", 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner")), 10, 180, 0, 0);
+        AddSkill(20, "용_각도범위공격", 1, 0, 0, 0, "", 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner")), 10, 360, 0, 0);
+
+
+        //Item Manager
+        AddItem(0, "빈 아이템",0,0,0,0,0,0,"",GameManager.ItemType.Wearable);
+        AddItem(1, "방패",0,5,0,0,0,0, "Texture/Shield", GameManager.ItemType.Wearable);
+
     }
 
 }
