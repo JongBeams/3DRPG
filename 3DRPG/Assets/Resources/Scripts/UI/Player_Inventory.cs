@@ -9,17 +9,30 @@ public class Player_Inventory : MonoBehaviour
 
     public List<ItemSlot> m_lSlot = new List<ItemSlot>();
 
-    public List<ItemSlot> m_lPlayerWearingSlot = new List<ItemSlot>();
-    public List<ItemSlot> m_lPartner1WearingSlot = new List<ItemSlot>();
-    public List<ItemSlot> m_lPartner2WearingSlot = new List<ItemSlot>();
 
     public int ver = 6;//¼¼·Î
     public int hor = 6;//°¡·Î
+
+    int n_mPlayerSlot = 2;
+    int n_mPartner1Slot = 2;
+    int n_mPartner2Slot = 2;
 
     public float anchorSize = 0.15f;
 
     public GameObject objInventory;
 
+    public int getPlayerSlot()
+    {
+        return n_mPlayerSlot;
+    }
+    public int getPartner1Slot()
+    {
+        return n_mPartner1Slot;
+    }
+    public int getPartner2Slot()
+    {
+        return n_mPartner2Slot;
+    }
 
     public void RemoteStart()
     {
@@ -66,14 +79,14 @@ public class Player_Inventory : MonoBehaviour
         }
 
         //ÇÃ·¹ÀÌ¾î Âø¿ë ½½·Ô
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < n_mPlayerSlot; i++)
         {
             Transform newSlot = Instantiate(slot);
             newSlot.name = "Slot" + (i + 1);
             newSlot.parent = objInventory.transform.GetChild(1);
-            newSlot.transform.tag = "WearItemSlot";
+            //newSlot.transform.tag = "WearItemSlot";
             RectTransform slotRect = newSlot.GetComponent<RectTransform>();
-            RectTransform ParslotRect = this.transform.GetComponent<RectTransform>();
+            RectTransform ParslotRect = objInventory.transform.GetComponent<RectTransform>();
 
             slotRect.sizeDelta = new Vector2(40, 40);
 
@@ -83,21 +96,21 @@ public class Player_Inventory : MonoBehaviour
 
 
 
-            m_lPlayerWearingSlot.Add(newSlot.GetComponent<ItemSlot>());
-            newSlot.GetComponent<ItemSlot>().m_nSlotNum = i;
+            m_lSlot.Add(newSlot.GetComponent<ItemSlot>());
+            newSlot.GetComponent<ItemSlot>().m_nSlotNum = (ver* hor) + i;
 
             newSlot.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 60);
         }
 
         //µ¿·á1 Âø¿ë ½½·Ô
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < n_mPartner1Slot; i++)
         {
             Transform newSlot = Instantiate(slot);
             newSlot.name = "Slot" + (i + 1);
             newSlot.parent = objInventory.transform.GetChild(1);
-            newSlot.transform.tag = "WearItemSlot";
+            //newSlot.transform.tag = "WearItemSlot";
             RectTransform slotRect = newSlot.GetComponent<RectTransform>();
-            RectTransform ParslotRect = this.transform.GetComponent<RectTransform>();
+            RectTransform ParslotRect = objInventory.transform.GetComponent<RectTransform>();
 
             slotRect.sizeDelta = new Vector2(40, 40);
 
@@ -107,21 +120,21 @@ public class Player_Inventory : MonoBehaviour
 
 
 
-            m_lPartner1WearingSlot.Add(newSlot.GetComponent<ItemSlot>());
-            newSlot.GetComponent<ItemSlot>().m_nSlotNum = i;
+            m_lSlot.Add(newSlot.GetComponent<ItemSlot>());
+            newSlot.GetComponent<ItemSlot>().m_nSlotNum = (ver * hor)+ n_mPlayerSlot + i;
 
             newSlot.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 60);
         }
 
         //µ¿·á2 Âø¿ë ½½·Ô
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < n_mPartner2Slot; i++)
         {
             Transform newSlot = Instantiate(slot);
             newSlot.name = "Slot" + (i + 1);
             newSlot.parent = objInventory.transform.GetChild(1);
-            newSlot.transform.tag = "WearItemSlot";
+            //newSlot.transform.tag = "WearItemSlot";
             RectTransform slotRect = newSlot.GetComponent<RectTransform>();
-            RectTransform ParslotRect = this.transform.GetComponent<RectTransform>();
+            RectTransform ParslotRect = objInventory.transform.GetComponent<RectTransform>();
 
             slotRect.sizeDelta = new Vector2(40, 40);
 
@@ -131,8 +144,8 @@ public class Player_Inventory : MonoBehaviour
 
 
 
-            m_lPartner2WearingSlot.Add(newSlot.GetComponent<ItemSlot>());
-            newSlot.GetComponent<ItemSlot>().m_nSlotNum = i;
+            m_lSlot.Add(newSlot.GetComponent<ItemSlot>());
+            newSlot.GetComponent<ItemSlot>().m_nSlotNum = (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + i;
 
             newSlot.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 60);
         }
@@ -142,7 +155,7 @@ public class Player_Inventory : MonoBehaviour
     }
 
 
-    public void AddItem(int number)
+    public void AddItem(int itmeID)
     {
         //bool checkslot = false;
         int i = 0;
@@ -151,7 +164,7 @@ public class Player_Inventory : MonoBehaviour
             //            Debug.Log((i+1)+"¹øÂ° Ä­ ItemID : "+slotScripts[i].item.ItemID);
             if (m_lSlot[i].item.getID() == 0)
             {
-                m_lSlot[i].item = CharDataBase.instance.m_lItemDB[number];
+                m_lSlot[i].item = CharDataBase.instance.m_lItemDB[itmeID];
                 ItemImageChange(m_lSlot[i].transform);
 
                 break;
@@ -175,5 +188,19 @@ public class Player_Inventory : MonoBehaviour
             _slot.GetChild(0).GetComponent<RectTransform>().sizeDelta = _slot.GetComponent<RectTransform>().sizeDelta;
         }
     }
+
+
+    public void ChangeItemSlot(int MovingItemNum,int DropItemNum)
+    {
+        
+        ItemData Saveitem= m_lSlot[DropItemNum].item;
+        m_lSlot[DropItemNum].item = m_lSlot[MovingItemNum].item;
+        ItemImageChange(m_lSlot[DropItemNum].transform);
+        
+        m_lSlot[MovingItemNum].item = Saveitem;
+        ItemImageChange(m_lSlot[MovingItemNum].transform);
+
+    }
+
 
 }

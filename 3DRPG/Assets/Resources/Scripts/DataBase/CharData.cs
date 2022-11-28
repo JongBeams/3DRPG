@@ -246,24 +246,18 @@ public class ItemData : CharData
         Name = "Empty";
         ATK = 0;
         DEF = 0;
-        HP = 0;
-        MP = 0;
         Speed = 0;
-        MP_Recovery = 0;
         ItemSprite = "";
         ItemType = GameManager.ItemType.Wearable;
     }
 
-    public ItemData(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery,string _ItemSprite,GameManager.ItemType _ItemType)
+    public ItemData(int _ID, string _Name, int _ATK, int _DEF, float _Speed,string _ItemSprite,GameManager.ItemType _ItemType)
     {
         ID = _ID;
         Name = _Name;
         ATK = _ATK;
         DEF = _DEF;
-        HP = _HP;
-        MP = _MP;
         Speed = _Speed;
-        MP_Recovery = _MP_Recovery;
         ItemSprite = _ItemSprite;
         ItemType = _ItemType;
     }

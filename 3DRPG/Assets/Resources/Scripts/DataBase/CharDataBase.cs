@@ -39,9 +39,9 @@ public class CharDataBase : MonoBehaviour
         m_lSkillDB.Add(new SkillData(_SkillID, _SkillName, _SkillCeofficientPer1, _SkillCeofficientPer2, _SkillCoolTime, _SkillUsingMana, _SkillEffectResource, _TargetSelect, _SkillRange1, _SkillRange2,_SkillSpeed, _SkillUsingTime));
     }
 
-    void AddItem(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery,string _ItemSprite, GameManager.ItemType _ItemType)
+    void AddItem(int _ID, string _Name, int _ATK, int _DEF,  float _Speed, string _ItemSprite, GameManager.ItemType _ItemType)
     {
-        m_lItemDB.Add(new ItemData(_ID, _Name, _ATK, _DEF, _HP, _MP, _Speed, _MP_Recovery, _ItemSprite, _ItemType));
+        m_lItemDB.Add(new ItemData(_ID, _Name, _ATK, _DEF, _Speed,  _ItemSprite, _ItemType));
     }
 
         // Start is called before the first frame update
@@ -85,8 +85,8 @@ public class CharDataBase : MonoBehaviour
 
 
         //Item Manager
-        AddItem(0, "빈 아이템",0,0,0,0,0,0,"",GameManager.ItemType.Wearable);
-        AddItem(1, "방패",0,5,0,0,0,0, "Texture/Shield", GameManager.ItemType.Wearable);
+        AddItem(0, "빈 아이템",0,0,0,"",GameManager.ItemType.Wearable);
+        AddItem(1, "방패",100,5,0, "Texture/Shield", GameManager.ItemType.Wearable);
 
     }
 

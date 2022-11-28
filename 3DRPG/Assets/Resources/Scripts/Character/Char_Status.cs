@@ -64,9 +64,10 @@ public class Char_Status : MonoBehaviour
     //애니메이션(메카님 애니메이션을 통한 제어)
     Animator animator;
 
+    public ItemSlot[] itemSlots;
+
     // 상태 체크
     bool m_bProtectBuff = false;
-
     bool m_bSuperArmor = false;
 
 
@@ -152,11 +153,27 @@ public class Char_Status : MonoBehaviour
     }
     public int getATK()
     {
-        return m_nATK;
+        if (m_nLayer == 8)
+        {
+            return m_nATK;
+        }
+        else
+        {
+            return itemSlots[0].item.getATK() + itemSlots[1].item.getATK() + m_nATK;
+        }
+        
     }
     public int getDEF()
     {
-        return m_nDEF;
+        if (m_nLayer == 8)
+        {
+            return m_nDEF;
+        }
+        else
+        {
+            return itemSlots[0].item.getDEF() + itemSlots[1].item.getDEF() + m_nDEF;
+        }
+        
     }
     public int getHP()
     {
@@ -176,7 +193,15 @@ public class Char_Status : MonoBehaviour
     }
     public float getSpeed()
     {
-        return m_fPlayerSpeed;
+        if (m_nLayer == 8)
+        {
+            return m_fPlayerSpeed;
+        }
+        else
+        {
+            return itemSlots[0].item.getSpeed() + itemSlots[1].item.getSpeed() + m_fPlayerSpeed;
+        }
+        
     }
     public int getIdentityPoint()
     {
@@ -281,7 +306,14 @@ public class Char_Status : MonoBehaviour
     {
         CS = _CS;
     }
-
+    public void setItemSlotsNum(int num)
+    {
+        itemSlots = new ItemSlot[num];
+    }
+    public void setItemSlots(int num,ItemSlot _ItmeSlot)
+    {
+        itemSlots[num] = _ItmeSlot;
+    }
 
     //set CharStatus
     public void CharStatusSetting(CharData _chardata)

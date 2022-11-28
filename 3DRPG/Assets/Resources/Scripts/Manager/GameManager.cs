@@ -78,10 +78,14 @@ public class GameManager : MonoBehaviour
     GraphicRaycaster GR;
     PointerEventData ped;
     public GameObject UIObj;
+    
     public Vector3 UIMBPoint;
     public ItemData ClickItem = new ItemData();
     public GameObject DragingItem=null;
-    
+    public GameObject DragingItemSprite = null;
+
+
+
 
     //gameend
     public GameObject objGameEnd;
@@ -95,6 +99,12 @@ public class GameManager : MonoBehaviour
     {
         return SM;
     }
+
+    public Player_Inventory getPI()
+    {
+        return PI;
+    }
+
     public bool getGameEnd()
     {
         return m_bGameEnd;
@@ -116,8 +126,6 @@ public class GameManager : MonoBehaviour
         SM = this.GetComponent<SkillManager>();
         PI = this.GetComponent<Player_Inventory>();
 
-        getInstanceChar();
-
         //UI 등록
         objCanvas = GameObject.FindGameObjectWithTag("Canvas");
         GR = objCanvas.GetComponent<GraphicRaycaster>();
@@ -125,7 +133,9 @@ public class GameManager : MonoBehaviour
 
         PI.RemoteStart();
 
-        
+        getInstanceChar();
+
+
     }
 
 
@@ -146,6 +156,19 @@ public class GameManager : MonoBehaviour
         objPlayer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPlayerDB[PlayerPrefs.GetInt("Player")]);
         objHealer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner1")]);
         objThief.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner2")]);
+
+        objPlayer.GetComponent<Char_Status>().setItemSlotsNum(PI.getPlayerSlot());
+        objHealer.GetComponent<Char_Status>().setItemSlotsNum(PI.getPartner1Slot());
+        objThief.GetComponent<Char_Status>().setItemSlotsNum(PI.getPartner2Slot());
+
+        objPlayer.GetComponent<Char_Status>().setItemSlots(0,PI.m_lSlot[(PI.ver * PI.hor)]);
+        objPlayer.GetComponent<Char_Status>().setItemSlots(1,PI.m_lSlot[(PI.ver * PI.hor)+1]);
+
+        objHealer.GetComponent<Char_Status>().setItemSlots(0, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot()]);
+        objHealer.GetComponent<Char_Status>().setItemSlots(1, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot()+1]);
+
+        objThief.GetComponent<Char_Status>().setItemSlots(0, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot()+PI.getPartner1Slot()]);
+        objThief.GetComponent<Char_Status>().setItemSlots(1, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot() + PI.getPartner1Slot() + 1]);
 
         objEnemy.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lEnemyDB[m_nEnemyID]);
         objEnemy.GetComponent<Char_Status>().SetSuperArmor(true);
@@ -187,8 +210,14 @@ public class GameManager : MonoBehaviour
         ped.position = Input.mousePosition;//마우스 위치의 이벤트 실행
         List<RaycastResult> rayResults = new List<RaycastResult>();
         GR.Raycast(ped, rayResults);
+
         //UIPos = ped.position;
-        UIMBPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        //UIMBPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        UIMBPoint = new Vector3(
+            (Camera.main.ScreenToViewportPoint(Input.mousePosition).x*Screen.width)- (Screen.width/2),
+            (Camera.main.ScreenToViewportPoint(Input.mousePosition).y * Screen.height) - (Screen.height / 2), 0);
+
+
         if (rayResults.Count > 0)
         {
             UIObj = rayResults[0].gameObject;
@@ -336,39 +365,69 @@ public class GameManager : MonoBehaviour
     void CtrlUI()
     {
 
-            if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (UIObj != null && UIObj.tag == "ItemSlot")
             {
-                if (UIObj != null&&UIObj.tag == "ItemSlot")
+                ClickItem = UIObj.GetComponent<ItemSlot>().item;
+                DragingItem = UIObj;
+                DragingItemSprite = UIObj.transform.GetChild(0).gameObject;
+                DragingItemSprite.transform.parent = objCanvas.transform;
+            }
+
+        }
+        if (Input.GetMouseButton(0))
+        {
+            DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = UIMBPoint;
+
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (DragingItem != null)
+            {
+                if (UIObj == null || UIObj.tag != "ItemSlot")
                 {
-                    ClickItem = UIObj.GetComponent<ItemSlot>().item;
-                    DragingItem = UIObj.transform.GetChild(0).gameObject;
+                    DragingItemSprite.transform.parent = DragingItem.transform;
+                    DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+                    DragingItemSprite = null;
+                    DragingItem = null;
+                    ClickItem = null;
+                    
                 }
-
-            }
-            if (Input.GetMouseButton(0))
-            {
-                DragingItem.GetComponent<RectTransform>().anchoredPosition = UIMBPoint;
-
-            }
-            if (Input.GetMouseButtonUp(0))
-            {
-                if (DragingItem != null)
+                else
                 {
-                    if(UIObj == null || UIObj.tag != "ItemSlot")
-                    {
-                        DragingItem.GetComponent<RectTransform>().anchoredPosition = new Vector3(0,0,0);
-                    }
+                    DragingItemSprite.transform.parent = DragingItem.transform;
+                    DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+                    PI.ChangeItemSlot(DragingItem.GetComponent<ItemSlot>().m_nSlotNum, UIObj.GetComponent<ItemSlot>().m_nSlotNum);
+                    DragingItemSprite = null;
+                    DragingItem = null;
+                    ClickItem = null;
                 }
-
             }
 
-            if (Input.GetMouseButtonDown(1))
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+
+
+
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (PI.objInventory.activeSelf == true)
             {
-
-               
-
+                PI.objInventory.SetActive(false);
             }
-        
+            else
+            {
+                PI.objInventory.SetActive(true);
+            }
+            
+        }
+
     }
 
     void HPMPBar()
