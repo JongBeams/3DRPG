@@ -389,6 +389,7 @@ public class GameManager : MonoBehaviour
                 {
                     DragingItemSprite.transform.parent = DragingItem.transform;
                     DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+                    PI.RemoveItem(DragingItem.GetComponent<ItemSlot>().m_nSlotNum);
                     DragingItemSprite = null;
                     DragingItem = null;
                     ClickItem = null;

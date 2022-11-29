@@ -778,6 +778,7 @@ MonoBehaviour:
   UIObj: {fileID: 0}
   UIMBPoint: {x: 0, y: 0, z: 0}
   DragingItem: {fileID: 0}
+  DragingItemSprite: {fileID: 0}
   objGameEnd: {fileID: 430516120}
   objGameEndMessage: {fileID: 1556656682}
   m_nEnemyID: 0
@@ -824,9 +825,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slot: {fileID: 0}
   m_lSlot: []
-  m_lPlayerWearingSlot: []
-  m_lPartner1WearingSlot: []
-  m_lPartner2WearingSlot: []
   ver: 6
   hor: 6
   anchorSize: 0.15

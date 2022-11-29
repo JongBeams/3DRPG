@@ -202,5 +202,12 @@ public class Player_Inventory : MonoBehaviour
 
     }
 
+    public void RemoveItem(int ItemNum)
+    {
+
+        m_lSlot[ItemNum].item=new ItemData();
+        ItemImageChange(m_lSlot[ItemNum].transform);
+    }
+
 
 }
