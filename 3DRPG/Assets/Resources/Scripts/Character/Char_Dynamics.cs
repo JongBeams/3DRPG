@@ -100,6 +100,7 @@ public class Char_Dynamics : MonoBehaviour
                 break;
             case GameManager.CharState.Death:
                 CharStatus.getAnimator().SetBool("Death", true);
+                //Destroy(this.gameObject, 5f);
                 break;
             case GameManager.CharState.Stay:
                 CharStatus.getAnimator().SetBool("Move", false);

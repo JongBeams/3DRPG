@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
     public Slider PlayerSkillECoolTime;
     public Slider PlayerSkillRCoolTime;
 
+    public GameObject objWall;
+
 
     //Manager
     SkillManager SM;
@@ -84,7 +86,7 @@ public class GameManager : MonoBehaviour
     public GameObject DragingItem=null;
     public GameObject DragingItemSprite = null;
 
-
+    
 
 
     //gameend
@@ -228,23 +230,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
-   
-
-    public void GoMain()
+    public void GoMaing()
     {
+        SceneManager.LoadScene("MainScene");
 
-        if (m_nEnemyID==1 ||(objPlayer.GetComponent<Char_Status>().getCS() == CharState.Death &&
-            objHealer.GetComponent<Char_Status>().getCS() == CharState.Death &&
-            objThief.GetComponent<Char_Status>().getCS() == CharState.Death))
+    }
+
+    public void NextStage()
+    {
+        if (m_nEnemyID == 1)
         {
             SceneManager.LoadScene("MainScene");
         }
         else
         {
-            SceneManager.LoadScene("SelectScene");
-            PlayerPrefs.SetInt("EnemyID", 1);
+            SceneManager.LoadScene("InGmaeScene");
+            PlayerPrefs.SetInt("EnemyID", m_nEnemyID+1);
         }
-        
+
     }
 
     void CtrlPlayer()
@@ -268,7 +271,7 @@ public class GameManager : MonoBehaviour
             이동 = 고유 같은 취급
              */
 
-            if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move || CS.getCS() == CharState.IdentitySkill)
+            if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move || CS.getCS() == CharState.IdentitySkill&&UIObj==null)
             {
 
                 if (Input.GetKeyDown(KeyCode.Space))
@@ -378,7 +381,8 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetMouseButton(0))
         {
-            DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = UIMBPoint;
+            if(DragingItemSprite!=null)
+                DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = UIMBPoint;
 
         }
         if (Input.GetMouseButtonUp(0))
@@ -487,8 +491,9 @@ public class GameManager : MonoBehaviour
         if (objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death)
         {
             m_bGameEnd = true;
-            objGameEnd.SetActive(true);
-            objGameEndMessage.text = "Game Clear";
+            //objGameEnd.SetActive(true);
+            //objGameEndMessage.text = "Game Clear";
+            objWall.SetActive(false);
         }
     }
 
@@ -505,11 +510,10 @@ public class GameManager : MonoBehaviour
         MouseTargetRay();
         UIMouseRay();
 
-        if (!m_bGameEnd)
-        {
-            CtrlPlayer();
-            CtrlUI();
-        }
+
+        CtrlPlayer();
+        CtrlUI();
+
             
 
         GameEndText();
