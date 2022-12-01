@@ -85,8 +85,9 @@ public class CharDataBase : MonoBehaviour
 
 
         //Item Manager
-        AddItem(0, "빈 아이템",0,0,0,"",GameManager.ItemType.Wearable);
-        AddItem(1, "방패",100,5,0, "Texture/Shield", GameManager.ItemType.Wearable);
+        AddItem(0, "빈 아이템",0,0,0,"",GameManager.ItemType.Empty);
+        AddItem(1, "검",10,0,0, "Texture/Sword", GameManager.ItemType.Wearable);
+        AddItem(1, "방패",0,5,0, "Texture/Shield", GameManager.ItemType.Wearable);
 
     }
 

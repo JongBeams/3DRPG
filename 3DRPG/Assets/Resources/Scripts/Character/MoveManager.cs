@@ -244,7 +244,7 @@ public static class MoveManager
         float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
 
 
-        float Range = 8f;
+        float Range = 6f;
 
 
 

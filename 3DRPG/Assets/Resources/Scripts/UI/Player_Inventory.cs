@@ -152,6 +152,11 @@ public class Player_Inventory : MonoBehaviour
 
 
         AddItem(1);
+        AddItem(2);
+        AddItem(1);
+        AddItem(2);
+        AddItem(1);
+        AddItem(2);
 
 
         objInventory.SetActive(false);

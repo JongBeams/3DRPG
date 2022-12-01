@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
 
     public enum ItemType
     {
+        Empty,
         Wearable,
         Expendalbe
     }
@@ -389,11 +390,14 @@ public class GameManager : MonoBehaviour
         {
             if (DragingItem != null)
             {
-                if (UIObj == null || UIObj.tag != "ItemSlot")
+                if (UIObj.tag != "ItemSlot")
                 {
                     DragingItemSprite.transform.parent = DragingItem.transform;
                     DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-                    PI.RemoveItem(DragingItem.GetComponent<ItemSlot>().m_nSlotNum);
+                    if (UIObj == null)
+                    {
+                        PI.RemoveItem(DragingItem.GetComponent<ItemSlot>().m_nSlotNum);
+                    }
                     DragingItemSprite = null;
                     DragingItem = null;
                     ClickItem = null;

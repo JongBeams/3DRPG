@@ -63,7 +63,7 @@ public class SkillManager : MonoBehaviour
                 FireBall(_CS, _id);
                 break;
             case 17:
-                FireBreath(_CS, _id);
+                StartCoroutine(FireBreath(_CS, _id));
                 break;
             case 18:
                 RangeAngleAttack(_CS, _id);
@@ -904,9 +904,10 @@ public class SkillManager : MonoBehaviour
 
 
         GameObject FireBreathEffect = Instantiate(Resources.Load<GameObject>(SkillDB.getSkillEffectResource()), AttackPos.position, Quaternion.identity, AttackPos);
+        FireBreathEffect.transform.parent = AttackPos;
         FireBreathEffect.transform.localPosition = Vector3.zero;
         FireBreathEffect.transform.localRotation = Quaternion.identity;
-        //FireBreathEffect.transform.parent = AttackPos;
+        
 
         FireBreathEffect.GetComponent<ParticleSystem>().Play();
         Destroy(FireBreathEffect, SkillDB.getSkillUsingTime() + 3f);

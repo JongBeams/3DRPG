@@ -248,7 +248,7 @@ public class ItemData : CharData
         DEF = 0;
         Speed = 0;
         ItemSprite = "";
-        ItemType = GameManager.ItemType.Wearable;
+        ItemType = GameManager.ItemType.Empty;
     }
 
     public ItemData(int _ID, string _Name, int _ATK, int _DEF, float _Speed,string _ItemSprite,GameManager.ItemType _ItemType)
