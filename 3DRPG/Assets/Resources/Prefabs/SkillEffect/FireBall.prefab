@@ -4608,7 +4608,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4265532644169763193}
-  - component: {fileID: 4265532644169763192}
+  - component: {fileID: 8238629247938151548}
   - component: {fileID: 4265532644169763199}
   - component: {fileID: 4265532644169763198}
   m_Layer: 0
@@ -4630,12 +4630,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4265532644297666703}
   - {fileID: 4265532645008089683}
+  - {fileID: 4265532644297666703}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4265532644169763192
+--- !u!114 &8238629247938151548
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4644,12 +4644,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4265532644169763186}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2590582c82a0974c903c73db506ffe8, type: 3}
+  m_Script: {fileID: 11500000, guid: 16a291777bc4fd8429f8713d83db6882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
-  Burning: {fileID: 0}
-  Explosion: {fileID: 0}
+  Burning: {fileID: 4265532645008089693}
+  Explosion: {fileID: 4265532644297666697}
 --- !u!135 &4265532644169763199
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -9449,7 +9449,7 @@ Transform:
   - {fileID: 4265532644565080375}
   - {fileID: 4265532644488043157}
   m_Father: {fileID: 4265532644169763193}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &4265532644297666697
 ParticleSystem:
@@ -42958,7 +42958,7 @@ Transform:
   - {fileID: 4265532644414732545}
   - {fileID: 4265532645193910146}
   m_Father: {fileID: 4265532644169763193}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &4265532645008089693
 ParticleSystem:

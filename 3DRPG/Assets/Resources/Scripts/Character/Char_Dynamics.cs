@@ -124,10 +124,7 @@ public class Char_Dynamics : MonoBehaviour
         switch (CharStatus.getCS())
         {
             case GameManager.CharState.Idle:
-                //if (this.gameObject.layer ==8 || this.gameObject.layer == 9)
-                //{
-                    
-                //}
+                //Debug.Log(CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Idle")+""+ CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime);
                 if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Idle") &&
                     CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                 {

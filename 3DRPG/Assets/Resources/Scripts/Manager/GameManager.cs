@@ -76,6 +76,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject objCanvas;
 
+    public SLManager slM;
+
 
     //UIMouse
     GraphicRaycaster GR;
@@ -128,17 +130,30 @@ public class GameManager : MonoBehaviour
         
         SM = this.GetComponent<SkillManager>();
         PI = this.GetComponent<Player_Inventory>();
+        slM = this.GetComponent<SLManager>();
 
         //UI 등록
         objCanvas = GameObject.FindGameObjectWithTag("Canvas");
         GR = objCanvas.GetComponent<GraphicRaycaster>();
         ped = new PointerEventData(null);//초기화
 
+        slM.RemoteStart();
+
         PI.RemoteStart();
+
 
         getInstanceChar();
 
-
+        if (PlayerPrefs.GetInt("EnemyID") <= 0)
+        {
+            PI.InventorySave();
+        }
+        else
+        {
+            PI.InventoryLoad();
+        }
+        
+        
     }
 
 
@@ -231,7 +246,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GoMaing()
+    public void GoMain()
     {
         SceneManager.LoadScene("MainScene");
 
@@ -239,6 +254,7 @@ public class GameManager : MonoBehaviour
 
     public void NextStage()
     {
+        PI.InventorySave();
         if (m_nEnemyID == 1)
         {
             SceneManager.LoadScene("MainScene");
@@ -248,8 +264,11 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("InGmaeScene");
             PlayerPrefs.SetInt("EnemyID", m_nEnemyID+1);
         }
-
+        
     }
+
+
+
 
     void CtrlPlayer()
     {
@@ -495,10 +514,14 @@ public class GameManager : MonoBehaviour
         if (objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death)
         {
             m_bGameEnd = true;
-            //objGameEnd.SetActive(true);
-            //objGameEndMessage.text = "Game Clear";
             objWall.SetActive(false);
         }
+        if ((objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death && objPlayer.GetComponent<Char_Status>().getCS() == CharState.Death)|| (objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death && m_nEnemyID == 1))
+        {
+            objGameEnd.SetActive(true);
+            objGameEndMessage.text = "Game Clear";
+        }
+        
     }
 
 

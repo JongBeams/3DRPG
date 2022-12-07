@@ -45,11 +45,11 @@ public class Char_Status : MonoBehaviour
 
     //SkillID
     int m_nAttackID = 0;
-    int m_nSkill1ID=0;
-    int m_nSkill2ID=0;
-    int m_nSkill3ID=0;
-    int m_nSkill4ID=0;
-    int m_nIdentitySkillID=0;
+    int m_nSkill1ID = 0;
+    int m_nSkill2ID = 0;
+    int m_nSkill3ID = 0;
+    int m_nSkill4ID = 0;
+    int m_nIdentitySkillID = 0;
 
 
     //int m_nLastGetDamage=0;
@@ -69,6 +69,7 @@ public class Char_Status : MonoBehaviour
     // 상태 체크
     bool m_bProtectBuff = false;
     bool m_bSuperArmor = false;
+    bool m_bTaunt = false;
 
 
     //스킬 쿨 타임
@@ -297,6 +298,11 @@ public class Char_Status : MonoBehaviour
     public bool getCheck02()
     {
         return m_bCheck02;
+    }
+
+    public bool getTaunt() 
+    {
+        return m_bTaunt;
     }
 
 
@@ -639,6 +645,18 @@ public class Char_Status : MonoBehaviour
         yield return new WaitForSeconds(_Time);
         m_fDRper = 0;
         m_bProtectBuff = false;
+    }
+    public void OnTaunt(float _Time, GameObject _Target)
+    {
+        StartCoroutine(OnOnTauntCoroutine(_Time, _Target));
+    }
+
+    IEnumerator OnOnTauntCoroutine(float _Time, GameObject _Target)
+    {
+        m_bTaunt = true;
+        objTarget = _Target;
+        yield return new WaitForSeconds(_Time);
+        m_bTaunt = false;
     }
 
 

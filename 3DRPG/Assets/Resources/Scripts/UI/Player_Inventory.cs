@@ -40,7 +40,7 @@ public class Player_Inventory : MonoBehaviour
         objInventory = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Inventory"));
         objInventory.transform.parent = GameManager.instance.objCanvas.transform;
         objInventory.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
-
+        
 
         //인벤토리 슬롯
         for (int i = 0; i < ver; i++)
@@ -71,6 +71,7 @@ public class Player_Inventory : MonoBehaviour
                 m_lSlot.Add(newSlot.GetComponent<ItemSlot>());
                 newSlot.GetComponent<ItemSlot>().m_nSlotNum = i * ver + j;
 
+
                 newSlot.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 60);
             }
             //objInventory.SetActive(false);
@@ -93,7 +94,6 @@ public class Player_Inventory : MonoBehaviour
             slotRect.anchoredPosition = new Vector3(-125 + (45 * i), 0, 0);
 
             slotRect.localScale = new Vector3(1, 1, 1);
-
 
 
             m_lSlot.Add(newSlot.GetComponent<ItemSlot>());
@@ -151,6 +151,7 @@ public class Player_Inventory : MonoBehaviour
         }
 
 
+
         AddItem(1);
         AddItem(2);
         AddItem(1);
@@ -160,6 +161,45 @@ public class Player_Inventory : MonoBehaviour
 
 
         objInventory.SetActive(false);
+    }
+
+
+    public void InventoryLoad()
+    {
+        GameManager.instance.slM._load();
+        GameData GD = GameManager.instance.slM.InvetoryData;
+        for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
+        {
+
+            m_lSlot[i].GetComponent<ItemSlot>().item=new ItemData(GD.ItemID[i], GD.ItemName[i], GD.ItemATK[i], GD.ItemDEF[i], GD.ItemSPD[i], GD.ItemSprite[i], (GameManager.ItemType)GD.ItemType[i]);
+            ItemImageChange(m_lSlot[i].transform);
+        }
+    }
+
+    public void InventorySave()
+    {
+        List<int> ItemID = new List<int>();
+        List<string> ItemName = new List<string>();
+        List<int> ItemATK = new List<int>();
+        List<int> ItemDEF = new List<int>();
+        List<float> ItemSPD = new List<float>();
+        List<string> ItemSprite = new List<string>();
+        List<int> ItemType = new List<int>();
+
+
+        for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
+        {
+            ItemID.Add(m_lSlot[i].item.getID());
+            ItemName.Add(m_lSlot[i].item.getName());
+            ItemATK.Add(m_lSlot[i].item.getATK());
+            ItemDEF.Add(m_lSlot[i].item.getDEF());
+            ItemSPD.Add(m_lSlot[i].item.getSpeed());
+            ItemSprite.Add(m_lSlot[i].item.getItemSprite());
+            ItemType.Add((int)m_lSlot[i].item.getItemType());
+
+        }
+        GameManager.instance.slM.InvetoryData = new GameData(ItemID, ItemName, ItemATK, ItemDEF, ItemSPD, ItemSprite, ItemType);
+        GameManager.instance.slM._save();
     }
 
 

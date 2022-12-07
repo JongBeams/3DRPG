@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class FireBall : MonoBehaviour
+public class Bullet : MonoBehaviour
 {
     float m_fSpeed = 2;
 
     public GameObject Target;
 
-    int Damage=0;
+    int Damage = 0;
 
     public ParticleSystem Burning;
     public ParticleSystem Explosion;
@@ -18,11 +17,11 @@ public class FireBall : MonoBehaviour
 
     bool end = false;
 
-    bool FirstSetting=true;
+    bool FirstSetting = true;
 
-    bool EnemyCheck=false;
+    bool EnemyCheck = false;
 
-    float LifeTime=5;
+    float LifeTime = 5;
 
     public void Setting(GameObject _Target, int _Damage, float _Speed, bool _EnemyCheck, float _LifeTime)
     {
@@ -42,8 +41,8 @@ public class FireBall : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Explosion = this.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
-        Burning = this.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
+        Burning = this.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
+        Explosion = this.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
         Destroy(this.gameObject, LifeTime);
     }
 
@@ -68,23 +67,12 @@ public class FireBall : MonoBehaviour
                     transform.position = Vector3.MoveTowards(transform.position, vecTraget, m_fSpeed * Time.deltaTime);
                 }
             }
-            
+
 
         }
-        
+
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    if (collision.gameObject.layer == 6 || collision.gameObject.layer == 9)
-    //    {
-    //        Burning.Stop();
-    //        Explosion.Play();
-    //        collision.gameObject.GetComponent<Char_Status>().GetDamage(8);
-    //        Destroy(this.gameObject, 1f);
-
-    //    }
-    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -101,7 +89,8 @@ public class FireBall : MonoBehaviour
 
             }
         }
-        else{
+        else
+        {
             if (other.gameObject.layer == 8)
             {
                 hit = true;
@@ -113,6 +102,6 @@ public class FireBall : MonoBehaviour
 
             }
         }
-        
+
     }
 }

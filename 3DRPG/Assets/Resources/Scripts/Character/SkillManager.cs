@@ -51,7 +51,7 @@ public class SkillManager : MonoBehaviour
                 StartCoroutine(RangeAngleAttack(_CS, _id));
                 break;
             case 13:
-                FireBall(_CS, _id);
+                SingleTargetBullet(_CS, _id);
                 break;
             case 14:
                 StartCoroutine(FireBreath(_CS, _id));
@@ -60,7 +60,7 @@ public class SkillManager : MonoBehaviour
                 OnShield(_CS, _id);
                 break;
             case 16:
-                FireBall(_CS, _id);
+                SingleTargetBullet(_CS, _id);
                 break;
             case 17:
                 StartCoroutine(FireBreath(_CS, _id));
@@ -88,11 +88,12 @@ public class SkillManager : MonoBehaviour
 
     void SingleTargetBullet(Char_Status _CS, int SkillID)
     {
+
         //파트너 정보
         Char_Status CS = _CS;
         Animator animator = CS.getAnimator();
-        GameObject TargetObj = CS.getObjTarget();
         Transform AttackPos = CS.getAttackPos();
+        GameObject TargetObj = CS.getObjTarget();
 
         //스킬 정보
         SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
@@ -111,25 +112,21 @@ public class SkillManager : MonoBehaviour
         }
         CS.transform.LookAt(vecEnemyLookingPoint);
 
-
-
-        //공격 애니메이션 조건 활성
-        animator.SetBool("Attack", true);
-
-        //원거리 공격 투사체 생성
-        //GameObject objFireBall = Instantiate(Resources.Load<GameObject>("Prefabs/HealerBullet"), AttackPos.position, Quaternion.identity);
-        GameObject objFireBall = Instantiate(Resources.Load<GameObject>(SkillDB.getSkillEffectResource()), AttackPos.position, Quaternion.identity);
-
         bool enemyCheck = false;
-        if (CS.gameObject.layer ==6 || CS.gameObject.layer == 9)
-        {
-            enemyCheck = true;
-        }
-        else
+        if (CS.getLayer() == 6 || CS.getLayer() == 9)
         {
             enemyCheck = false;
         }
-        objFireBall.GetComponent<HealerBullet>().Setting(TargetObj, (int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()), SkillDB.getSkillSpeed(), enemyCheck, SkillDB.getSkillUsingTime());
+        else
+        {
+            enemyCheck = true;
+        }
+
+        if (CS.getObjTarget() != null || CS.getObjTarget().activeSelf == false)
+        {
+            GameObject objFireBall = Instantiate(Resources.Load<GameObject>(SkillDB.getSkillEffectResource()), AttackPos.position, Quaternion.identity);
+            objFireBall.GetComponent<Bullet>().Setting(TargetObj, (int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()), SkillDB.getSkillSpeed(), enemyCheck, SkillDB.getSkillUsingTime());
+        }
 
 
     }
@@ -631,7 +628,7 @@ public class SkillManager : MonoBehaviour
         {
             if (CS.getObjTarget().layer == 8)
             {
-                CS.getObjTarget().GetComponent<Char_Status>().objTarget = CS.gameObject;
+                CS.getObjTarget().GetComponent<Char_Status>().OnTaunt(3f, CS.gameObject);
                 //Debug.Log("TauntTarget : " + GameManager.instance.MBTarget);
             }
         }
@@ -639,7 +636,7 @@ public class SkillManager : MonoBehaviour
         {
             if (CS.getObjTarget().layer == 6|| CS.getObjTarget().layer == 9)
             {
-                CS.getObjTarget().GetComponent<Char_Status>().objTarget = CS.gameObject;
+                CS.getObjTarget().GetComponent<Char_Status>().OnTaunt(3f, CS.gameObject);
                 //Debug.Log("TauntTarget : " + GameManager.instance.MBTarget);
             }
         }

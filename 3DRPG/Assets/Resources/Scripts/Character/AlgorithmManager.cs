@@ -69,137 +69,146 @@ public static class AlgorithmManager
         else
         {
 
-            //탐색 콜라이더 선별
-            while (count < hitcol.Length)
+            if (!CS.getTaunt())
             {
-                if (CS.getLayer() == 9)// 캐릭터가 동료 일때
+                //탐색 콜라이더 선별
+                while (count < hitcol.Length)
                 {
-                    if (hitcol[count].gameObject.layer == 6 || hitcol[count].gameObject.layer == 9)// 플레이어 또는 동료일때
+                    if (CS.getLayer() == 9)// 캐릭터가 동료 일때
                     {
-                        Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
-                        if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
+                        if (hitcol[count].gameObject.layer == 6 || hitcol[count].gameObject.layer == 9)// 플레이어 또는 동료일때
                         {
-                            if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
+                            Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
+                            if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
                             {
-                                CS.SetObjTarget(hitcol[count].gameObject);// 타겟지정
-                                Target = hitcol[count].gameObject;
-                                CS.setCheck02(false);//아군 체크 (적이 아니다)
-                                break;
-                            }
-
-                        }
-                    }
-                    else //몬스터일때
-                    {
-                        CS.SetObjTarget(hitcol[count].gameObject);
-                        Target = hitcol[count].gameObject;
-                        //PartnerTarget = hitcol[count].gameObject;
-                        CS.setCheck02(true);// 적 체크
-                                            //setEnemy = true;
-                    }
-                }
-                else
-                {
-                    if (hitcol[count].gameObject.layer == 8 )// 플레이어 또는 동료일때
-                    {
-                        Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
-                        if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
-                        {
-                            if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
-                            {
-                                CS.SetObjTarget(hitcol[count].gameObject);// 타겟지정
-                                Target = hitcol[count].gameObject;
-                                CS.setCheck02(false);//아군 체크 (적이 아니다)
-                                break;
-                            }
-
-                        }
-                    }
-                    else //몬스터일때
-                    {
-                        CS.SetObjTarget(hitcol[count].gameObject);
-                        Target = hitcol[count].gameObject;
-                        //PartnerTarget = hitcol[count].gameObject;
-                        CS.setCheck02(true);// 적 체크
-                                            //setEnemy = true;
-                    }
-                }
-                
-                count++;
-
-            }
-
-            // 자신의 체력 상태에 때른 타겟 변화
-            if (CS.getHP() <= CS.getHPMax() / 2 && CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana()) // 자신이 회복이 필요할때
-            {
-                CS.SetObjTarget(CS.gameObject);// 타겟을 자신으로
-
-                if (CS.getCheck02())// 회복할 아군캐릭터는 없을때
-                {
-                    mineCheck = true; //회복할 아군없음 구분
-                    CS.setCheck02(false);// 회복으로 조건 진행
-                }
-
-            }
-
-            //타겟과의 거리
-            Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, CS.gameObject.transform.position.y, Target.transform.position.z);
-            float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
-
-            // 행동 설정
-            if (CS.getObjTarget() != null)// 타겟이 존재할때
-            {
-                if (CS.getCheck02())//TargetEnemyCheck // 적일때
-                {
-                    if (dis > 20f)//거리 20 보다 멀때
-                    {
-                        CS.setCheck01(false);// RunAway Dist Check
-                        CD.SetCharStatus(GameManager.CharState.Move);
-                    }
-                    else if (dis < 15f) //거리 15보다 가까울때
-                    {
-                        CS.setCheck01(true);// RunAway Dist Check
-                        CD.SetCharStatus(GameManager.CharState.Move);
-                    }
-                    else //적정거리
-                    {
-                        CD.SetCharStatus(GameManager.CharState.Attack);
-                    }
-                }
-                else //아군일때
-                {
-                    if (dis > 15f) //거리 15보다 멀때(힐 거리가 안될 때)
-                    {
-                        CS.setCheck01(false);// RunAway Dist Check
-                        CD.SetCharStatus(GameManager.CharState.Move);
-                    }
-                    else// 스킬 사거리 일때
-                    {
-                        if (CS.getObjTarget() == CS.gameObject)// 타겟이 자신일때
-                        {
-                            if (mineCheck) // 치료해야할 동료가 없을때
-                            {
-                                CD.SetCharStatus(GameManager.CharState.Skill1);
-                            }
-                            else //치료해야할 동료가 있을때
-                            {
-                                if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())//전체힐 사용 조건
+                                if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
                                 {
-                                    CD.SetCharStatus(GameManager.CharState.Skill2);
+                                    CS.SetObjTarget(hitcol[count].gameObject);// 타겟지정
+                                    Target = hitcol[count].gameObject;
+                                    CS.setCheck02(false);//아군 체크 (적이 아니다)
+                                    break;
                                 }
-                                else
+
+                            }
+                        }
+                        else //몬스터일때
+                        {
+                            CS.SetObjTarget(hitcol[count].gameObject);
+                            Target = hitcol[count].gameObject;
+                            //PartnerTarget = hitcol[count].gameObject;
+                            CS.setCheck02(true);// 적 체크
+                                                //setEnemy = true;
+                        }
+                    }
+                    else
+                    {
+                        if (hitcol[count].gameObject.layer == 8)// 플레이어 또는 동료일때
+                        {
+                            Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
+                            if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
+                            {
+                                if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
+                                {
+                                    CS.SetObjTarget(hitcol[count].gameObject);// 타겟지정
+                                    Target = hitcol[count].gameObject;
+                                    CS.setCheck02(false);//아군 체크 (적이 아니다)
+                                    break;
+                                }
+
+                            }
+                        }
+                        else //몬스터일때
+                        {
+                            CS.SetObjTarget(hitcol[count].gameObject);
+                            Target = hitcol[count].gameObject;
+                            //PartnerTarget = hitcol[count].gameObject;
+                            CS.setCheck02(true);// 적 체크
+                                                //setEnemy = true;
+                        }
+                    }
+
+                    count++;
+
+                }
+
+                // 자신의 체력 상태에 때른 타겟 변화
+                if (CS.getHP() <= CS.getHPMax() / 2 && CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana()) // 자신이 회복이 필요할때
+                {
+                    CS.SetObjTarget(CS.gameObject);// 타겟을 자신으로
+
+                    if (CS.getCheck02())// 회복할 아군캐릭터는 없을때
+                    {
+                        mineCheck = true; //회복할 아군없음 구분
+                        CS.setCheck02(false);// 회복으로 조건 진행
+                    }
+
+                }
+            }
+            
+
+            if (Target!=null)
+            {
+                //타겟과의 거리
+                Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, CS.gameObject.transform.position.y, Target.transform.position.z);
+                float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
+
+                // 행동 설정
+                if (CS.getObjTarget() != null)// 타겟이 존재할때
+                {
+                    if (CS.getCheck02())//TargetEnemyCheck // 적일때
+                    {
+                        if (dis > 20f)//거리 20 보다 멀때
+                        {
+                            CS.setCheck01(false);// RunAway Dist Check
+                            CD.SetCharStatus(GameManager.CharState.Move);
+                        }
+                        else if (dis < 15f) //거리 15보다 가까울때
+                        {
+                            CS.setCheck01(true);// RunAway Dist Check
+                            CD.SetCharStatus(GameManager.CharState.Move);
+                        }
+                        else //적정거리
+                        {
+                            CD.SetCharStatus(GameManager.CharState.Attack);
+                        }
+                    }
+                    else //아군일때
+                    {
+                        if (dis > 15f) //거리 15보다 멀때(힐 거리가 안될 때)
+                        {
+                            CS.setCheck01(false);// RunAway Dist Check
+                            CD.SetCharStatus(GameManager.CharState.Move);
+                        }
+                        else// 스킬 사거리 일때
+                        {
+                            if (CS.getObjTarget() == CS.gameObject)// 타겟이 자신일때
+                            {
+                                if (mineCheck) // 치료해야할 동료가 없을때
                                 {
                                     CD.SetCharStatus(GameManager.CharState.Skill1);
                                 }
+                                else //치료해야할 동료가 있을때
+                                {
+                                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())//전체힐 사용 조건
+                                    {
+                                        CD.SetCharStatus(GameManager.CharState.Skill2);
+                                    }
+                                    else
+                                    {
+                                        CD.SetCharStatus(GameManager.CharState.Skill1);
+                                    }
+                                }
                             }
-                        }
-                        else
-                        {
-                            CD.SetCharStatus(GameManager.CharState.Skill1);
+                            else
+                            {
+                                CD.SetCharStatus(GameManager.CharState.Skill1);
+                            }
                         }
                     }
                 }
             }
+
+            
         }
 
     }
@@ -245,35 +254,44 @@ public static class AlgorithmManager
 
             if (hitcol != null)
             {
-                CS.SetObjTarget(hitcol[0].gameObject);
-                Target = hitcol[0].gameObject;
-            }
 
-
-            Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, CS.gameObject.transform.position.y, Target.transform.position.z);
-            float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
-
-
-            if (dis > 3.5f)
-            {
-                CD.SetCharStatus(GameManager.CharState.Move);
-            }
-            else
-            {
-                if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getCheck01() && CS.getSkill2On())
+                if (!CS.getTaunt())
                 {
-                    CD.SetCharStatus(GameManager.CharState.Skill2);
+                    CS.SetObjTarget(hitcol[0].gameObject);
+                    Target = hitcol[0].gameObject;
                 }
-                else if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && !CS.getCheck01() && CS.getSkill1On())
+                    
+
+                Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, CS.gameObject.transform.position.y, Target.transform.position.z);
+                float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
+
+
+                if (dis > 3.5f)
                 {
-                    CD.SetCharStatus(GameManager.CharState.Skill1);
+                    CD.SetCharStatus(GameManager.CharState.Move);
                 }
                 else
                 {
-                    CD.SetCharStatus(GameManager.CharState.Attack);
+                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getCheck01() && CS.getSkill2On())
+                    {
+                        CD.SetCharStatus(GameManager.CharState.Skill2);
+                    }
+                    else if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && !CS.getCheck01() && CS.getSkill1On())
+                    {
+                        CD.SetCharStatus(GameManager.CharState.Skill1);
+                    }
+                    else
+                    {
+                        CD.SetCharStatus(GameManager.CharState.Attack);
+                    }
+
                 }
 
+
             }
+
+
+            
         }
         //if (Target == null || Target.activeSelf == false)
         //{
@@ -324,63 +342,64 @@ public static class AlgorithmManager
 
             if (hitcol != null)
             {
-                CS.SetObjTarget(hitcol[0].gameObject);
-                Target = hitcol[0].gameObject;
-            }
-
-
-            //타겟과의 거리
-            Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, CS.gameObject.transform.position.y, Target.transform.position.z);
-            float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
-
-            // 행동 설정
-            if (CS.getObjTarget() != null)// 타겟이 존재할때
-            {
-
-                if (dis > 20f)//거리 20 보다 멀때
+                if (!CS.getTaunt())
                 {
-                    CS.setCheck01(false);// RunAway Dist Check
-                    CD.SetCharStatus(GameManager.CharState.Move);
+                    CS.SetObjTarget(hitcol[0].gameObject);
+                    Target = hitcol[0].gameObject;
                 }
-                else if (dis < 15f) //거리 15보다 가까울때
+
+
+                //타겟과의 거리
+                Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, CS.gameObject.transform.position.y, Target.transform.position.z);
+                float dis = Vector3.Distance(CS.gameObject.transform.position, vecEnemyLookingPoint);
+
+                // 행동 설정
+                if (CS.getObjTarget() != null)// 타겟이 존재할때
                 {
-                    CS.setCheck01(true);// RunAway Dist Check
-                    CD.SetCharStatus(GameManager.CharState.Move);
-                }
-                else //적정거리
-                {
-                    int ran = Random.Range(0, 3);
-                    if (ran == 2) 
+
+                    if (dis > 20f)//거리 20 보다 멀때
                     {
-                        if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())
+                        CS.setCheck01(false);// RunAway Dist Check
+                        CD.SetCharStatus(GameManager.CharState.Move);
+                    }
+                    else if (dis < 15f) //거리 15보다 가까울때
+                    {
+                        CS.setCheck01(true);// RunAway Dist Check
+                        CD.SetCharStatus(GameManager.CharState.Move);
+                    }
+                    else //적정거리
+                    {
+                        int ran = Random.Range(0, 3);
+                        if (ran == 2)
                         {
-                            CD.SetCharStatus(GameManager.CharState.Skill2);
+                            if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())
+                            {
+                                CD.SetCharStatus(GameManager.CharState.Skill2);
+                            }
+                            else
+                            {
+                                CD.SetCharStatus(GameManager.CharState.Attack);
+                            }
+                        }
+                        else if (ran == 1)
+                        {
+                            if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())
+                            {
+                                CD.SetCharStatus(GameManager.CharState.Skill1);
+                            }
+                            else
+                            {
+                                CD.SetCharStatus(GameManager.CharState.Attack);
+                            }
                         }
                         else
                         {
                             CD.SetCharStatus(GameManager.CharState.Attack);
                         }
-                    }
-                    else if (ran == 1)
-                    {
-                        if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())
-                        {
-                            CD.SetCharStatus(GameManager.CharState.Skill1);
-                        }
-                        else
-                        {
-                            CD.SetCharStatus(GameManager.CharState.Attack);
-                        }
-                    }
-                    else
-                    {
-                        CD.SetCharStatus(GameManager.CharState.Attack);
-                    }
 
-                    
+
+                    }
                 }
-
-
 
             }
         }
@@ -413,25 +432,26 @@ public static class AlgorithmManager
         Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 30f, m_nMask);
         int count = 0;
 
-        //m_fActionDelayTimer = 3f;
-
-        //animator.Play("Idle01");
-
-        int TargetRan = Random.Range(0, hitcol.Length);
-        while (count < hitcol.Length)
+        if (!CS.getTaunt())
         {
-            if (hitcol[TargetRan].GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
+            int TargetRan = Random.Range(0, hitcol.Length);
+            while (count < hitcol.Length)
             {
-                CS.SetObjTarget(hitcol[TargetRan].gameObject);
-                break;
-            }
-            else
-            {
-                TargetRan = Random.Range(0, hitcol.Length);
+                if (hitcol[TargetRan].GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
+                {
+                    CS.SetObjTarget(hitcol[TargetRan].gameObject);
+                    break;
+                }
+                else
+                {
+                    TargetRan = Random.Range(0, hitcol.Length);
 
+                }
+                count++;
             }
-            count++;
         }
+
+        
 
         //Debug.Log(i+","+count + "," + hitcol.Length);
         if (GameManager.instance.objPlayer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
@@ -544,20 +564,25 @@ public static class AlgorithmManager
         int count = 0;
 
 
-        int TargetRan = Random.Range(0, hitcol.Length);
-        while (count < hitcol.Length)
+        if (!CS.getTaunt())
         {
-            if (hitcol[TargetRan].GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
+            int TargetRan = Random.Range(0, hitcol.Length);
+            while (count < hitcol.Length)
             {
-                CS.SetObjTarget(hitcol[TargetRan].gameObject);
-                break;
+                if (hitcol[TargetRan].GetComponent<Char_Status>().getCS() != GameManager.CharState.Death)
+                {
+                    CS.SetObjTarget(hitcol[TargetRan].gameObject);
+                    break;
+                }
+                else
+                {
+                    TargetRan = Random.Range(0, hitcol.Length);
+
+                }
+                count++;
             }
-            else
-            {
-                TargetRan = Random.Range(0, hitcol.Length);
-            }
-            count++;
         }
+
 
         if (GameManager.instance.objPlayer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
             GameManager.instance.objHealer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&

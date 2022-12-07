@@ -21,6 +21,7 @@ public class Portal : MonoBehaviour
     {
         if (other.gameObject.layer==6)
         {
+            GameManager.instance.getPI().InventorySave();
             if (GameManager.instance.m_nEnemyID == 1)
             {
                 SceneManager.LoadScene("MainScene");
