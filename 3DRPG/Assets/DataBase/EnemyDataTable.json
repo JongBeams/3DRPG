@@ -1,0 +1,30 @@
+[
+  {
+    "ID": 10,
+    "Name": "붉은 용",
+    "PFL": "Prefabs/Character/Enemy",
+    "ATK": 10,
+    "DEF": 0,
+    "HP": 250,
+    "SPD": 8,
+    "TYP": 8,
+    "S1ID": 11,
+    "S2ID": 12,
+    "S3ID": 13,
+    "S4ID": 14
+  },
+  {
+    "ID": 11,
+    "Name": "초록 용",
+    "PFL": "Prefabs/Green",
+    "ATK": 8,
+    "DEF": 0,
+    "HP": 200,
+    "SPD": 12,
+    "TYP": 8,
+    "S1ID": 11,
+    "S2ID": 18,
+    "S3ID": 19,
+    "S4ID": 20
+  }
+]

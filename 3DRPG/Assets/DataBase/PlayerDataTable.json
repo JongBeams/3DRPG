@@ -1,0 +1,23 @@
+[
+  {
+    "ID": 0,
+    "Name": "±â»ç",
+    "PFL": "Prefabs/Character/Player",
+    "ATK": 2,
+    "DEF": 5,
+    "HP": 40,
+    "MP": 100,
+    "SPD": 4,
+    "MPRP": 30,
+    "TYP": 6,
+    "S0ID": 6,
+    "S1ID": 7,
+    "S2ID": 8,
+    "S3ID": 9,
+    "S4ID": 10,
+    "ISID": 15,
+    "ISP": 30,
+    "ISPRP": 10,
+    "ISRT": 10
+  }
+]

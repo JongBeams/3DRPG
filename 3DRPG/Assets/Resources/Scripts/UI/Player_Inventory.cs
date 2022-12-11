@@ -171,7 +171,7 @@ public class Player_Inventory : MonoBehaviour
         for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
         {
 
-            m_lSlot[i].GetComponent<ItemSlot>().item=new ItemData(GD.ItemID[i], GD.ItemName[i], GD.ItemATK[i], GD.ItemDEF[i], GD.ItemSPD[i], GD.ItemSprite[i], (GameManager.ItemType)GD.ItemType[i]);
+            m_lSlot[i].GetComponent<ItemSlot>().item=new ItemData(GD.ItemID[i], GD.ItemName[i], GD.ItemATK[i], GD.ItemDEF[i], GD.ItemSPD[i], GD.ItemSprite[i], GD.ItemType[i]);
             ItemImageChange(m_lSlot[i].transform);
         }
     }
@@ -212,7 +212,7 @@ public class Player_Inventory : MonoBehaviour
             //            Debug.Log((i+1)+"¹øÂ° Ä­ ItemID : "+slotScripts[i].item.ItemID);
             if (m_lSlot[i].item.getID() == 0)
             {
-                m_lSlot[i].item = CharDataBase.instance.m_lItemDB[itmeID];
+                m_lSlot[i].item = DBManager.ItemData[itmeID];
                 ItemImageChange(m_lSlot[i].transform);
 
                 break;

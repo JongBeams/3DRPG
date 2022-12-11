@@ -54,7 +54,7 @@ public class SkillManager : MonoBehaviour
                 SingleTargetBullet(_CS, _id);
                 break;
             case 14:
-                StartCoroutine(FireBreath(_CS, _id));
+                FireBreath(_CS, _id);
                 break;
             case 15:
                 OnShield(_CS, _id);
@@ -63,7 +63,7 @@ public class SkillManager : MonoBehaviour
                 SingleTargetBullet(_CS, _id);
                 break;
             case 17:
-                StartCoroutine(FireBreath(_CS, _id));
+                FireBreath(_CS, _id);
                 break;
             case 18:
                 RangeAngleAttack(_CS, _id);
@@ -96,7 +96,7 @@ public class SkillManager : MonoBehaviour
         GameObject TargetObj = CS.getObjTarget();
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -142,7 +142,7 @@ public class SkillManager : MonoBehaviour
         Transform AttackPos = CS.getAttackPos();
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -177,7 +177,7 @@ public class SkillManager : MonoBehaviour
 
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -225,7 +225,7 @@ public class SkillManager : MonoBehaviour
         Transform AttackPos = CS.getAttackPos();
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -286,7 +286,7 @@ public class SkillManager : MonoBehaviour
 
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         
         
@@ -318,7 +318,7 @@ public class SkillManager : MonoBehaviour
         Transform AttackPos = CS.getAttackPos();
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -382,7 +382,7 @@ public class SkillManager : MonoBehaviour
         GameObject TargetObj = CS.getObjTarget();
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
 
 
@@ -429,7 +429,7 @@ public class SkillManager : MonoBehaviour
         GameObject TargetObj = CS.getObjTarget();
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -476,12 +476,25 @@ public class SkillManager : MonoBehaviour
         GameObject TargetObj = CS.getObjTarget();
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
 
-        if (!CS.getSkill2Using())
+
+
+        int i = 0;
+        while (i < CS.getSkillID().Length)
+        {
+            if (SkillID == CS.getSkillID()[i])
+            {
+                break;
+            }
+            i++;
+        }
+        
+
+        if (!CS.getSkillUsing()[i])
         {
             // 타깃 바라보기
             Vector3 vecEnemyLookingPoint;
@@ -497,7 +510,7 @@ public class SkillManager : MonoBehaviour
             CS.transform.LookAt(vecEnemyLookingPoint);
 
             CD.setStartPos();
-            CS.setSkill2Using(true);
+            CS.setSkillUsing(i,true);
         }
         else
         {
@@ -519,7 +532,7 @@ public class SkillManager : MonoBehaviour
                 {
                     //hitcol[0].GetComponent<Char_Status>().GetDamage((int)(CS.getDEF() * ((m_fRustDist / 30) * SkillDB.getSkillCeofficientPer1())));
                     hitcol[0].GetComponent<Char_Status>().delGetDamae((int)(CS.getDEF() * ((m_fRustDist / 30) * SkillDB.getSkillCeofficientPer1())));
-                    CS.setSkill2Using(false);
+                    CS.setSkillUsing(i, false);
 
                     //CD.SetCharStatus(GameManager.CharState.Idle);
                 }
@@ -528,7 +541,7 @@ public class SkillManager : MonoBehaviour
             }
             else
             {
-                CS.setSkill2Using(false);
+                CS.setSkillUsing(i, false);
 
                 //CD.SetCharStatus(GameManager.CharState.Idle);
             }
@@ -555,7 +568,7 @@ public class SkillManager : MonoBehaviour
 
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -607,7 +620,7 @@ public class SkillManager : MonoBehaviour
 
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -657,7 +670,7 @@ public class SkillManager : MonoBehaviour
         GameObject TargetObj = CS.getObjTarget();
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
@@ -737,7 +750,7 @@ public class SkillManager : MonoBehaviour
 
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -785,7 +798,7 @@ public class SkillManager : MonoBehaviour
 
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -836,7 +849,7 @@ public class SkillManager : MonoBehaviour
         GameObject TargetObj = CS.getObjTarget();
 
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -872,7 +885,70 @@ public class SkillManager : MonoBehaviour
     }
 
 
-    IEnumerator FireBreath(Char_Status _CS, int SkillID)
+    //IEnumerator FireBreath(Char_Status _CS, int SkillID)
+    //{
+    //    //파트너 정보
+    //    Char_Status CS = _CS;
+    //    Animator animator = CS.getAnimator();
+    //    Transform AttackPos = CS.getAttackPos();
+    //    GameObject TargetObj = CS.getObjTarget();
+
+
+    //    //스킬 정보
+    //    SkillData SkillDB = DBManager.SkillData[SkillID];
+
+    //    // 타깃 바라보기
+    //    Vector3 vecEnemyLookingPoint;
+    //    Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
+    //    Vector3 MousePoint = CD.getMovePoint();
+    //    if (CS.getLayer() == 6)
+    //    {
+    //        vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
+    //    }
+    //    else
+    //    {
+    //        vecEnemyLookingPoint = new Vector3(TargetObj.transform.position.x, CS.transform.position.y, TargetObj.transform.position.z);
+    //    }
+    //    CS.transform.LookAt(vecEnemyLookingPoint);
+
+
+
+    //    GameObject FireBreathEffect = Instantiate(Resources.Load<GameObject>(SkillDB.getSkillEffectResource()), AttackPos.position, Quaternion.identity, AttackPos);
+    //    FireBreathEffect.transform.parent = AttackPos;
+    //    FireBreathEffect.transform.localPosition = Vector3.zero;
+    //    FireBreathEffect.transform.localRotation = Quaternion.identity;
+        
+
+    //    FireBreathEffect.GetComponent<ParticleSystem>().Play();
+    //    Destroy(FireBreathEffect, SkillDB.getSkillUsingTime() + 3f);
+
+    //    yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length / 2);
+
+    //    int m_nMask = 0;
+    //    m_nMask = SkillDB.getTargetSelect();
+    //    Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, SkillDB.getSkillRange1(), m_nMask);//충돌감지 저장
+    //    int count = 0;
+    //    //int i = 0;
+    //    while (count < hitcol.Length)
+    //    {
+
+    //        Vector3 targetDir = hitcol[count].transform.position - CS.gameObject.transform.position;
+    //        float angle = Vector3.Angle(targetDir, CS.gameObject.transform.forward);
+
+    //        if (angle <= SkillDB.getSkillRange2())
+    //        {
+    //            //Debug.Log(angle + "" + hitcol[count].gameObject.name);
+    //            //hitcol[count].gameObject.GetComponent<Char_Status>().GetDamage((int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()));
+    //            hitcol[count].gameObject.GetComponent<Char_Status>().delGetDamae((int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()));
+    //        }
+
+    //        count++;
+    //    }
+
+       
+    //}
+
+    void FireBreath(Char_Status _CS, int SkillID)
     {
         //파트너 정보
         Char_Status CS = _CS;
@@ -880,9 +956,8 @@ public class SkillManager : MonoBehaviour
         Transform AttackPos = CS.getAttackPos();
         GameObject TargetObj = CS.getObjTarget();
 
-
         //스킬 정보
-        SkillData SkillDB = CharDataBase.instance.m_lSkillDB[SkillID];
+        SkillData SkillDB = DBManager.SkillData[SkillID];
 
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
@@ -899,40 +974,19 @@ public class SkillManager : MonoBehaviour
         CS.transform.LookAt(vecEnemyLookingPoint);
 
 
-
-        GameObject FireBreathEffect = Instantiate(Resources.Load<GameObject>(SkillDB.getSkillEffectResource()), AttackPos.position, Quaternion.identity, AttackPos);
-        FireBreathEffect.transform.parent = AttackPos;
-        FireBreathEffect.transform.localPosition = Vector3.zero;
-        FireBreathEffect.transform.localRotation = Quaternion.identity;
-        
-
-        FireBreathEffect.GetComponent<ParticleSystem>().Play();
-        Destroy(FireBreathEffect, SkillDB.getSkillUsingTime() + 3f);
-
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length / 2);
-
-        int m_nMask = 0;
-        m_nMask = SkillDB.getTargetSelect();
-        Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, SkillDB.getSkillRange1(), m_nMask);//충돌감지 저장
-        int count = 0;
-        //int i = 0;
-        while (count < hitcol.Length)
+        if (CS.getObjTarget() != null || CS.getObjTarget().activeSelf == false)
         {
 
-            Vector3 targetDir = hitcol[count].transform.position - CS.gameObject.transform.position;
-            float angle = Vector3.Angle(targetDir, CS.gameObject.transform.forward);
+            GameObject FireBreathEffect = Instantiate(Resources.Load<GameObject>(SkillDB.getSkillEffectResource()), AttackPos.position, Quaternion.identity, AttackPos);
+            FireBreathEffect.transform.parent = AttackPos;
+            FireBreathEffect.transform.localPosition = Vector3.zero;
+            FireBreathEffect.transform.localRotation = Quaternion.identity;
+            FireBreathEffect.GetComponent<ParticleSystem>().Play();
+            FireBreathEffect.GetComponent<FireBreath>().Setting((int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()), SkillDB.getSkillSpeed(),
+                SkillDB.getSkillRange1(),SkillDB.getTargetSelect(),SkillDB.getSkillRange2());
 
-            if (angle <= SkillDB.getSkillRange2())
-            {
-                //Debug.Log(angle + "" + hitcol[count].gameObject.name);
-                //hitcol[count].gameObject.GetComponent<Char_Status>().GetDamage((int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()));
-                hitcol[count].gameObject.GetComponent<Char_Status>().delGetDamae((int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()));
-            }
-
-            count++;
         }
 
-       
     }
 
 

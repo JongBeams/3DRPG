@@ -81,7 +81,7 @@ public static class AlgorithmManager
                             Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
                             if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
                             {
-                                if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
+                                if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[0]].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
                                 {
                                     CS.SetObjTarget(hitcol[count].gameObject);// 타겟지정
                                     Target = hitcol[count].gameObject;
@@ -107,7 +107,7 @@ public static class AlgorithmManager
                             Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
                             if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
                             {
-                                if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
+                                if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[0]].getSkillUsingMana() && CS.getSkill1On())// 스킬 사용가능 여부 확인
                                 {
                                     CS.SetObjTarget(hitcol[count].gameObject);// 타겟지정
                                     Target = hitcol[count].gameObject;
@@ -132,7 +132,7 @@ public static class AlgorithmManager
                 }
 
                 // 자신의 체력 상태에 때른 타겟 변화
-                if (CS.getHP() <= CS.getHPMax() / 2 && CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana()) // 자신이 회복이 필요할때
+                if (CS.getHP() <= CS.getHPMax() / 2 && CS.getMP() >= DBManager.SkillData[CS.getSkillID()[0]].getSkillUsingMana()) // 자신이 회복이 필요할때
                 {
                     CS.SetObjTarget(CS.gameObject);// 타겟을 자신으로
 
@@ -189,7 +189,7 @@ public static class AlgorithmManager
                                 }
                                 else //치료해야할 동료가 있을때
                                 {
-                                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())//전체힐 사용 조건
+                                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[1]].getSkillUsingMana() && CS.getSkill2On())//전체힐 사용 조건
                                     {
                                         CD.SetCharStatus(GameManager.CharState.Skill2);
                                     }
@@ -272,11 +272,11 @@ public static class AlgorithmManager
                 }
                 else
                 {
-                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getCheck01() && CS.getSkill2On())
+                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[1]].getSkillUsingMana() && CS.getCheck01() && CS.getSkill2On())
                     {
                         CD.SetCharStatus(GameManager.CharState.Skill2);
                     }
-                    else if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && !CS.getCheck01() && CS.getSkill1On())
+                    else if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[0]].getSkillUsingMana() && !CS.getCheck01() && CS.getSkill1On())
                     {
                         CD.SetCharStatus(GameManager.CharState.Skill1);
                     }
@@ -372,7 +372,7 @@ public static class AlgorithmManager
                         int ran = Random.Range(0, 3);
                         if (ran == 2)
                         {
-                            if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())
+                            if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[1]].getSkillUsingMana() && CS.getSkill2On())
                             {
                                 CD.SetCharStatus(GameManager.CharState.Skill2);
                             }
@@ -383,7 +383,7 @@ public static class AlgorithmManager
                         }
                         else if (ran == 1)
                         {
-                            if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())
+                            if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[0]].getSkillUsingMana() && CS.getSkill1On())
                             {
                                 CD.SetCharStatus(GameManager.CharState.Skill1);
                             }

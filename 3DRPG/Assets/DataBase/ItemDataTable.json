@@ -1,0 +1,29 @@
+[
+  {
+    "ID": 0,
+    "Name": "빈 아이템",
+    "ATK": 0,
+    "DEF": 0,
+    "SPD": 0,
+    "IMG": "",
+    "TYP": 0
+  },
+  {
+    "ID": 1,
+    "Name": "검",
+    "ATK": 10,
+    "DEF": 0,
+    "SPD": 0,
+    "IMG": "Texture/Sword",
+    "TYP": 1
+  },
+  {
+    "ID": 2,
+    "Name": "방패",
+    "ATK": 0,
+    "DEF": 5,
+    "SPD": 0,
+    "IMG": "Texture/Shield",
+    "TYP": 2
+  }
+]

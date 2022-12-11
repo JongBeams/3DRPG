@@ -25,8 +25,10 @@ public class Char_Status : MonoBehaviour
     int m_nPlayerMPMax = 100;
     //이동속도
     float m_fPlayerSpeed = 5;
+    //마나 회복량
+    float m_fPlayerMPRecoveryPoint = 30;
     //마나 회복 속도
-    float m_fPlayerMPRecoveryTimer = 3;
+    float m_fPlayerMPRecoveryTimer = 5;
 
     //캐릭터 구분 레이어
     int m_nLayer = 0;
@@ -45,10 +47,7 @@ public class Char_Status : MonoBehaviour
 
     //SkillID
     int m_nAttackID = 0;
-    int m_nSkill1ID = 0;
-    int m_nSkill2ID = 0;
-    int m_nSkill3ID = 0;
-    int m_nSkill4ID = 0;
+    int[] m_nSkillID = new int[4];
     int m_nIdentitySkillID = 0;
 
 
@@ -88,16 +87,16 @@ public class Char_Status : MonoBehaviour
 
 
     //Skill 사용중 상태 체크
-    bool m_bSkill1Using = false;
-    bool m_bSkill2Using = false;
-    bool m_bSkill3Using = false;
-    bool m_bSkill4Using = false;
+    bool[] m_bSkillUsing = new bool[4];
     bool m_bIdentitySkillUsing = false;
 
 
     //bool Check : 캐릭터 별 체크 사함
     bool m_bCheck01 = false; //Healer = RunAway Dist Check //Thief = BackPos
     bool m_bCheck02 = false; //Healer = Target Enemy Check
+
+    //임시 할당 변수
+    public float m_fTempFloat = 0;
 
 
 
@@ -230,21 +229,9 @@ public class Char_Status : MonoBehaviour
     {
         return m_nAttackID;
     }
-    public int getSkill1ID()
+    public int[] getSkillID()
     {
-        return m_nSkill1ID;
-    }
-    public int getSkill2ID()
-    {
-        return m_nSkill2ID;
-    }
-    public int getSkill3ID()
-    {
-        return m_nSkill3ID;
-    }
-    public int getSkill4ID()
-    {
-        return m_nSkill4ID;
+        return m_nSkillID;
     }
     public int getIdentitySkillID()
     {
@@ -272,22 +259,11 @@ public class Char_Status : MonoBehaviour
 
 
     //get Skill Using Checking State
-    public bool getSkill1Using()
+    public bool[] getSkillUsing()
     {
-        return m_bSkill1Using;
+        return m_bSkillUsing;
     }
-    public bool getSkill2Using()
-    {
-        return m_bSkill2Using;
-    }
-    public bool getSkill3Using()
-    {
-        return m_bSkill3Using;
-    }
-    public bool getSkill4Using()
-    {
-        return m_bSkill4Using;
-    }
+
 
 
     //get bool Check
@@ -303,6 +279,12 @@ public class Char_Status : MonoBehaviour
     public bool getTaunt() 
     {
         return m_bTaunt;
+    }
+
+    //임시 변수 체크
+    public float getTempFloat()
+    {
+        return m_fTempFloat;
     }
 
 
@@ -350,8 +332,8 @@ public class Char_Status : MonoBehaviour
             m_nPlayerMP = m_nPlayerMPMax;
 
 
-            //마나 회복 속도
-            m_fPlayerMPRecoveryTimer = _chardata.getMP_Recovery();
+            //마나 회복 양
+            m_fPlayerMPRecoveryPoint = _chardata.getMP_Recovery();
 
             //playerIdentitySkill
             m_nIdentityPointtMax = _chardata.getIdentitySkillPoint();
@@ -363,19 +345,19 @@ public class Char_Status : MonoBehaviour
 
             //SkillID
             m_nAttackID = _chardata.getAttackID();
-            m_nSkill1ID = _chardata.getSkill1ID();
-            m_nSkill2ID = _chardata.getSkill2ID();
-            m_nSkill3ID = _chardata.getSkill3ID();
-            m_nSkill4ID = _chardata.getSkill4ID();
+            m_nSkillID[0] = _chardata.getSkill1ID();
+            m_nSkillID[1] = _chardata.getSkill2ID();
+            m_nSkillID[2] = _chardata.getSkill3ID();
+            m_nSkillID[3] = _chardata.getSkill4ID();
             m_nIdentitySkillID = _chardata.getIdentitySkillID();
         }
         if (_chardata.getLayer() == 8)
         {
             //SkillID
-            m_nSkill1ID = _chardata.getSkill1ID();
-            m_nSkill2ID = _chardata.getSkill2ID();
-            m_nSkill3ID = _chardata.getSkill3ID();
-            m_nSkill4ID = _chardata.getSkill4ID();
+            m_nSkillID[0] = _chardata.getSkill1ID();
+            m_nSkillID[1] = _chardata.getSkill2ID();
+            m_nSkillID[2] = _chardata.getSkill3ID();
+            m_nSkillID[3] = _chardata.getSkill4ID();
 
 
         }
@@ -386,7 +368,7 @@ public class Char_Status : MonoBehaviour
             m_nPlayerMP = m_nPlayerMPMax;
 
             //마나 회복 속도
-            m_fPlayerMPRecoveryTimer = _chardata.getMP_Recovery();
+            m_fPlayerMPRecoveryPoint = _chardata.getMP_Recovery();
 
             //playerIdentitySkill
             m_nIdentityPointtMax = _chardata.getIdentitySkillPoint();
@@ -398,8 +380,8 @@ public class Char_Status : MonoBehaviour
 
             //SkillID
             m_nAttackID = _chardata.getAttackID();
-            m_nSkill1ID = _chardata.getSkill1ID();
-            m_nSkill2ID = _chardata.getSkill2ID();
+            m_nSkillID[0] = _chardata.getSkill1ID();
+            m_nSkillID[1] = _chardata.getSkill2ID();
         }
 
 
@@ -452,22 +434,11 @@ public class Char_Status : MonoBehaviour
 
 
     //set Skill Using Checking State
-    public void setSkill1Using(bool Using)
+    public void setSkillUsing(int num,bool Using)
     {
-        m_bSkill1Using = Using;
+        m_bSkillUsing[num] = Using;
     }
-    public void setSkill2Using(bool Using)
-    {
-        m_bSkill2Using = Using;
-    }
-    public void setSkill3Using(bool Using)
-    {
-        m_bSkill3Using = Using;
-    }
-    public void setSkill4Using(bool Using)
-    {
-        m_bSkill4Using = Using;
-    }
+
 
 
     //set bool
@@ -484,7 +455,12 @@ public class Char_Status : MonoBehaviour
     {
         m_bSuperArmor = _SuperArmor;
     }
-
+    //set
+    //임시 변수 체크
+    public void setTempFloat(float _TempFloat)
+    {
+        m_fTempFloat = _TempFloat;
+    }
 
 
     public void HealingHP(int HealingPoint)
@@ -596,8 +572,8 @@ public class Char_Status : MonoBehaviour
         {
             if (m_fPlayerMPRecoveryTimer <= 0)
             {
-                m_nPlayerMP += 10;
-                m_fPlayerMPRecoveryTimer = 3;
+                m_nPlayerMP += (int)m_fPlayerMPRecoveryPoint;
+                m_fPlayerMPRecoveryTimer = 5;
             }
             else
             {
@@ -673,6 +649,15 @@ public class Char_Status : MonoBehaviour
         CS=GameManager.CharState.Idle;
         
         delGetDamae = GetDamage;
+
+        for(int i = 0; i < m_bSkillUsing.Length; i++)
+        {
+            m_bSkillUsing[i] =false;
+        }
+        
+
+
+
     }
 
     // Update is called once per frame

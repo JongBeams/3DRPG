@@ -835,6 +835,7 @@ GameObject:
   - component: {fileID: 406626316}
   - component: {fileID: 406626318}
   - component: {fileID: 406626319}
+  - component: {fileID: 406626320}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -891,7 +892,8 @@ MonoBehaviour:
   EnemyHPBar: {fileID: 1803448883}
   Target: {fileID: 1613743972}
   objCanvas: {fileID: 0}
-  slManager: {fileID: 0}
+  slM: {fileID: 0}
+  DBM: {fileID: 0}
   UIObj: {fileID: 0}
   UIMBPoint: {x: 0, y: 0, z: 0}
   DragingItem: {fileID: 0}
@@ -923,11 +925,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fbbfb97ce34aef4b86aee24f0dec975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_lPlayerDB: []
-  m_lPartnerDB: []
-  m_lEnemyDB: []
-  m_lSkillDB: []
-  m_lItemDB: []
 --- !u!114 &406626318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -956,6 +953,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6bb25d2e6945df54fae4ffbc568c56fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &406626320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 406626312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb46e28e1f597e34e82d8d4a3bccbc4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &410467890

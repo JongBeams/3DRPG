@@ -73,23 +73,23 @@ public class Char_Dynamics : MonoBehaviour
                 break;
             case GameManager.CharState.Skill1:
                 CharStatus.getAnimator().SetBool("Skill1", true);
-                CharStatus.UseMana(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillUsingMana());
-                GameManager.instance.getSM().SetCharSkill(CharStatus.getSkill1ID(), CharStatus);
+                CharStatus.UseMana(DBManager.SkillData[CharStatus.getSkillID()[0]].getSkillUsingMana());
+                GameManager.instance.getSM().SetCharSkill(CharStatus.getSkillID()[0], CharStatus);
                 break;
             case GameManager.CharState.Skill2:
                 CharStatus.getAnimator().SetBool("Skill2", true);
-                CharStatus.UseMana(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill2ID()].getSkillUsingMana());
-                GameManager.instance.getSM().SetCharSkill(CharStatus.getSkill2ID(), CharStatus);
+                CharStatus.UseMana(DBManager.SkillData[CharStatus.getSkillID()[1]].getSkillUsingMana());
+                GameManager.instance.getSM().SetCharSkill(CharStatus.getSkillID()[1], CharStatus);
                 break;
             case GameManager.CharState.Skill3:
                 CharStatus.getAnimator().SetBool("Skill3", true);
-                CharStatus.UseMana(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill3ID()].getSkillUsingMana());
-                GameManager.instance.getSM().SetCharSkill(CharStatus.getSkill3ID(), CharStatus);
+                CharStatus.UseMana(DBManager.SkillData[CharStatus.getSkillID()[2]].getSkillUsingMana());
+                GameManager.instance.getSM().SetCharSkill(CharStatus.getSkillID()[2], CharStatus);
                 break;
             case GameManager.CharState.Skill4:
                 CharStatus.getAnimator().SetBool("Skill4", true);
-                CharStatus.UseMana(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill4ID()].getSkillUsingMana());
-                GameManager.instance.getSM().SetCharSkill(CharStatus.getSkill4ID(), CharStatus);
+                CharStatus.UseMana(DBManager.SkillData[CharStatus.getSkillID()[3]].getSkillUsingMana());
+                GameManager.instance.getSM().SetCharSkill(CharStatus.getSkillID()[3], CharStatus);
                 break;
             case GameManager.CharState.Hit:
                 CharStatus.getAnimator().SetBool("Hit", true);
@@ -124,8 +124,7 @@ public class Char_Dynamics : MonoBehaviour
         switch (CharStatus.getCS())
         {
             case GameManager.CharState.Idle:
-                //Debug.Log(CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Idle")+""+ CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime);
-                if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Idle") &&
+                if (CharStatus.getAnimator()!=null && CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Idle") &&
                     CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                 {
                     AlgorithmManager.SetAlgorithm(CharStatus.getID(), CharStatus);
@@ -157,16 +156,16 @@ public class Char_Dynamics : MonoBehaviour
                 }
                 break;
             case GameManager.CharState.Skill1:
-                if (CharStatus.getSkill1Using())
+                if (CharStatus.getSkillUsing()[0])
                 {
-                    GameManager.instance.getSM().SetCharSkill(CharStatus.getSkill1ID(), CharStatus);
+                    GameManager.instance.getSM().SetCharSkill(CharStatus.getSkillID()[0], CharStatus);
                 }
                 else {
                     if (CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).IsName("Skill1") &&
                     CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
                         
-                        CharStatus.setSkill1CoolTimer(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillCoolTime());
+                        CharStatus.setSkill1CoolTimer(DBManager.SkillData[CharStatus.getSkillID()[0]].getSkillCoolTime());
                         CharStatus.setSkill1On(false);
                         SetCharStatus(GameManager.CharState.Idle);
                     }
@@ -174,9 +173,9 @@ public class Char_Dynamics : MonoBehaviour
                 
                 break;
             case GameManager.CharState.Skill2:
-                if (CharStatus.getSkill2Using())
+                if (CharStatus.getSkillUsing()[1])
                 {
-                    GameManager.instance.getSM().SetCharSkill(CharStatus.getSkill2ID(), CharStatus);
+                    GameManager.instance.getSM().SetCharSkill(CharStatus.getSkillID()[1], CharStatus);
                 }
                 else
                 {
@@ -184,7 +183,7 @@ public class Char_Dynamics : MonoBehaviour
                        CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
                         
-                        CharStatus.setSkill2CoolTimer(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillCoolTime());
+                        CharStatus.setSkill2CoolTimer(DBManager.SkillData[CharStatus.getSkillID()[1]].getSkillCoolTime());
                         CharStatus.setSkill2On(false);
                         SetCharStatus(GameManager.CharState.Idle);
                     }
@@ -193,9 +192,9 @@ public class Char_Dynamics : MonoBehaviour
                 
                 break;
             case GameManager.CharState.Skill3:
-                if (CharStatus.getSkill3Using())
+                if (CharStatus.getSkillUsing()[2])
                 {
-                    GameManager.instance.getSM().SetCharSkill(CharStatus.getSkill3ID(), CharStatus);
+                    GameManager.instance.getSM().SetCharSkill(CharStatus.getSkillID()[2], CharStatus);
                 }
                 else
                 {
@@ -203,7 +202,7 @@ public class Char_Dynamics : MonoBehaviour
                     CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
                         
-                        CharStatus.setSkill3CoolTimer(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillCoolTime());
+                        CharStatus.setSkill3CoolTimer(DBManager.SkillData[CharStatus.getSkillID()[2]].getSkillCoolTime());
                         CharStatus.setSkill3On(false);
                         SetCharStatus(GameManager.CharState.Idle);
                     }
@@ -211,9 +210,9 @@ public class Char_Dynamics : MonoBehaviour
                 
                 break;
             case GameManager.CharState.Skill4:
-                if (CharStatus.getSkill4Using())
+                if (CharStatus.getSkillUsing()[3])
                 {
-                    GameManager.instance.getSM().SetCharSkill(CharStatus.getSkill4ID(), CharStatus);
+                    GameManager.instance.getSM().SetCharSkill(CharStatus.getSkillID()[3], CharStatus);
                 }
                 else
                 {
@@ -222,7 +221,7 @@ public class Char_Dynamics : MonoBehaviour
                     CharStatus.getAnimator().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
                     {
                        
-                        CharStatus.setSkill4CoolTimer(CharDataBase.instance.m_lSkillDB[CharStatus.getSkill1ID()].getSkillCoolTime());
+                        CharStatus.setSkill4CoolTimer(DBManager.SkillData[CharStatus.getSkillID()[3]].getSkillCoolTime());
                         CharStatus.setSkill4On(false);
                         SetCharStatus(GameManager.CharState.Idle);
                     }

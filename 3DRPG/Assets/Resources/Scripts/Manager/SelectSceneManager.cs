@@ -28,9 +28,9 @@ public class SelectSceneManager : MonoBehaviour
             CharID[i] = 0; 
         }
 
-        PlayerName.text = CharDataBase.instance.m_lPlayerDB[CharID[0]].getName();
-        PartnerName[0].text = CharDataBase.instance.m_lPartnerDB[CharID[0]].getName();
-        PartnerName[1].text = CharDataBase.instance.m_lPartnerDB[CharID[1]].getName();
+        PlayerName.text = DBManager.PlayerData[CharID[0]].getName();
+        PartnerName[0].text = DBManager.PartnerData[CharID[0]].getName();
+        PartnerName[1].text = DBManager.PartnerData[CharID[1]].getName();
         //for (int i = 0; i < CharButton.Length; i++)
         //{
         //    CharButton[i].onClick.AddListener(() => SelectScreen(i));
@@ -63,7 +63,7 @@ public class SelectSceneManager : MonoBehaviour
             
                 if (CharID[ID] <= 0)
                 {
-                    CharID[ID] = CharDataBase.instance.m_lPlayerDB.Count-1;
+                    CharID[ID] = DBManager.PlayerData.Count-1;
                 }
                 else
                 {
@@ -71,14 +71,14 @@ public class SelectSceneManager : MonoBehaviour
                 }
                 
             
-            PlayerName.text = CharDataBase.instance.m_lPlayerDB[CharID[ID]].getName();
+            PlayerName.text = DBManager.PlayerData[CharID[ID]].getName();
         }
         else
         {
 
             if (CharID[ID] <= 0)
             {
-                CharID[ID] = CharDataBase.instance.m_lPartnerDB.Count-1;
+                CharID[ID] = DBManager.PartnerData.Count-1;
             }
             else
             {
@@ -86,7 +86,7 @@ public class SelectSceneManager : MonoBehaviour
             }
 
             
-            PartnerName[ID - 1].text = CharDataBase.instance.m_lPartnerDB[CharID[ID]].getName();
+            PartnerName[ID - 1].text = DBManager.PartnerData[CharID[ID]].getName();
         }
     }
 
@@ -98,7 +98,7 @@ public class SelectSceneManager : MonoBehaviour
         if (ID == 0)
         {
             
-                if (CharID[ID] >= CharDataBase.instance.m_lPlayerDB.Count-1)
+                if (CharID[ID] >= DBManager.PlayerData.Count-1)
                 {
                     CharID[ID] = 0;
                 }
@@ -109,12 +109,12 @@ public class SelectSceneManager : MonoBehaviour
 
            
             
-            PlayerName.text = CharDataBase.instance.m_lPlayerDB[CharID[ID]].getName();
+            PlayerName.text = DBManager.PlayerData[CharID[ID]].getName();
         }
         else
         {
             
-                if (CharID[ID] >= CharDataBase.instance.m_lPartnerDB.Count-1)
+                if (CharID[ID] >= DBManager.PartnerData.Count-1)
                 {
                     CharID[ID] = 0;
                 }
@@ -123,7 +123,7 @@ public class SelectSceneManager : MonoBehaviour
                     CharID[ID]++;
                 }
             
-            PartnerName[ID - 1].text = CharDataBase.instance.m_lPartnerDB[CharID[ID]].getName();
+            PartnerName[ID - 1].text = DBManager.PartnerData[CharID[ID]].getName();
         }
     }
 
@@ -131,8 +131,8 @@ public class SelectSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //PlayerName.text = CharDataBase.instance.m_lPlayerDB[CharID[0]].getName();
-        //PartnerName[0].text = CharDataBase.instance.m_lPartnerDB[CharID[1]].getName();
-        //PartnerName[1].text = CharDataBase.instance.m_lPartnerDB[CharID[2]].getName();
+        //PlayerName.text = DBManager.PlayerData[CharID[0]].getName();
+        //PartnerName[0].text = DBManager.PartnerData[CharID[1]].getName();
+        //PartnerName[1].text = DBManager.PartnerData[CharID[2]].getName();
     }
 }

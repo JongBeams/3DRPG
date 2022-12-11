@@ -1,0 +1,47 @@
+[
+  {
+    "ID": 1,
+    "Name": "사제",
+    "PFL": "Prefabs/Character/Healer",
+    "ATK": 2,
+    "DEF": 5,
+    "HP": 20,
+    "MP": 200,
+    "SPD": 4,
+    "MPRP": 3,
+    "TYP": 9,
+    "S0ID": 0,
+    "S1ID": 1,
+    "S2ID": 2
+  },
+  {
+    "ID": 2,
+    "Name": "도적",
+    "PFL": "Prefabs/Character/Thief",
+    "ATK": 4,
+    "DEF": 5,
+    "HP": 20,
+    "MP": 100,
+    "SPD": 4,
+    "MPRP": 3,
+    "TYP": 9,
+    "S0ID": 3,
+    "S1ID": 4,
+    "S2ID": 5
+  },
+  {
+    "ID": 3,
+    "Name": "마법사",
+    "PFL": "Prefabs/Magician",
+    "ATK": 10,
+    "DEF": 5,
+    "HP": 20,
+    "MP": 1000,
+    "SPD": 4,
+    "MPRP": 3,
+    "TYP": 9,
+    "S0ID": 0,
+    "S1ID": 16,
+    "S2ID": 17
+  }
+]

@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
         Expendalbe
     }
 
+    
+
 
     public static GameManager instance;
 
@@ -78,6 +80,8 @@ public class GameManager : MonoBehaviour
 
     public SLManager slM;
 
+    public DBManager DBM;
+
 
     //UIMouse
     GraphicRaycaster GR;
@@ -89,8 +93,14 @@ public class GameManager : MonoBehaviour
     public GameObject DragingItem=null;
     public GameObject DragingItemSprite = null;
 
-    
 
+    struct Dropitem
+    {
+        GameObject ItemObj;
+        int ItemID;
+    }
+    List<Dropitem> m_lDropItem = new List<Dropitem>();
+    
 
     //gameend
     public GameObject objGameEnd;
@@ -131,6 +141,7 @@ public class GameManager : MonoBehaviour
         SM = this.GetComponent<SkillManager>();
         PI = this.GetComponent<Player_Inventory>();
         slM = this.GetComponent<SLManager>();
+        DBM = this.GetComponent<DBManager>();
 
         //UI µî·Ï
         objCanvas = GameObject.FindGameObjectWithTag("Canvas");
@@ -160,20 +171,20 @@ public class GameManager : MonoBehaviour
     void getInstanceChar()
     {
         m_nEnemyID = PlayerPrefs.GetInt("EnemyID");
-
-        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(CharDataBase.instance.m_lPlayerDB[PlayerPrefs.GetInt("Player")].getObjPrefab()), new Vector3(0,0,-15), Quaternion.identity);
-        GameObject Partner1Obj = Instantiate(Resources.Load<GameObject>(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner1")].getObjPrefab()), new Vector3(5, 0, -17), Quaternion.identity);
-        GameObject Partner2Obj = Instantiate(Resources.Load<GameObject>(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner2")].getObjPrefab()), new Vector3(-5, 0, -17), Quaternion.identity);
-        GameObject EnemyObj = Instantiate(Resources.Load<GameObject>(CharDataBase.instance.m_lEnemyDB[m_nEnemyID].getObjPrefab()), new Vector3(0, 0, 15), Quaternion.identity);
+        //
+        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[PlayerPrefs.GetInt("Player")].getObjPrefab()), new Vector3(0,0,-15), Quaternion.identity);
+        GameObject Partner1Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")].getObjPrefab()), new Vector3(5, 0, -17), Quaternion.identity);
+        GameObject Partner2Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")].getObjPrefab()), new Vector3(-5, 0, -17), Quaternion.identity);
+        GameObject EnemyObj = Instantiate(Resources.Load<GameObject>(DBManager.EnemyData[m_nEnemyID].getObjPrefab()), new Vector3(0, 0, 15), Quaternion.identity);
 
         objPlayer = PlayerObj;
         objHealer = Partner1Obj;
         objThief = Partner2Obj;
         objEnemy = EnemyObj;
 
-        objPlayer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPlayerDB[PlayerPrefs.GetInt("Player")]);
-        objHealer.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner1")]);
-        objThief.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lPartnerDB[PlayerPrefs.GetInt("Partner2")]);
+        objPlayer.GetComponent<Char_Status>().CharStatusSetting(DBManager.PlayerData[PlayerPrefs.GetInt("Player")]);
+        objHealer.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")]);
+        objThief.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")]);
 
         objPlayer.GetComponent<Char_Status>().setItemSlotsNum(PI.getPlayerSlot());
         objHealer.GetComponent<Char_Status>().setItemSlotsNum(PI.getPartner1Slot());
@@ -188,7 +199,7 @@ public class GameManager : MonoBehaviour
         objThief.GetComponent<Char_Status>().setItemSlots(0, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot()+PI.getPartner1Slot()]);
         objThief.GetComponent<Char_Status>().setItemSlots(1, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot() + PI.getPartner1Slot() + 1]);
 
-        objEnemy.GetComponent<Char_Status>().CharStatusSetting(CharDataBase.instance.m_lEnemyDB[m_nEnemyID]);
+        objEnemy.GetComponent<Char_Status>().CharStatusSetting(DBManager.EnemyData[m_nEnemyID]);
         objEnemy.GetComponent<Char_Status>().SetSuperArmor(true);
     }
 
@@ -337,7 +348,7 @@ public class GameManager : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
 
-                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill1ID()].getSkillUsingMana() && CS.getSkill1On())
+                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[0]].getSkillUsingMana() && CS.getSkill1On())
                     {
                         CD.setMovePoint(MBPoint);
                         CS.SetObjTarget(MBTarget);
@@ -348,7 +359,7 @@ public class GameManager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.W))
                 {
-                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill2ID()].getSkillUsingMana() && CS.getSkill2On())
+                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[1]].getSkillUsingMana() && CS.getSkill2On())
                     {
                         CD.setMovePoint(MBPoint);
                         CS.SetObjTarget(MBTarget);
@@ -358,7 +369,7 @@ public class GameManager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill3ID()].getSkillUsingMana() && CS.getSkill3On())
+                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[2]].getSkillUsingMana() && CS.getSkill3On())
                     {
                         CD.setMovePoint(MBPoint);
                         CS.SetObjTarget(MBTarget);
@@ -368,7 +379,7 @@ public class GameManager : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.R))
                 {
-                    if (CS.getMP() >= CharDataBase.instance.m_lSkillDB[CS.getSkill4ID()].getSkillUsingMana() && CS.getSkill4On())
+                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[3]].getSkillUsingMana() && CS.getSkill4On())
                     {
                         CD.setMovePoint(MBPoint);
                         CS.SetObjTarget(MBTarget);
