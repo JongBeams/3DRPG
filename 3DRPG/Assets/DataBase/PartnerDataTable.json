@@ -1,7 +1,7 @@
-[
+Ôªø[
   {
     "ID": 1,
-    "Name": "ªÁ¡¶",
+    "Name": "ÏÇ¨Ï†ú",
     "PFL": "Prefabs/Character/Healer",
     "ATK": 2,
     "DEF": 5,
@@ -16,7 +16,7 @@
   },
   {
     "ID": 2,
-    "Name": "µµ¿˚",
+    "Name": "ÎèÑÏ†Å",
     "PFL": "Prefabs/Character/Thief",
     "ATK": 4,
     "DEF": 5,
@@ -31,7 +31,7 @@
   },
   {
     "ID": 3,
-    "Name": "∏∂π˝ªÁ",
+    "Name": "ÎßàÎ≤ïÏÇ¨",
     "PFL": "Prefabs/Magician",
     "ATK": 10,
     "DEF": 5,

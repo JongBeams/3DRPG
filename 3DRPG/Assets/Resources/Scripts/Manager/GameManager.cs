@@ -259,7 +259,16 @@ public class GameManager : MonoBehaviour
 
     public void GoMain()
     {
-        SceneManager.LoadScene("MainScene");
+
+        if (m_nEnemyID != 1 && objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death)
+        {
+            PlayerPrefs.SetInt("EnemyID", m_nEnemyID + 1);
+            SceneManager.LoadScene("InGameScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("MainScene");
+        }
 
     }
 
@@ -272,8 +281,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene("InGmaeScene");
-            PlayerPrefs.SetInt("EnemyID", m_nEnemyID+1);
+            PlayerPrefs.SetInt("EnemyID", m_nEnemyID + 1);
+            SceneManager.LoadScene("InGameScene");
         }
         
     }

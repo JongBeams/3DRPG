@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
+    int SetTargetLayerMask(string _Target)
+    {
+        switch (_Target)
+        {
+            case "Ally":
+                return 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner")); 
+                break;
+            case "Enemy":
+                return 1 << (LayerMask.NameToLayer("Enemy"));
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
 
 
     //DeleGate, 상속, 전략적패턴으로 대체 가능
@@ -66,13 +81,13 @@ public class SkillManager : MonoBehaviour
                 FireBreath(_CS, _id);
                 break;
             case 18:
-                RangeAngleAttack(_CS, _id);
+                StartCoroutine(RangeAngleAttack(_CS, _id));
                 break;
             case 19:
-                RangeAngleAttack(_CS, _id);
+                StartCoroutine(RangeAngleAttack(_CS, _id));
                 break;
             case 20:
-                RangeAngleAttack(_CS, _id);
+                StartCoroutine(RangeAngleAttack(_CS, _id));
                 break;
 
         }
@@ -199,7 +214,7 @@ public class SkillManager : MonoBehaviour
 
         int m_nMask = 0;
         //m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
-        m_nMask = SkillDB.getTargetSelect();
+        m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
         Collider[] hitcol = Physics.OverlapSphere(CS.transform.position, SkillDB.getSkillRange1(), m_nMask);
         int count = 0;
 
@@ -244,7 +259,7 @@ public class SkillManager : MonoBehaviour
 
         //공격 범위
         int m_nMask = 0;
-        m_nMask = SkillDB.getTargetSelect();
+        m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
         Collider[] hitcol = Physics.OverlapBox(AttackPos.position, new Vector3(1, 1, 1),
             Quaternion.Euler(new Vector3(0, GetAngle(CS.transform.position, vecEnemyLookingPoint), 0)), m_nMask);
 
@@ -293,7 +308,7 @@ public class SkillManager : MonoBehaviour
 
 
         int m_nMask = 0;
-        m_nMask = SkillDB.getTargetSelect();
+        m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
         Collider[] hitcol = Physics.OverlapSphere(CS.transform.position, SkillDB.getSkillRange1(), m_nMask);//충돌감지 저장
                                                                                            //int count = 0;
 
@@ -338,7 +353,7 @@ public class SkillManager : MonoBehaviour
 
         //공격 범위
         int m_nMask = 0;
-        m_nMask = SkillDB.getTargetSelect();
+        m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
         Collider[] hitcol = Physics.OverlapBox(AttackPos.position, new Vector3(1, 1, 1),
             Quaternion.Euler(new Vector3(0, GetAngle(CS.transform.position, vecEnemyLookingPoint), 0)), m_nMask);
 
@@ -404,7 +419,7 @@ public class SkillManager : MonoBehaviour
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length/2);
 
         int m_nMask = 0;
-        m_nMask = SkillDB.getTargetSelect();
+        m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
         Collider[] hitcol = Physics.OverlapBox(AttackPos.position, new Vector3(1, 1, 1),
             Quaternion.Euler(new Vector3(0, GetAngle(CS.transform.position, vecEnemyLookingPoint), 0)), m_nMask);
 
@@ -449,7 +464,7 @@ public class SkillManager : MonoBehaviour
 
 
         int m_nMask = 0;
-        m_nMask = SkillDB.getTargetSelect();
+        m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
         Collider[] hitcol = Physics.OverlapBox(AttackPos.position, new Vector3(1, 1, 1),
             Quaternion.Euler(new Vector3(0, GetAngle(CS.transform.position, vecEnemyLookingPoint), 0)), m_nMask);
 
@@ -525,7 +540,7 @@ public class SkillManager : MonoBehaviour
                 CS.gameObject.transform.Translate(Vector3.forward * CS.getSpeed() * 3.5f * Time.deltaTime);
 
                 int m_nMask = 0;
-                m_nMask = SkillDB.getTargetSelect();
+                m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
                 Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, 1f, m_nMask);
 
                 if (hitcol.Length != 0)
@@ -592,7 +607,7 @@ public class SkillManager : MonoBehaviour
         Destroy(objProtectZone, SkillDB.getSkillUsingTime()+3f);
 
         int m_nMask = 0;
-        m_nMask = SkillDB.getTargetSelect();
+        m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
         Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, SkillDB.getSkillRange1(), m_nMask);
         int count = 0;
 
@@ -636,23 +651,26 @@ public class SkillManager : MonoBehaviour
         }
         CS.transform.LookAt(vecEnemyLookingPoint);
 
-
-        if (CS.getLayer() == 6 || CS.getLayer() == 9) 
+        if (CS.getObjTarget()!=null)
         {
-            if (CS.getObjTarget().layer == 8)
+            if (CS.getLayer() == 6 || CS.getLayer() == 9)
             {
-                CS.getObjTarget().GetComponent<Char_Status>().OnTaunt(3f, CS.gameObject);
-                //Debug.Log("TauntTarget : " + GameManager.instance.MBTarget);
+                if (CS.getObjTarget().layer == 8)
+                {
+                    CS.getObjTarget().GetComponent<Char_Status>().OnTaunt(5f, CS.gameObject);
+                    //Debug.Log("TauntTarget : " + GameManager.instance.MBTarget);
+                }
+            }
+            else
+            {
+                if (CS.getObjTarget().layer == 6 || CS.getObjTarget().layer == 9)
+                {
+                    CS.getObjTarget().GetComponent<Char_Status>().OnTaunt(5f, CS.gameObject);
+                    //Debug.Log("TauntTarget : " + GameManager.instance.MBTarget);
+                }
             }
         }
-        else
-        {
-            if (CS.getObjTarget().layer == 6|| CS.getObjTarget().layer == 9)
-            {
-                CS.getObjTarget().GetComponent<Char_Status>().OnTaunt(3f, CS.gameObject);
-                //Debug.Log("TauntTarget : " + GameManager.instance.MBTarget);
-            }
-        }
+        
 
         
 
@@ -769,7 +787,7 @@ public class SkillManager : MonoBehaviour
         yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length / 2);
 
         int m_nMask = 0;
-        m_nMask = SkillDB.getTargetSelect();
+        m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
         Collider[] hitcol = Physics.OverlapBox(AttackPos.position,new Vector3(3, 3, 3),
             Quaternion.Euler(new Vector3(0, GetAngle(CS.gameObject.transform.position, vecEnemyLookingPoint), 0)), m_nMask);
 
@@ -815,10 +833,10 @@ public class SkillManager : MonoBehaviour
         CS.transform.LookAt(vecEnemyLookingPoint);
 
 
-        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length / 2);
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
         int m_nMask = 0;
-        m_nMask = SkillDB.getTargetSelect();
+        m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
         Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, SkillDB.getSkillRange1(), m_nMask);//충돌감지 저장
         int count = 0;
         //int i = 0;
@@ -925,7 +943,7 @@ public class SkillManager : MonoBehaviour
     //    yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length / 2);
 
     //    int m_nMask = 0;
-    //    m_nMask = SkillDB.getTargetSelect();
+    //    m_nMask = SetTargetLayerMask(SkillDB.getTargetSelect());
     //    Collider[] hitcol = Physics.OverlapSphere(CS.gameObject.transform.position, SkillDB.getSkillRange1(), m_nMask);//충돌감지 저장
     //    int count = 0;
     //    //int i = 0;
@@ -983,7 +1001,7 @@ public class SkillManager : MonoBehaviour
             FireBreathEffect.transform.localRotation = Quaternion.identity;
             FireBreathEffect.GetComponent<ParticleSystem>().Play();
             FireBreathEffect.GetComponent<FireBreath>().Setting((int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()), SkillDB.getSkillSpeed(),
-                SkillDB.getSkillRange1(),SkillDB.getTargetSelect(),SkillDB.getSkillRange2());
+                SkillDB.getSkillRange1(),SetTargetLayerMask(SkillDB.getTargetSelect()),SkillDB.getSkillRange2());
 
         }
 

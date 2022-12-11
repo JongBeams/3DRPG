@@ -1,7 +1,7 @@
-[
+ï»¿[
   {
     "ID": 10,
-    "Name": "ºÓÀº ¿ë",
+    "Name": "ë¶‰ì€ ìš©",
     "PFL": "Prefabs/Character/Enemy",
     "ATK": 10,
     "DEF": 0,
@@ -15,7 +15,7 @@
   },
   {
     "ID": 11,
-    "Name": "ÃÊ·Ï ¿ë",
+    "Name": "ì´ˆë¡ ìš©",
     "PFL": "Prefabs/Green",
     "ATK": 8,
     "DEF": 0,

@@ -41,10 +41,30 @@ public class DBManager : MonoSingleton<DBManager>
     }
 
     //람다식 + Linq 공부할것
-    public static CharData GetPlayerStatusByIdx(int idx)
+    public static PlayerCharData GetPlayerStatusByIdx(int idx)
     {
         return DeepCopy(PlayerData.Find(x => x.getID() == idx));
     }
+
+    public static PartnerCharData GetPartnerStatusByIdx(int idx)
+    {
+        return DeepCopy(PartnerData.Find(x => x.getID() == idx));
+    }
+    public static EnemyCharData GetEnemyStatusByIdx(int idx)
+    {
+        return DeepCopy(EnemyData.Find(x => x.getID() == idx));
+    }
+    public static SkillData GetSkillStatusByIdx(int idx)
+    {
+        return DeepCopy(SkillData.Find(x => x.getSkillID() == idx));
+    }
+    public static ItemData GetItemStatusByIdx(int idx)
+    {
+        return DeepCopy(ItemData.Find(x => x.getID() == idx));
+    }
+
+
+
 
     public void ReadData()
     {
@@ -66,7 +86,7 @@ public class DBManager : MonoSingleton<DBManager>
         {
             string jdata = File.ReadAllText(m_sSaveFileDirectory + "PartnerDataTable.json");
 
-            PlayerData = JsonConvert.DeserializeObject< List<PlayerCharData>>(jdata);
+            PartnerData = JsonConvert.DeserializeObject< List<PartnerCharData>>(jdata);
         }
         else
         {
@@ -76,9 +96,9 @@ public class DBManager : MonoSingleton<DBManager>
 
         if (File.Exists(m_sSaveFileDirectory + "EnemyDataTable.json"))
         {
-            string jdata = File.ReadAllText(m_sSaveFileDirectory + "PlayerDataTable.json");
+            string jdata = File.ReadAllText(m_sSaveFileDirectory + "EnemyDataTable.json");
 
-            PlayerData = JsonConvert.DeserializeObject< List<PlayerCharData>>(jdata);
+            EnemyData = JsonConvert.DeserializeObject< List<EnemyCharData>>(jdata);
         }
         else
         {
@@ -90,7 +110,7 @@ public class DBManager : MonoSingleton<DBManager>
         {
             string jdata = File.ReadAllText(m_sSaveFileDirectory + "SkillDataTable.json");
 
-            PlayerData = JsonConvert.DeserializeObject< List<PlayerCharData>>(jdata);
+            SkillData = JsonConvert.DeserializeObject< List<SkillData>>(jdata);
         }
         else
         {
@@ -102,7 +122,7 @@ public class DBManager : MonoSingleton<DBManager>
         {
             string jdata = File.ReadAllText(m_sSaveFileDirectory + "ItemDataTable.json");
 
-            PlayerData = JsonConvert.DeserializeObject< List<PlayerCharData>>(jdata);
+            ItemData = JsonConvert.DeserializeObject< List<ItemData>>(jdata);
         }
         else
         {

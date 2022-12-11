@@ -95,8 +95,6 @@ public class Char_Status : MonoBehaviour
     bool m_bCheck01 = false; //Healer = RunAway Dist Check //Thief = BackPos
     bool m_bCheck02 = false; //Healer = Target Enemy Check
 
-    //임시 할당 변수
-    public float m_fTempFloat = 0;
 
 
 
@@ -281,11 +279,7 @@ public class Char_Status : MonoBehaviour
         return m_bTaunt;
     }
 
-    //임시 변수 체크
-    public float getTempFloat()
-    {
-        return m_fTempFloat;
-    }
+
 
 
 
@@ -455,12 +449,7 @@ public class Char_Status : MonoBehaviour
     {
         m_bSuperArmor = _SuperArmor;
     }
-    //set
-    //임시 변수 체크
-    public void setTempFloat(float _TempFloat)
-    {
-        m_fTempFloat = _TempFloat;
-    }
+
 
 
     public void HealingHP(int HealingPoint)

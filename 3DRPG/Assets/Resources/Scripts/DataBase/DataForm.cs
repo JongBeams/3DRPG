@@ -8,27 +8,27 @@ using UnityEditor;
 public class SkillData
 {
     // ID
-    int ID;
+    public int ID;
     // 스킬명
-    string Name;
+    public string Name;
     // 스킬 계수
-    float SDP1;
-    float SDP2;
+    public float SDP1;
+    public float SDP2;
     // 스킬 쿨타임
-    float SCT;
+    public float SCT;
     // 스킬 사용 마나
-    int SM;
+    public int SM;
     // 스킬 이펙트 리소스
-    string SER;
+    public string SER;
     // 타깃 구분
-    int ST;
+    public string ST;
     // 범위 지정
-    float SR1;
-    float SR2;
+    public float SR1;
+    public float SR2;
     //스킬 속도
-    float SSPD;
+    public float SSPD;
     //스킬 지속 시간
-    float SLT;
+    public float SLT;
 
     public SkillData(
     int _SkillID,
@@ -38,7 +38,7 @@ public class SkillData
     float _SkillCoolTime,
     int _SkillUsingMana,
     string _SkillEffectResource,
-    int _TargetSelect,
+    string _TargetSelect,
     float _SkillRange1,
     float _SkillRange2,
     float _SkillSpeed,
@@ -106,7 +106,7 @@ public class SkillData
         return SER;
     }
     // 타깃 구분
-    public int getTargetSelect()
+    public string getTargetSelect()
     {
         return ST;
     }
@@ -139,42 +139,42 @@ public class CharData
 
 
     //ID
-    protected int ID;
+    public int ID;
     //캐릭터명
-    protected string Name;
+    public string Name;
     //게임 오브젝트 프리펩 위치
-    protected string PFL;
+    public string PFL;
     //공격력
-    protected int ATK;
+    public int ATK;
     //방어력
-    protected int DEF;
+    public int DEF;
     //HP
-    protected int HP;
+    public int HP;
     //MP
-    protected int MP;
+    public int MP;
     //이동속도
-    protected float SPD;
+    public float SPD;
     //마나 회복 속도
-    protected float MPRP;
+    public float MPRP;
     //레이어 구분
-    protected int TYP;
+    public int TYP;
 
     //캐릭터 스킬 ID
     // AI 캐릭터, 플레이어 사용
-    protected int S0ID;
+    public int S0ID;
     // 적 유닛, AI 캐릭터, 플레이어 사용
-    protected int S1ID;
-    protected int S2ID;
+    public int S1ID;
+    public int S2ID;
     // 적 유닛, 플레이어 사용
-    protected int S3ID;
-    protected int S4ID;
+    public int S3ID;
+    public int S4ID;
     // 플레이어 사용
-    protected int ISID;
+    public int ISID;
 
     //플레이어 고유 스킬
-    protected int ISP;
-    protected int ISPRP;
-    protected float ISPRT;
+    public int ISP;
+    public int ISPRP;
+    public float ISPRT;
 
 
 
