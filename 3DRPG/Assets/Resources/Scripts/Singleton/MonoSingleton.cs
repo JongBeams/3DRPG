@@ -8,7 +8,7 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
-            Debug.Log(instance);
+            //Debug.Log(instance);
             if (null == instance)
             {
                 instance = FindObjectOfType(typeof(T)) as T;

@@ -31,7 +31,7 @@ public class DBManager : MonoSingleton<DBManager>
     // Start is called before the first frame update
     void Awake()
     {
-        m_sSaveFileDirectory = Application.dataPath + "/DataBase/";
+        m_sSaveFileDirectory = "/DataBase/";
         ReadData();
         
     }
@@ -72,11 +72,32 @@ public class DBManager : MonoSingleton<DBManager>
 
     public void ReadData()
     {
+        //var textAsset = Resources.Load<TextAsset>(m_sSaveFileDirectory + "PlayerDataTable");
+        //PlayerData = JsonConvert.DeserializeObject<List<PlayerCharData>>(textAsset.text);
 
+        //string jdata1 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/PlayerDataTable").text);
 
-        if (File.Exists(m_sSaveFileDirectory+ "PlayerDataTable.json"))
+        //PlayerData = JsonConvert.DeserializeObject<List<PlayerCharData>>(jdata1);
+
+        //string jdata2 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/PartnerDataTable").text);
+
+        //PartnerData = JsonConvert.DeserializeObject<List<PartnerCharData>>(jdata2);
+
+        //string jdata3 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/EnemyDataTable").text);
+
+        //EnemyData = JsonConvert.DeserializeObject<List<EnemyCharData>>(jdata3);
+
+        //string jdata4 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/SkillDataTable").text);
+
+        //SkillData = JsonConvert.DeserializeObject<List<SkillData>>(jdata4);
+
+        //string jdata5 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/ItemDataTable").text);
+
+        //ItemData = JsonConvert.DeserializeObject<List<ItemData>>(jdata5);
+
+        if (Resources.Load<TextAsset>("DataBase/PlayerDataTable")!=null)
         {
-            string jdata = File.ReadAllText(m_sSaveFileDirectory + "PlayerDataTable.json");
+            string jdata = Resources.Load<TextAsset>("DataBase/PlayerDataTable").text;
 
             PlayerData = JsonConvert.DeserializeObject<List<PlayerCharData>>(jdata);
         }
@@ -86,11 +107,12 @@ public class DBManager : MonoSingleton<DBManager>
 
         }
 
-        if (File.Exists(m_sSaveFileDirectory + "PartnerDataTable.json"))
+        if (Resources.Load<TextAsset>("DataBase/PartnerDataTable") != null)
         {
-            string jdata = File.ReadAllText(m_sSaveFileDirectory + "PartnerDataTable.json");
+            string jdata = Resources.Load<TextAsset>("DataBase/PartnerDataTable").text;
 
-            PartnerData = JsonConvert.DeserializeObject< List<PartnerCharData>>(jdata);
+            PartnerData = JsonConvert.DeserializeObject<List<PartnerCharData>>(jdata);
+
         }
         else
         {
@@ -98,11 +120,11 @@ public class DBManager : MonoSingleton<DBManager>
 
         }
 
-        if (File.Exists(m_sSaveFileDirectory + "EnemyDataTable.json"))
+        if (Resources.Load<TextAsset>("DataBase/EnemyDataTable") != null)
         {
-            string jdata = File.ReadAllText(m_sSaveFileDirectory + "EnemyDataTable.json");
+            string jdata = Resources.Load<TextAsset>("DataBase/EnemyDataTable").text;
 
-            EnemyData = JsonConvert.DeserializeObject< List<EnemyCharData>>(jdata);
+            EnemyData = JsonConvert.DeserializeObject<List<EnemyCharData>>(jdata);
         }
         else
         {
@@ -110,11 +132,11 @@ public class DBManager : MonoSingleton<DBManager>
 
         }
 
-        if (File.Exists(m_sSaveFileDirectory + "SkillDataTable.json"))
+        if (Resources.Load<TextAsset>("DataBase/SkillDataTable") != null)
         {
-            string jdata = File.ReadAllText(m_sSaveFileDirectory + "SkillDataTable.json");
+            string jdata = Resources.Load<TextAsset>("DataBase/SkillDataTable").text;
 
-            SkillData = JsonConvert.DeserializeObject< List<SkillData>>(jdata);
+            SkillData = JsonConvert.DeserializeObject<List<SkillData>>(jdata);
         }
         else
         {
@@ -122,11 +144,11 @@ public class DBManager : MonoSingleton<DBManager>
 
         }
 
-        if (File.Exists(m_sSaveFileDirectory + "ItemDataTable.json"))
+        if (Resources.Load<TextAsset>("DataBase/ItemDataTable") != null)
         {
-            string jdata = File.ReadAllText(m_sSaveFileDirectory + "ItemDataTable.json");
+            string jdata = Resources.Load<TextAsset>("DataBase/ItemDataTable").text;
 
-            ItemData = JsonConvert.DeserializeObject< List<ItemData>>(jdata);
+            ItemData = JsonConvert.DeserializeObject<List<ItemData>>(jdata);
         }
         else
         {
@@ -136,7 +158,7 @@ public class DBManager : MonoSingleton<DBManager>
 
     }
 
-    
+
 
 
 }
