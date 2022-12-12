@@ -22,6 +22,10 @@ public class DBManager : MonoSingleton<DBManager>
 
     //static List<GameData> DropListData = new List<GameData>();
 
+    public void CallDBManager()
+    {
+        Debug.Log("Call DBManager");
+    }
 
 
     // Start is called before the first frame update

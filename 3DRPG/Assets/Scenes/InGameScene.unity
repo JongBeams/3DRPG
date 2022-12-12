@@ -835,7 +835,6 @@ GameObject:
   - component: {fileID: 406626316}
   - component: {fileID: 406626318}
   - component: {fileID: 406626319}
-  - component: {fileID: 406626320}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -896,6 +895,26 @@ MonoBehaviour:
   DBM: {fileID: 0}
   UIObj: {fileID: 0}
   UIMBPoint: {x: 0, y: 0, z: 0}
+  ClickItem:
+    ID: 0
+    Name: Empty
+    PFL: 
+    ATK: 0
+    DEF: 0
+    HP: 0
+    MP: 0
+    SPD: 0
+    MPRP: 0
+    TYP: 0
+    S0ID: 0
+    S1ID: 0
+    S2ID: 0
+    S3ID: 0
+    S4ID: 0
+    ISID: 0
+    ISP: 0
+    ISPRP: 0
+    ISPRT: 0
   DragingItem: {fileID: 0}
   DragingItemSprite: {fileID: 0}
   objGameEnd: {fileID: 430516120}
@@ -953,18 +972,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6bb25d2e6945df54fae4ffbc568c56fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &406626320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406626312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb46e28e1f597e34e82d8d4a3bccbc4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &410467890

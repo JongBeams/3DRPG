@@ -75,8 +75,6 @@ public class Player_Inventory : MonoBehaviour
                 newSlot.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 60);
             }
             //objInventory.SetActive(false);
-
-            
         }
 
         //ÇÃ·¹ÀÌ¾î Âø¿ë ½½·Ô

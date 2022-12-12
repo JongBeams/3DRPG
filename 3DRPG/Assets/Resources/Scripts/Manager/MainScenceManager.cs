@@ -24,6 +24,7 @@ public class MainScenceManager : MonoBehaviour
         // Start is called before the first frame update
         void Start()
     {
+        DBManager.Instance.CallDBManager();
         SetResolution();
         PlayerPrefs.SetInt("EnemyID",0);
     }
