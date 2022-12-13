@@ -44,6 +44,24 @@ public class Char_Dynamics : MonoBehaviour
         return new Vector3(vecMovePoint.x, this.transform.position.y, vecMovePoint.z);
     }
 
+    void ItemDrop()
+    {
+        if (this.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            ItemDropData IDD = DBManager.GetItemDropDataByIdx(CharStatus.getID());
+            for (int i = 0; i < IDD.IDP.Count; i++)
+            {
+                int ran = Random.Range(0, 100);
+                if (ran < IDD.IDP[i])
+                {
+                    GameObject Item = Instantiate(Resources.Load<GameObject>("Prefabs/Item/DropItem"),this.transform.position,Quaternion.identity);
+                    Item.GetComponent<DropItemInfo>().SetItem(IDD.IDT[i], DBManager.GetItemStatusByIdx(IDD.IDT[i]).Mesh, DBManager.GetItemStatusByIdx(IDD.IDT[i]).Material);
+                }
+            }
+        }
+        
+    }
+
     public void SetCharStatus(GameManager.CharState _CS)// 한번 실행
     {
 
@@ -100,6 +118,7 @@ public class Char_Dynamics : MonoBehaviour
                 break;
             case GameManager.CharState.Death:
                 CharStatus.getAnimator().SetBool("Death", true);
+                ItemDrop();
                 //Destroy(this.gameObject, 5f);
                 break;
             case GameManager.CharState.Stay:

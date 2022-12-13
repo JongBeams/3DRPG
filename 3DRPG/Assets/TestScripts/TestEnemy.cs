@@ -107,6 +107,8 @@ public class TestEnemy : MonoBehaviour
         TargetSetting();
 
         TargetSetting2();
+
+        DBManager.Instance.CallDBManager();
     }
 
 

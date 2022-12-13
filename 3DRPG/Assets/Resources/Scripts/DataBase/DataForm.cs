@@ -5,6 +5,21 @@ using UnityEditor;
 
 
 [System.Serializable]
+public class ItemDropData
+{
+    public int ID;
+    //아이템 드랍 DB
+    public List<int> IDT;
+    public List<float> IDP;
+
+    ItemDropData()
+    {
+        IDT = new List<int>();
+        IDP = new List<float>();
+    }
+}
+
+[System.Serializable]
 public class SkillData
 {
     // ID
@@ -224,7 +239,7 @@ public class CharData
         return MPRP;
     }
     //레이어 구분
-    public int getLayer()
+    public int getTYP()
     {
         return TYP;
     }
@@ -368,7 +383,10 @@ public class EnemyCharData : CharData
 [System.Serializable]
 public class ItemData : CharData
 {
-    protected string IMG;
+    public string IMG;
+    public string Mesh;
+    public string Material;
+
     public ItemData()
     {
         ID = 0;
@@ -377,10 +395,12 @@ public class ItemData : CharData
         DEF = 0;
         SPD = 0;
         IMG = "";
+        Mesh="";
+        Material="";
         TYP = 0;
     }
 
-    public ItemData(int _ID, string _Name, int _ATK, int _DEF, float _Speed,string _ItemSprite,int _ItemType)
+    public ItemData(int _ID, string _Name, int _ATK, int _DEF, float _Speed,string _ItemSprite, string _Mesh, string _Material, int _ItemType)
     {
         ID = _ID;
         Name = _Name;
@@ -388,6 +408,8 @@ public class ItemData : CharData
         DEF = _DEF;
         SPD = _Speed;
         IMG = _ItemSprite;
+        Mesh = _Mesh;
+        Material = _Material;
         TYP = _ItemType;
     }
 
@@ -395,9 +417,13 @@ public class ItemData : CharData
     {
         return IMG;
     }
-
-    public int getItemType()
+    public string getItemMesh()
     {
-        return TYP;
+        return Mesh;
     }
+    public string getItemMaterial()
+    {
+        return Material;
+    }
+
 }

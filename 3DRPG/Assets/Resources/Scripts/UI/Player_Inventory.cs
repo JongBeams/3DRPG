@@ -169,7 +169,7 @@ public class Player_Inventory : MonoBehaviour
         for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
         {
 
-            m_lSlot[i].GetComponent<ItemSlot>().item=new ItemData(GD.ItemID[i], GD.ItemName[i], GD.ItemATK[i], GD.ItemDEF[i], GD.ItemSPD[i], GD.ItemSprite[i], GD.ItemType[i]);
+            m_lSlot[i].GetComponent<ItemSlot>().item=new ItemData(GD.ItemID[i], GD.ItemName[i], GD.ItemATK[i], GD.ItemDEF[i], GD.ItemSPD[i], GD.ItemSprite[i], GD.ItemMesh[i], GD.ItemMaterial[i], GD.ItemType[i]);
             ItemImageChange(m_lSlot[i].transform);
         }
     }
@@ -182,6 +182,8 @@ public class Player_Inventory : MonoBehaviour
         List<int> ItemDEF = new List<int>();
         List<float> ItemSPD = new List<float>();
         List<string> ItemSprite = new List<string>();
+        List<string> ItemMesh = new List<string>();
+        List<string> ItemMaterial = new List<string>();
         List<int> ItemType = new List<int>();
 
 
@@ -193,10 +195,12 @@ public class Player_Inventory : MonoBehaviour
             ItemDEF.Add(m_lSlot[i].item.getDEF());
             ItemSPD.Add(m_lSlot[i].item.getSpeed());
             ItemSprite.Add(m_lSlot[i].item.getItemSprite());
-            ItemType.Add((int)m_lSlot[i].item.getItemType());
+            ItemMesh.Add(m_lSlot[i].item.getItemMesh());
+            ItemMaterial.Add(m_lSlot[i].item.getItemMaterial());
+            ItemType.Add((int)m_lSlot[i].item.getTYP());
 
         }
-        GameManager.instance.slM.InvetoryData = new GameData(ItemID, ItemName, ItemATK, ItemDEF, ItemSPD, ItemSprite, ItemType);
+        GameManager.instance.slM.InvetoryData = new GameData(ItemID, ItemName, ItemATK, ItemDEF, ItemSPD, ItemSprite,ItemMesh,ItemMaterial, ItemType);
         GameManager.instance.slM._save();
     }
 

@@ -74,7 +74,7 @@ public static class AlgorithmManager
                 //탐색 콜라이더 선별
                 while (count < hitcol.Length)
                 {
-                    if (CS.getLayer() == 9)// 캐릭터가 동료 일때
+                    if (CS.getTYP() == 9)// 캐릭터가 동료 일때
                     {
                         if (hitcol[count].gameObject.layer == 6 || hitcol[count].gameObject.layer == 9)// 플레이어 또는 동료일때
                         {
@@ -226,7 +226,7 @@ public static class AlgorithmManager
 
         // 범위 탐색
         int m_nMask = 0;
-        if (CS.getLayer() == 9)
+        if (CS.getTYP() == 9)
         {
             m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
         }
@@ -316,7 +316,7 @@ public static class AlgorithmManager
 
         // 범위 탐색
         int m_nMask = 0;
-        if (CS.getLayer() == 9)
+        if (CS.getTYP() == 9)
         {
             m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
         }
@@ -421,7 +421,7 @@ public static class AlgorithmManager
 
 
         int m_nMask = 0;
-        if (CS.getLayer() == 9)
+        if (CS.getTYP() == 9)
         {
             m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
         }
@@ -552,7 +552,7 @@ public static class AlgorithmManager
 
 
         int m_nMask = 0;
-        if (CS.getLayer() == 9)
+        if (CS.getTYP() == 9)
         {
             m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
         }

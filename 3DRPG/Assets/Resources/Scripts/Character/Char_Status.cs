@@ -210,7 +210,7 @@ public class Char_Status : MonoBehaviour
         return m_nIdentityPointtMax;
     }
 
-    public int getLayer()
+    public int getTYP()
     {
         return m_nLayer;
     }
@@ -315,11 +315,11 @@ public class Char_Status : MonoBehaviour
         m_fPlayerSpeed = _chardata.getSpeed();
 
         //LayerNum
-        m_nLayer = _chardata.getLayer();
+        m_nLayer = _chardata.getTYP();
         this.gameObject.layer = m_nLayer;
 
 
-        if (_chardata.getLayer() == 6)
+        if (_chardata.getTYP() == 6)
         {
             //MP
             m_nPlayerMPMax = _chardata.getMP();
@@ -345,7 +345,7 @@ public class Char_Status : MonoBehaviour
             m_nSkillID[3] = _chardata.getSkill4ID();
             m_nIdentitySkillID = _chardata.getIdentitySkillID();
         }
-        if (_chardata.getLayer() == 8)
+        if (_chardata.getTYP() == 8)
         {
             //SkillID
             m_nSkillID[0] = _chardata.getSkill1ID();
@@ -355,7 +355,7 @@ public class Char_Status : MonoBehaviour
 
 
         }
-        if (_chardata.getLayer() == 9)
+        if (_chardata.getTYP() == 9)
         {
             //MP
             m_nPlayerMPMax = _chardata.getMP();

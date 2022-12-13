@@ -14,11 +14,18 @@ public class DBManager : MonoSingleton<DBManager>
 
 
 
+
     public static List<PlayerCharData> PlayerData = new List<PlayerCharData>();
     public static List<PartnerCharData> PartnerData = new List<PartnerCharData>();
     public static List<EnemyCharData> EnemyData = new List<EnemyCharData>();
     public static List<SkillData> SkillData = new List<SkillData>();
     public static List<ItemData> ItemData = new List<ItemData>();
+
+
+    public static List<ItemDropData> DropItemData = new List<ItemDropData>();
+
+
+
 
     //static List<GameData> DropListData = new List<GameData>();
 
@@ -33,7 +40,11 @@ public class DBManager : MonoSingleton<DBManager>
     {
         m_sSaveFileDirectory = "/DataBase/";
         ReadData();
-        
+
+
+
+
+        Debug.Log(DropItemData[0].IDP[0]);
     }
 
     static T DeepCopy<T>(T obj)
@@ -66,34 +77,16 @@ public class DBManager : MonoSingleton<DBManager>
     {
         return DeepCopy(ItemData.Find(x => x.getID() == idx));
     }
-
+    public static ItemDropData GetItemDropDataByIdx(int idx)
+    {
+        return DeepCopy(DropItemData.Find(x => x.ID == idx));
+    }
 
 
 
     public void ReadData()
     {
-        //var textAsset = Resources.Load<TextAsset>(m_sSaveFileDirectory + "PlayerDataTable");
-        //PlayerData = JsonConvert.DeserializeObject<List<PlayerCharData>>(textAsset.text);
-
-        //string jdata1 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/PlayerDataTable").text);
-
-        //PlayerData = JsonConvert.DeserializeObject<List<PlayerCharData>>(jdata1);
-
-        //string jdata2 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/PartnerDataTable").text);
-
-        //PartnerData = JsonConvert.DeserializeObject<List<PartnerCharData>>(jdata2);
-
-        //string jdata3 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/EnemyDataTable").text);
-
-        //EnemyData = JsonConvert.DeserializeObject<List<EnemyCharData>>(jdata3);
-
-        //string jdata4 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/SkillDataTable").text);
-
-        //SkillData = JsonConvert.DeserializeObject<List<SkillData>>(jdata4);
-
-        //string jdata5 = File.ReadAllText(Resources.Load<TextAsset>("DataBase/ItemDataTable").text);
-
-        //ItemData = JsonConvert.DeserializeObject<List<ItemData>>(jdata5);
+        
 
         if (Resources.Load<TextAsset>("DataBase/PlayerDataTable")!=null)
         {
@@ -155,6 +148,25 @@ public class DBManager : MonoSingleton<DBManager>
             Debug.LogError("Scan Failed");
 
         }
+
+        if (Resources.Load<TextAsset>("DataBase/ItemDropTable") != null)
+        {
+            string jdata = Resources.Load<TextAsset>("DataBase/ItemDropTable").text;
+
+
+            DropItemData = JsonConvert.DeserializeObject<List<ItemDropData>>(jdata);
+
+
+            //ItemData = JsonConvert.DeserializeObject<List<ItemData>>(jdata);
+        }
+        else
+        {
+            Debug.LogError("Scan Failed");
+
+        }
+
+
+
 
     }
 
