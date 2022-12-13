@@ -150,12 +150,12 @@ public class Player_Inventory : MonoBehaviour
 
 
 
-        AddItem(1);
-        AddItem(2);
-        AddItem(1);
-        AddItem(2);
-        AddItem(1);
-        AddItem(2);
+        //AddItem(1);
+        //AddItem(2);
+        //AddItem(1);
+        //AddItem(2);
+        //AddItem(1);
+        //AddItem(2);
 
 
         objInventory.SetActive(false);
@@ -166,6 +166,7 @@ public class Player_Inventory : MonoBehaviour
     {
         GameManager.instance.slM._load();
         GameData GD = GameManager.instance.slM.InvetoryData;
+        GameManager.instance.Gold = GD.Gold;
         for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
         {
 
@@ -176,6 +177,7 @@ public class Player_Inventory : MonoBehaviour
 
     public void InventorySave()
     {
+        int Gold = GameManager.instance.Gold;
         List<int> ItemID = new List<int>();
         List<string> ItemName = new List<string>();
         List<int> ItemATK = new List<int>();
@@ -200,7 +202,7 @@ public class Player_Inventory : MonoBehaviour
             ItemType.Add((int)m_lSlot[i].item.getTYP());
 
         }
-        GameManager.instance.slM.InvetoryData = new GameData(ItemID, ItemName, ItemATK, ItemDEF, ItemSPD, ItemSprite,ItemMesh,ItemMaterial, ItemType);
+        GameManager.instance.slM.InvetoryData = new GameData(Gold,ItemID, ItemName, ItemATK, ItemDEF, ItemSPD, ItemSprite,ItemMesh,ItemMaterial, ItemType);
         GameManager.instance.slM._save();
     }
 

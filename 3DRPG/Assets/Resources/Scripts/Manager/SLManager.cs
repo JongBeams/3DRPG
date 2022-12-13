@@ -9,7 +9,7 @@ using System.IO;
 
 public class GameData
 {
-
+    public int Gold = 0;
     public List<int> ItemID = new List<int>();
     public List<string> ItemName = new List<string>();
     public List<int> ItemATK = new List<int>();
@@ -22,8 +22,9 @@ public class GameData
 
 
 
-    public GameData( List<int> _ItemID, List<string> _ItemName, List<int> _ItemATK, List<int> _ItemDEF, List<float> _ItemSPD, List<string> _ItemSprite, List<string> _ItemMesh, List<string> _ItemMaterial, List<int> _ItemType)
+    public GameData(int _Gold, List<int> _ItemID, List<string> _ItemName, List<int> _ItemATK, List<int> _ItemDEF, List<float> _ItemSPD, List<string> _ItemSprite, List<string> _ItemMesh, List<string> _ItemMaterial, List<int> _ItemType)
     {
+        Gold = _Gold;
         ItemID = _ItemID;
         ItemName = _ItemName;
         ItemATK = _ItemATK;
@@ -131,7 +132,7 @@ public class SLManager : MonoBehaviour
         else
         {
             
-            InvetoryData = new GameData(new List<int>(),new List<string>(),new List<int>(),new List<int>(),new List<float>(),new List<string>(), new List<string>(), new List<string>(), new List<int>());
+            InvetoryData = new GameData(100,new List<int>(),new List<string>(),new List<int>(),new List<int>(),new List<float>(),new List<string>(), new List<string>(), new List<string>(), new List<int>());
 
 
 

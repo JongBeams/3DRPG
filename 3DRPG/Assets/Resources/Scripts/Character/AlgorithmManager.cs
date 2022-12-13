@@ -74,9 +74,9 @@ public static class AlgorithmManager
                 //탐색 콜라이더 선별
                 while (count < hitcol.Length)
                 {
-                    if (CS.getTYP() == 9)// 캐릭터가 동료 일때
+                    if (CS.getTYP() == LayerMask.NameToLayer("Partner"))// 캐릭터가 동료 일때
                     {
-                        if (hitcol[count].gameObject.layer == 6 || hitcol[count].gameObject.layer == 9)// 플레이어 또는 동료일때
+                        if (hitcol[count].gameObject.layer == LayerMask.NameToLayer("Player") || hitcol[count].gameObject.layer == LayerMask.NameToLayer("Partner"))// 플레이어 또는 동료일때
                         {
                             Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
                             if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
@@ -102,7 +102,7 @@ public static class AlgorithmManager
                     }
                     else
                     {
-                        if (hitcol[count].gameObject.layer == 8)// 플레이어 또는 동료일때
+                        if (hitcol[count].gameObject.layer == LayerMask.NameToLayer("Enemy"))// 플레이어 또는 동료일때
                         {
                             Char_Status cs = hitcol[count].gameObject.GetComponent<Char_Status>();
                             if (cs.getHP() <= cs.getHPMax() / 2 && cs.getCS() != GameManager.CharState.Death)//체력이 반이하일때
@@ -226,7 +226,7 @@ public static class AlgorithmManager
 
         // 범위 탐색
         int m_nMask = 0;
-        if (CS.getTYP() == 9)
+        if (CS.getTYP() == LayerMask.NameToLayer("Partner"))
         {
             m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
         }
@@ -316,7 +316,7 @@ public static class AlgorithmManager
 
         // 범위 탐색
         int m_nMask = 0;
-        if (CS.getTYP() == 9)
+        if (CS.getTYP() == LayerMask.NameToLayer("Partner"))
         {
             m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
         }
@@ -421,7 +421,7 @@ public static class AlgorithmManager
 
 
         int m_nMask = 0;
-        if (CS.getTYP() == 9)
+        if (CS.getTYP() == LayerMask.NameToLayer("Partner"))
         {
             m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
         }
@@ -552,7 +552,7 @@ public static class AlgorithmManager
 
 
         int m_nMask = 0;
-        if (CS.getTYP() == 9)
+        if (CS.getTYP() == LayerMask.NameToLayer("Partner"))
         {
             m_nMask = 1 << (LayerMask.NameToLayer("Enemy"));
         }

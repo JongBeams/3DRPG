@@ -32,7 +32,7 @@
   {
     "ID": 3,
     "Name": "마법사",
-    "PFL": "Prefabs/Magician",
+    "PFL": "Prefabs/Character/Magician",
     "ATK": 10,
     "DEF": 5,
     "HP": 20,

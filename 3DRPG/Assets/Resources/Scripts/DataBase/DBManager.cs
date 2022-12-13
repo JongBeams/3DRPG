@@ -44,7 +44,7 @@ public class DBManager : MonoSingleton<DBManager>
 
 
 
-        Debug.Log(DropItemData[0].IDP[0]);
+        //Debug.Log(DropItemData[0].IDP[0]);
     }
 
     static T DeepCopy<T>(T obj)

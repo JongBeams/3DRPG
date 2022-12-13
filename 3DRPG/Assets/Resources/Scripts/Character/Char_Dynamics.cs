@@ -49,13 +49,24 @@ public class Char_Dynamics : MonoBehaviour
         if (this.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             ItemDropData IDD = DBManager.GetItemDropDataByIdx(CharStatus.getID());
+            GameManager.instance.Gold += 100;
+            //Debug.Log(IDD.IDP.Count);
             for (int i = 0; i < IDD.IDP.Count; i++)
             {
                 int ran = Random.Range(0, 100);
+                //Debug.Log(i+"번째 아이템 드랍 "+(ran+1)+"/100");
                 if (ran < IDD.IDP[i])
                 {
                     GameObject Item = Instantiate(Resources.Load<GameObject>("Prefabs/Item/DropItem"),this.transform.position,Quaternion.identity);
+                    //Debug.Log("드랍성공");
+                    //Debug.Log("ItemID : "+ IDD.IDT[i]);
+                    //Debug.Log("ItemMesh : "+ DBManager.GetItemStatusByIdx(IDD.IDT[i]).Mesh);
+                    //Debug.Log("ItemMaterial : "+ DBManager.GetItemStatusByIdx(IDD.IDT[i]).Material);
                     Item.GetComponent<DropItemInfo>().SetItem(IDD.IDT[i], DBManager.GetItemStatusByIdx(IDD.IDT[i]).Mesh, DBManager.GetItemStatusByIdx(IDD.IDT[i]).Material);
+                }
+                else
+                {
+                    //Debug.Log("드랍 실패!");
                 }
             }
         }
@@ -119,6 +130,8 @@ public class Char_Dynamics : MonoBehaviour
             case GameManager.CharState.Death:
                 CharStatus.getAnimator().SetBool("Death", true);
                 ItemDrop();
+                this.GetComponent<Rigidbody>().isKinematic = true;
+                this.GetComponent<Collider>().isTrigger = true;
                 //Destroy(this.gameObject, 5f);
                 break;
             case GameManager.CharState.Stay:
@@ -279,7 +292,7 @@ public class Char_Dynamics : MonoBehaviour
     {
         UpdateCharStatus();
 
-        if (CharStatus.getHP() <= 0)
+        if (CharStatus.getHP() <= 0 && CharStatus.CS!=GameManager.CharState.Death)
         {
             SetCharStatus(GameManager.CharState.Death);
         }

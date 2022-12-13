@@ -117,7 +117,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -128,7 +128,7 @@ public class SkillManager : MonoBehaviour
         CS.transform.LookAt(vecEnemyLookingPoint);
 
         bool enemyCheck = false;
-        if (CS.getTYP() == 6 || CS.getTYP() == 9)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player") || CS.getTYP() == LayerMask.NameToLayer("Partner"))
         {
             enemyCheck = false;
         }
@@ -163,7 +163,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -198,7 +198,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -246,7 +246,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -339,7 +339,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -406,7 +406,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -450,7 +450,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -514,7 +514,7 @@ public class SkillManager : MonoBehaviour
             // 타깃 바라보기
             Vector3 vecEnemyLookingPoint;
             
-            if (CS.getTYP() == 6)
+            if (CS.getTYP() == LayerMask.NameToLayer("Player"))
             {
                 vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
             }
@@ -524,6 +524,7 @@ public class SkillManager : MonoBehaviour
             }
             CS.transform.LookAt(vecEnemyLookingPoint);
 
+            CS.SetSuperArmor(true);
             CD.setStartPos();
             CS.setSkillUsing(i,true);
         }
@@ -548,7 +549,7 @@ public class SkillManager : MonoBehaviour
                     //hitcol[0].GetComponent<Char_Status>().GetDamage((int)(CS.getDEF() * ((m_fRustDist / 30) * SkillDB.getSkillCeofficientPer1())));
                     hitcol[0].GetComponent<Char_Status>().delGetDamae((int)(CS.getDEF() * ((m_fRustDist / 30) * SkillDB.getSkillCeofficientPer1())));
                     CS.setSkillUsing(i, false);
-
+                    CS.SetSuperArmor(false);
                     //CD.SetCharStatus(GameManager.CharState.Idle);
                 }
 
@@ -557,7 +558,7 @@ public class SkillManager : MonoBehaviour
             else
             {
                 CS.setSkillUsing(i, false);
-
+                CS.SetSuperArmor(false);
                 //CD.SetCharStatus(GameManager.CharState.Idle);
             }
 
@@ -589,7 +590,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -641,7 +642,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -653,7 +654,7 @@ public class SkillManager : MonoBehaviour
 
         if (CS.getObjTarget()!=null)
         {
-            if (CS.getTYP() == 6 || CS.getTYP() == 9)
+            if (CS.getTYP() == LayerMask.NameToLayer("Player") || CS.getTYP() == LayerMask.NameToLayer("Partner"))
             {
                 if (CS.getObjTarget().layer == 8)
                 {
@@ -703,7 +704,7 @@ public class SkillManager : MonoBehaviour
             // 타깃 바라보기
             Vector3 vecEnemyLookingPoint;
 
-            if (CS.getTYP() == 6)
+            if (CS.getTYP() == LayerMask.NameToLayer("Player"))
             {
                 vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
             }
@@ -774,7 +775,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -822,7 +823,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -873,7 +874,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }
@@ -884,7 +885,7 @@ public class SkillManager : MonoBehaviour
         CS.transform.LookAt(vecEnemyLookingPoint);
 
         bool enemyCheck = false;
-        if (CS.getTYP() == 6 || CS.getTYP() == 9)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player") || CS.getTYP() == LayerMask.NameToLayer("Partner"))
         {
             enemyCheck = false;
         }
@@ -981,7 +982,7 @@ public class SkillManager : MonoBehaviour
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();
         Vector3 MousePoint = CD.getMovePoint();
-        if (CS.getTYP() == 6)
+        if (CS.getTYP() == LayerMask.NameToLayer("Player"))
         {
             vecEnemyLookingPoint = new Vector3(MousePoint.x, CS.transform.position.y, MousePoint.z);
         }

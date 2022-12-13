@@ -67,7 +67,7 @@ public class Char_Status : MonoBehaviour
 
     // 상태 체크
     bool m_bProtectBuff = false;
-    bool m_bSuperArmor = false;
+    public bool m_bSuperArmor = false;
     bool m_bTaunt = false;
 
 
@@ -319,7 +319,7 @@ public class Char_Status : MonoBehaviour
         this.gameObject.layer = m_nLayer;
 
 
-        if (_chardata.getTYP() == 6)
+        if (_chardata.getTYP() == LayerMask.NameToLayer("Player"))
         {
             //MP
             m_nPlayerMPMax = _chardata.getMP();
@@ -345,7 +345,7 @@ public class Char_Status : MonoBehaviour
             m_nSkillID[3] = _chardata.getSkill4ID();
             m_nIdentitySkillID = _chardata.getIdentitySkillID();
         }
-        if (_chardata.getTYP() == 8)
+        if (_chardata.getTYP() == LayerMask.NameToLayer("Enemy"))
         {
             //SkillID
             m_nSkillID[0] = _chardata.getSkill1ID();
@@ -355,7 +355,7 @@ public class Char_Status : MonoBehaviour
 
 
         }
-        if (_chardata.getTYP() == 9)
+        if (_chardata.getTYP() == LayerMask.NameToLayer("Partner"))
         {
             //MP
             m_nPlayerMPMax = _chardata.getMP();

@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 1614d891a54b5ce4aa0e94ddea4e7bf8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,7 +93,9 @@ GameObject:
   m_Component:
   - component: {fileID: 66976639948521535}
   - component: {fileID: 5080560782594518979}
-  m_Layer: 0
+  - component: {fileID: 3686604}
+  - component: {fileID: 3686605}
+  m_Layer: 10
   m_Name: DropItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,3 +130,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20b1b8f64a74cc746a8487c2bf895f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  meshfilter: {fileID: 66976639355505530}
+  MR: {fileID: 66976639355505531}
+  mesh: {fileID: 0}
+--- !u!54 &3686604
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66976639948521532}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!135 &3686605
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66976639948521532}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

@@ -14,10 +14,12 @@ public class SelectSceneManager : MonoBehaviour
     public Button[] PreviousButton;
 
 
-    public Text PlayerName;
-    public Text[] PartnerName;
+    public Text[] CharName;
 
     public int addID = 0;
+
+    public GameObject[] CharObj=new GameObject[3];
+
 
 
     // Start is called before the first frame update
@@ -28,19 +30,19 @@ public class SelectSceneManager : MonoBehaviour
             CharID[i] = 0; 
         }
 
-        PlayerName.text = DBManager.PlayerData[CharID[0]].getName();
-        PartnerName[0].text = DBManager.PartnerData[CharID[0]].getName();
-        PartnerName[1].text = DBManager.PartnerData[CharID[1]].getName();
-        //for (int i = 0; i < CharButton.Length; i++)
-        //{
-        //    CharButton[i].onClick.AddListener(() => SelectScreen(i));
-        //}
+        CharName[0].text = DBManager.PlayerData[CharID[0]].getName();
+        CharName[1].text = DBManager.PartnerData[CharID[0]].getName();
+        CharName[2].text = DBManager.PartnerData[CharID[1]].getName();
 
-        //for (int i = 0; i < CharSelectButton.Length; i++)
-        //{
-        //    CharSelectButton[i].onClick.AddListener(() => CharIDButton(i));
-        //}
-
+        GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[0]].getObjPrefab()),new Vector3(0,0,-1),Quaternion.Euler(new Vector3(0,180,0)));
+        Player.GetComponent<Rigidbody>().isKinematic = true;
+        CharObj[0] = Player;
+        GameObject Partner1 = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[0]].getObjPrefab()), new Vector3(10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+        Partner1.GetComponent<Rigidbody>().isKinematic = true;
+        CharObj[1] = Partner1;
+        GameObject Partner2 = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[0]].getObjPrefab()), new Vector3(20, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+        Partner2.GetComponent<Rigidbody>().isKinematic = true;
+        CharObj[2] = Partner2;
     }
 
     public void GameStart()
@@ -50,6 +52,9 @@ public class SelectSceneManager : MonoBehaviour
         PlayerPrefs.SetInt("Player", CharID[0]);
         PlayerPrefs.SetInt("Partner1", CharID[1]);
         PlayerPrefs.SetInt("Partner2", CharID[2]);
+
+
+
     }
 
 
@@ -57,7 +62,7 @@ public class SelectSceneManager : MonoBehaviour
 
     public void PreviousChar(int ID)
     {
-
+        Destroy(CharObj[ID]);
         if (ID == 0)
         {
             
@@ -69,9 +74,11 @@ public class SelectSceneManager : MonoBehaviour
                 {
                     CharID[ID]--;
                 }
-                
-            
-            PlayerName.text = DBManager.PlayerData[CharID[ID]].getName();
+            GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[ID]].getObjPrefab()), new Vector3(ID * 10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            Player.GetComponent<Rigidbody>().isKinematic = true;
+            CharObj[ID] = Player;
+
+            CharName[ID].text = DBManager.PlayerData[CharID[ID]].getName();
         }
         else
         {
@@ -84,17 +91,22 @@ public class SelectSceneManager : MonoBehaviour
             {
                 CharID[ID]--;
             }
-
             
-            PartnerName[ID - 1].text = DBManager.PartnerData[CharID[ID]].getName();
+            GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[ID]].getObjPrefab()), new Vector3(ID*10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            Player.GetComponent<Rigidbody>().isKinematic = true;
+            CharObj[ID] = Player;
+            CharName[ID].text = DBManager.PartnerData[CharID[ID]].getName();
         }
+
+        
+
     }
 
     public void NextChar(int ID)
     {
 
-      
 
+        Destroy(CharObj[ID]);
         if (ID == 0)
         {
             
@@ -107,9 +119,11 @@ public class SelectSceneManager : MonoBehaviour
                     CharID[ID]++;
                 }
 
-           
-            
-            PlayerName.text = DBManager.PlayerData[CharID[ID]].getName();
+            GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[ID]].getObjPrefab()), new Vector3(ID * 10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            Player.GetComponent<Rigidbody>().isKinematic = true;
+            CharObj[ID] = Player;
+
+            CharName[ID].text = DBManager.PlayerData[CharID[ID]].getName();
         }
         else
         {
@@ -122,8 +136,10 @@ public class SelectSceneManager : MonoBehaviour
                 {
                     CharID[ID]++;
                 }
-            
-            PartnerName[ID - 1].text = DBManager.PartnerData[CharID[ID]].getName();
+            GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[ID]].getObjPrefab()), new Vector3(ID * 10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            Player.GetComponent<Rigidbody>().isKinematic = true;
+            CharObj[ID] = Player;
+            CharName[ID].text = DBManager.PartnerData[CharID[ID]].getName();
         }
     }
 

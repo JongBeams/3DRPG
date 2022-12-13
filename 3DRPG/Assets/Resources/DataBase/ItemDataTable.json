@@ -19,7 +19,7 @@
     "IMG": "Sprites/Sword",
     "TYP": 1,
     "Mesh": "Mesh/Sword",
-    "Material": "Mesh/Materials/Sword"
+    "Material": "Mesh/Materials/Weapons"
   },
   {
     "ID": 2,
@@ -30,6 +30,6 @@
     "IMG": "Sprites/Shield",
     "TYP": 2,
     "Mesh": "Mesh/Shield",
-    "Material": "Mesh/Materials/Shield"
+    "Material": "Mesh/Materials/Weapons"
   }
 ]

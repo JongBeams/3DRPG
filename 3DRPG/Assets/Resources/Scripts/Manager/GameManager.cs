@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -57,6 +58,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject objWall;
 
+    public Camera Partner1Cam;
+    public Camera Partner2Cam;
+
 
     //Manager
     SkillManager SM;
@@ -81,6 +85,8 @@ public class GameManager : MonoBehaviour
     public SLManager slM;
 
     public DBManager DBM;
+
+    public int Gold = 0;
 
 
     //UIMouse
@@ -201,6 +207,13 @@ public class GameManager : MonoBehaviour
 
         objEnemy.GetComponent<Char_Status>().CharStatusSetting(DBManager.EnemyData[m_nEnemyID]);
         objEnemy.GetComponent<Char_Status>().SetSuperArmor(true);
+
+        Partner1Cam.transform.parent = Partner1Obj.transform;
+        Partner1Cam.transform.localPosition = new Vector3(0,1.4f,1.5f);
+        Partner1Cam.transform.rotation = Quaternion.Euler(new Vector3(0,180,0));
+        Partner2Cam.transform.parent = Partner2Obj.transform;
+        Partner2Cam.transform.localPosition = new Vector3(0, 1.4f, 1.5f);
+        Partner2Cam.transform.rotation = Quaternion.Euler(new Vector3(0, 180,0));
     }
 
 
@@ -478,7 +491,7 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void HPMPBar()
+    void UpdateUI()
     {
         Char_Status CS = objPlayer.GetComponent<Char_Status>();
 
@@ -518,6 +531,13 @@ public class GameManager : MonoBehaviour
         if(objEnemy.GetComponent<Char_Status>().getObjTarget()!=null)
             Target.text = "Target : " + objEnemy.GetComponent<Char_Status>().objTarget.GetComponent<Char_Status>().getName() 
                 + "\n NextPattern : " + objEnemy.GetComponent<Char_Status>().getCS();
+
+        if (PI.objInventory.transform.GetChild(3).gameObject.activeSelf==true)
+        {
+            //Debug.LogError(PI.objInventory.transform.GetChild(3).gameObject);
+            //Debug.LogError(PI.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text);
+            PI.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Gold : " + Gold;
+        }
     }
 
 
@@ -552,7 +572,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HPMPBar();
+        UpdateUI();
 
         MouseTargetRay();
         UIMouseRay();
