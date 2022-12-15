@@ -25,6 +25,7 @@ public class MainScenceManager : MonoBehaviour
         void Start()
     {
         DBManager.Instance.CallDBManager();
+        GameManager.Instance.
         SetResolution();
         PlayerPrefs.SetInt("EnemyID",0);
     }

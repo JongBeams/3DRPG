@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoSingleton<GameManager>
 {
     public enum CharState
     {
@@ -33,190 +33,88 @@ public class GameManager : MonoBehaviour
 
     
 
-
-    public static GameManager instance;
-
+    [Header("Player")]
     public GameObject objPlayer;
-    public GameObject objHealer;
-    public GameObject objThief;
-
     public Slider PlayerHPBar;
     public Slider PlayerMPBar;
     public Slider PlayerShieldBar;
-
-
-    public Slider HealerHPBar;
-    public Slider HealerMPBar;
-
-    public Slider ThiefHPBar;
-    public Slider ThiefMPBar;
-
     public Slider PlayerSkillQCoolTime;
     public Slider PlayerSkillWCoolTime;
     public Slider PlayerSkillECoolTime;
     public Slider PlayerSkillRCoolTime;
 
-    public GameObject objWall;
 
-    public Camera Partner1Cam;
-    public Camera Partner2Cam;
-
-
-    //Manager
-    SkillManager SM;
-    Player_Inventory PI;
-
-
-    //Mouse
+    [Header("Mouse,Button")]
     public GameObject MBTarget;
     public Vector3 MBPoint;
-
-
     public bool m_bKeySpaceOn = false;
 
-    public GameObject objEnemy;
-
-    public Slider EnemyHPBar;
-
-    public Text Target;
-
-    public GameObject objCanvas;
-
-    public SLManager slM;
-
-    public DBManager DBM;
-
-    public int Gold = 0;
-
-
-    //UIMouse
     GraphicRaycaster GR;
     PointerEventData ped;
     public GameObject UIObj;
-    
     public Vector3 UIMBPoint;
     public ItemData ClickItem = new ItemData();
-    public GameObject DragingItem=null;
+    public GameObject DragingItem = null;
     public GameObject DragingItemSprite = null;
 
+    [Header("UI")]
+    public int Gold = 0;
+    public GameObject objCanvas;
 
-    struct Dropitem
-    {
-        GameObject ItemObj;
-        int ItemID;
-    }
-    List<Dropitem> m_lDropItem = new List<Dropitem>();
     
 
-    //gameend
-    public GameObject objGameEnd;
-    public Text objGameEndMessage;
-    bool m_bGameEnd = false;
-
-    public int m_nEnemyID = 0;
-
-    //get
-    public SkillManager getSM()
-    {
-        return SM;
-    }
-
-    public Player_Inventory getPI()
-    {
-        return PI;
-    }
-
-    public bool getGameEnd()
-    {
-        return m_bGameEnd;
-    }
-
-
-
-    private void Awake()
-    {
-        if (GameManager.instance == null)
-            GameManager.instance = this;
-
-    }
 
     // Start is called before the first frame update
     void Start()
     {
-        
-        SM = this.GetComponent<SkillManager>();
-        PI = this.GetComponent<Player_Inventory>();
-        slM = this.GetComponent<SLManager>();
-        DBM = this.GetComponent<DBManager>();
 
         //UI 등록
         objCanvas = GameObject.FindGameObjectWithTag("Canvas");
         GR = objCanvas.GetComponent<GraphicRaycaster>();
         ped = new PointerEventData(null);//초기화
 
-        slM.RemoteStart();
+        SLManager.Instance.RemoteStart();
 
-        PI.RemoteStart();
+        Player_Inventory.Instance.RemoteStart();
 
+        Player_Inventory.Instance.InventoryLoad();
 
-        getInstanceChar();
-
-        if (PlayerPrefs.GetInt("EnemyID") <= 0)
-        {
-            PI.InventorySave();
-        }
-        else
-        {
-            PI.InventoryLoad();
-        }
-        
+        Camera.main.GetComponent<CameraPos>().Target = objPlayer;
         
     }
 
 
-    void getInstanceChar()
+    public void GetInstancePlayerChar(Vector3 Pos)
     {
-        m_nEnemyID = PlayerPrefs.GetInt("EnemyID");
-        //
-        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[PlayerPrefs.GetInt("Player")].getObjPrefab()), new Vector3(0,0,-15), Quaternion.identity);
-        GameObject Partner1Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")].getObjPrefab()), new Vector3(5, 0, -17), Quaternion.identity);
-        GameObject Partner2Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")].getObjPrefab()), new Vector3(-5, 0, -17), Quaternion.identity);
-        GameObject EnemyObj = Instantiate(Resources.Load<GameObject>(DBManager.EnemyData[m_nEnemyID].getObjPrefab()), new Vector3(0, 0, 15), Quaternion.identity);
+        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[PlayerPrefs.GetInt("Player")].getObjPrefab()), Pos, Quaternion.identity);
+
 
         objPlayer = PlayerObj;
-        objHealer = Partner1Obj;
-        objThief = Partner2Obj;
-        objEnemy = EnemyObj;
+
 
         objPlayer.GetComponent<Char_Status>().CharStatusSetting(DBManager.PlayerData[PlayerPrefs.GetInt("Player")]);
-        objHealer.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")]);
-        objThief.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")]);
 
-        objPlayer.GetComponent<Char_Status>().setItemSlotsNum(PI.getPlayerSlot());
-        objHealer.GetComponent<Char_Status>().setItemSlotsNum(PI.getPartner1Slot());
-        objThief.GetComponent<Char_Status>().setItemSlotsNum(PI.getPartner2Slot());
 
-        objPlayer.GetComponent<Char_Status>().setItemSlots(0,PI.m_lSlot[(PI.ver * PI.hor)]);
-        objPlayer.GetComponent<Char_Status>().setItemSlots(1,PI.m_lSlot[(PI.ver * PI.hor)+1]);
+        objPlayer.GetComponent<Char_Status>().setItemSlotsNum(Player_Inventory.Instance.getPlayerSlot());
 
-        objHealer.GetComponent<Char_Status>().setItemSlots(0, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot()]);
-        objHealer.GetComponent<Char_Status>().setItemSlots(1, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot()+1]);
 
-        objThief.GetComponent<Char_Status>().setItemSlots(0, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot()+PI.getPartner1Slot()]);
-        objThief.GetComponent<Char_Status>().setItemSlots(1, PI.m_lSlot[(PI.ver * PI.hor)+PI.getPlayerSlot() + PI.getPartner1Slot() + 1]);
+        objPlayer.GetComponent<Char_Status>().setItemSlots(0, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor)]);
+        objPlayer.GetComponent<Char_Status>().setItemSlots(1, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + 1]);
 
-        objEnemy.GetComponent<Char_Status>().CharStatusSetting(DBManager.EnemyData[m_nEnemyID]);
-        objEnemy.GetComponent<Char_Status>().SetSuperArmor(true);
-
-        Partner1Cam.transform.parent = Partner1Obj.transform;
-        Partner1Cam.transform.localPosition = new Vector3(0,1.4f,1.5f);
-        Partner1Cam.transform.rotation = Quaternion.Euler(new Vector3(0,180,0));
-        Partner2Cam.transform.parent = Partner2Obj.transform;
-        Partner2Cam.transform.localPosition = new Vector3(0, 1.4f, 1.5f);
-        Partner2Cam.transform.rotation = Quaternion.Euler(new Vector3(0, 180,0));
     }
 
 
+    public void SetPlayerUI()
+    {
+        objPlayer;
+        PlayerHPBar;
+        PlayerMPBar;
+        PlayerShieldBar;
+        PlayerSkillQCoolTime;
+        PlayerSkillWCoolTime;
+        PlayerSkillECoolTime;
+        PlayerSkillRCoolTime;
+    }
 
     //게임 오브젝트 레이케스트
     void MouseTargetRay()
@@ -270,35 +168,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GoMain()
-    {
 
-        if (m_nEnemyID != 1 && objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death)
-        {
-            PlayerPrefs.SetInt("EnemyID", m_nEnemyID + 1);
-            SceneManager.LoadScene("InGameScene");
-        }
-        else
-        {
-            SceneManager.LoadScene("MainScene");
-        }
-
-    }
-
-    public void NextStage()
-    {
-        PI.InventorySave();
-        if (m_nEnemyID == 1)
-        {
-            SceneManager.LoadScene("MainScene");
-        }
-        else
-        {
-            PlayerPrefs.SetInt("EnemyID", m_nEnemyID + 1);
-            SceneManager.LoadScene("InGameScene");
-        }
-        
-    }
 
 
 
@@ -448,7 +318,7 @@ public class GameManager : MonoBehaviour
                     DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
                     if (UIObj == null)
                     {
-                        PI.RemoveItem(DragingItem.GetComponent<ItemSlot>().m_nSlotNum);
+                        Player_Inventory.Instance.RemoveItem(DragingItem.GetComponent<ItemSlot>().m_nSlotNum);
                     }
                     DragingItemSprite = null;
                     DragingItem = null;
@@ -459,7 +329,7 @@ public class GameManager : MonoBehaviour
                 {
                     DragingItemSprite.transform.parent = DragingItem.transform;
                     DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
-                    PI.ChangeItemSlot(DragingItem.GetComponent<ItemSlot>().m_nSlotNum, UIObj.GetComponent<ItemSlot>().m_nSlotNum);
+                    Player_Inventory.Instance.ChangeItemSlot(DragingItem.GetComponent<ItemSlot>().m_nSlotNum, UIObj.GetComponent<ItemSlot>().m_nSlotNum);
                     DragingItemSprite = null;
                     DragingItem = null;
                     ClickItem = null;
@@ -478,91 +348,22 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.I))
         {
-            if (PI.objInventory.activeSelf == true)
+            if (Player_Inventory.Instance.objInventory.activeSelf == true)
             {
-                PI.objInventory.SetActive(false);
+                Player_Inventory.Instance.objInventory.SetActive(false);
             }
             else
             {
-                PI.objInventory.SetActive(true);
+                Player_Inventory.Instance.objInventory.SetActive(true);
             }
             
         }
 
     }
 
-    void UpdateUI()
-    {
-        Char_Status CS = objPlayer.GetComponent<Char_Status>();
+    
 
-        //Debug.Log("check");
-        PlayerHPBar.value = CS.getHP();
-        PlayerMPBar.value = CS.getMP();
-        PlayerShieldBar.value = CS.getIdentityPoint();
-        PlayerHPBar.maxValue = CS.getHPMax();
-        PlayerMPBar.maxValue = CS.getMPMax();
-        PlayerShieldBar.maxValue = CS.getIdentityPointMax();
-
-        PlayerSkillQCoolTime.value = 100 - CS.getSkill1CoolTimer() / 5 * 100;
-        PlayerSkillWCoolTime.value = 100 - CS.getSkill2CoolTimer() / 7 * 100;
-        PlayerSkillECoolTime.value = 100 - CS.getSkill3CoolTimer() / 15 * 100;
-        PlayerSkillRCoolTime.value = 100 - CS.getSkill4CoolTimer() / 5 * 100;
-
-        PlayerSkillQCoolTime.maxValue = 100;
-        PlayerSkillWCoolTime.maxValue = 100;
-        PlayerSkillECoolTime.maxValue = 100;
-        PlayerSkillRCoolTime.maxValue = 100;
-
-        //Debug.Log("check");
-        HealerHPBar.value = objHealer.GetComponent<Char_Status>().getHP();
-        HealerMPBar.value = objHealer.GetComponent<Char_Status>().getMP();
-        HealerHPBar.maxValue = objHealer.GetComponent<Char_Status>().getHPMax();
-        HealerMPBar.maxValue = objHealer.GetComponent<Char_Status>().getMPMax();
-
-
-        //Debug.Log("check");
-        ThiefHPBar.value = objThief.GetComponent<Char_Status>().getHP();
-        ThiefMPBar.value = objThief.GetComponent<Char_Status>().getMP();
-        ThiefHPBar.maxValue = objThief.GetComponent<Char_Status>().getHPMax();
-        ThiefMPBar.maxValue = objThief.GetComponent<Char_Status>().getMPMax();
-
-        EnemyHPBar.value = objEnemy.GetComponent<Char_Status>().getHP();
-        EnemyHPBar.maxValue = objEnemy.GetComponent<Char_Status>().getHPMax();
-        if(objEnemy.GetComponent<Char_Status>().getObjTarget()!=null)
-            Target.text = "Target : " + objEnemy.GetComponent<Char_Status>().objTarget.GetComponent<Char_Status>().getName() 
-                + "\n NextPattern : " + objEnemy.GetComponent<Char_Status>().getCS();
-
-        if (PI.objInventory.transform.GetChild(3).gameObject.activeSelf==true)
-        {
-            //Debug.LogError(PI.objInventory.transform.GetChild(3).gameObject);
-            //Debug.LogError(PI.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text);
-            PI.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Gold : " + Gold;
-        }
-    }
-
-
-     void GameEndText()
-    {
-        if (objPlayer.GetComponent<Char_Status>().getCS() == CharState.Death &&
-            objHealer.GetComponent<Char_Status>().getCS() == CharState.Death &&
-            objThief.GetComponent<Char_Status>().getCS() == CharState.Death)
-        {
-            m_bGameEnd = true;
-            objGameEnd.SetActive(true);
-            objGameEndMessage.text = "Game Over";
-        }
-        if (objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death)
-        {
-            m_bGameEnd = true;
-            objWall.SetActive(false);
-        }
-        if ((objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death && objPlayer.GetComponent<Char_Status>().getCS() == CharState.Death)|| (objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death && m_nEnemyID == 1))
-        {
-            objGameEnd.SetActive(true);
-            objGameEndMessage.text = "Game Clear";
-        }
-        
-    }
+    
 
 
 
@@ -572,7 +373,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateUI();
+        
 
         MouseTargetRay();
         UIMouseRay();
@@ -583,7 +384,7 @@ public class GameManager : MonoBehaviour
 
             
 
-        GameEndText();
+       
 
 
 

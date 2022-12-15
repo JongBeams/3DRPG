@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player_Inventory : MonoBehaviour
+public class Player_Inventory : MonoSingleton<Player_Inventory>
 {
     public Transform slot;
 
@@ -38,7 +38,7 @@ public class Player_Inventory : MonoBehaviour
     {
         slot = Resources.Load<Transform>("Prefabs/UI/ItemSlot");
         objInventory = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Inventory"));
-        objInventory.transform.parent = GameManager.instance.objCanvas.transform;
+        objInventory.transform.parent = GameManager.Instance.objCanvas.transform;
         objInventory.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
         
 
@@ -164,9 +164,9 @@ public class Player_Inventory : MonoBehaviour
 
     public void InventoryLoad()
     {
-        GameManager.instance.slM._load();
-        GameData GD = GameManager.instance.slM.InvetoryData;
-        GameManager.instance.Gold = GD.Gold;
+        SLManager.Instance._load();
+        GameData GD = SLManager.Instance.InvetoryData;
+        GameManager.Instance.Gold = GD.Gold;
         for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
         {
 
@@ -177,7 +177,7 @@ public class Player_Inventory : MonoBehaviour
 
     public void InventorySave()
     {
-        int Gold = GameManager.instance.Gold;
+        int Gold = GameManager.Instance.Gold;
         List<int> ItemID = new List<int>();
         List<string> ItemName = new List<string>();
         List<int> ItemATK = new List<int>();
@@ -202,8 +202,8 @@ public class Player_Inventory : MonoBehaviour
             ItemType.Add((int)m_lSlot[i].item.getTYP());
 
         }
-        GameManager.instance.slM.InvetoryData = new GameData(Gold,ItemID, ItemName, ItemATK, ItemDEF, ItemSPD, ItemSprite,ItemMesh,ItemMaterial, ItemType);
-        GameManager.instance.slM._save();
+        SLManager.Instance.InvetoryData = new GameData(Gold,ItemID, ItemName, ItemATK, ItemDEF, ItemSPD, ItemSprite,ItemMesh,ItemMaterial, ItemType);
+        SLManager.Instance._save();
     }
 
 

@@ -7,34 +7,46 @@ using UnityEngine.SceneManagement;
 public class SelectSceneManager : MonoBehaviour
 {
 
-
+    [Header("CharSelectUI")]
     public int[] CharID = new int[3];
-
     public Button[] NextButton;
     public Button[] PreviousButton;
-
-
     public Text[] CharName;
-
     public int addID = 0;
-
     public GameObject[] CharObj=new GameObject[3];
+    public GameObject objCharSelectUI;
+
+    [Header("PlayerUI")]
+    public Slider PlayerHPBar;
+    public Slider PlayerMPBar;
+    public Slider PlayerShieldBar;
+    public Slider PlayerSkillQCoolTime;
+    public Slider PlayerSkillWCoolTime;
+    public Slider PlayerSkillECoolTime;
+    public Slider PlayerSkillRCoolTime;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        for(int i =0; i < CharID.Length; i++)
+        SetCharSelectUI();
+        GameManager.Instance.GetInstancePlayerChar(new Vector3 (0, 0, 0));
+    }
+
+
+    void SetCharSelectUI()
+    {
+        for (int i = 0; i < CharID.Length; i++)
         {
-            CharID[i] = 0; 
+            CharID[i] = 0;
         }
 
         CharName[0].text = DBManager.PlayerData[CharID[0]].getName();
         CharName[1].text = DBManager.PartnerData[CharID[0]].getName();
         CharName[2].text = DBManager.PartnerData[CharID[1]].getName();
 
-        GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[0]].getObjPrefab()),new Vector3(0,0,-1),Quaternion.Euler(new Vector3(0,180,0)));
+        GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[0]].getObjPrefab()), new Vector3(0, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
         Player.GetComponent<Rigidbody>().isKinematic = true;
         CharObj[0] = Player;
         GameObject Partner1 = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[0]].getObjPrefab()), new Vector3(10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
@@ -56,9 +68,6 @@ public class SelectSceneManager : MonoBehaviour
 
 
     }
-
-
-
 
     public void PreviousChar(int ID)
     {

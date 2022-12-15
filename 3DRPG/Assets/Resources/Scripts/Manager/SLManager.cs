@@ -38,7 +38,7 @@ public class GameData
 
 }
 
-public class SLManager : MonoBehaviour
+public class SLManager : MonoSingleton<SLManager>
 {
 
     private string m_sSaveFileDirectory;  // 저장할 폴더 경로
