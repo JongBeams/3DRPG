@@ -38,10 +38,8 @@ public class GameManager : MonoSingleton<GameManager>
     public Slider PlayerHPBar;
     public Slider PlayerMPBar;
     public Slider PlayerShieldBar;
-    public Slider PlayerSkillQCoolTime;
-    public Slider PlayerSkillWCoolTime;
-    public Slider PlayerSkillECoolTime;
-    public Slider PlayerSkillRCoolTime;
+    public Slider[] PlayerSkillCoolTime;
+
 
 
     [Header("Mouse,Button")]
@@ -58,35 +56,37 @@ public class GameManager : MonoSingleton<GameManager>
     public GameObject DragingItemSprite = null;
 
     [Header("UI")]
-    public int Gold = 0;
+    public int m_nGold = 0;
     public GameObject objCanvas;
+    public bool OnUIScreen = false;
+    public List<GameObject> m_lOnUI = new List<GameObject>();
 
-    
+    public void CallGameManager()
+    {
+        Debug.Log("CallGM");
+    }
 
 
     // Start is called before the first frame update
     void Start()
     {
-
-        //UI 등록
-        objCanvas = GameObject.FindGameObjectWithTag("Canvas");
-        GR = objCanvas.GetComponent<GraphicRaycaster>();
-        ped = new PointerEventData(null);//초기화
-
-        SLManager.Instance.RemoteStart();
-
-        Player_Inventory.Instance.RemoteStart();
-
-        Player_Inventory.Instance.InventoryLoad();
-
-        Camera.main.GetComponent<CameraPos>().Target = objPlayer;
         
     }
 
 
+    public void SetCanvas(GameObject _objCanvas)
+    {
+        objCanvas = _objCanvas;
+        GR = objCanvas.GetComponent<GraphicRaycaster>();
+        ped = new PointerEventData(null);//초기화
+
+        //켜진 UI 초기화
+        m_lOnUI.Clear();
+    }
+
     public void GetInstancePlayerChar(Vector3 Pos)
     {
-        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[PlayerPrefs.GetInt("Player")].getObjPrefab()), Pos, Quaternion.identity);
+        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[0].getObjPrefab()), Pos, Quaternion.identity);
 
 
         objPlayer = PlayerObj;
@@ -101,19 +101,18 @@ public class GameManager : MonoSingleton<GameManager>
         objPlayer.GetComponent<Char_Status>().setItemSlots(0, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor)]);
         objPlayer.GetComponent<Char_Status>().setItemSlots(1, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + 1]);
 
+        Camera.main.GetComponent<CameraPos>().Target = objPlayer;
+
     }
 
 
-    public void SetPlayerUI()
+    public void SetPlayerUI(GameObject _objPlayer,Slider _PlayerHPBar, Slider _PlayerMPBar,Slider _PlayerShieldBar,Slider[] _PlayerSKillCoolTime)
     {
-        objPlayer;
-        PlayerHPBar;
-        PlayerMPBar;
-        PlayerShieldBar;
-        PlayerSkillQCoolTime;
-        PlayerSkillWCoolTime;
-        PlayerSkillECoolTime;
-        PlayerSkillRCoolTime;
+        objPlayer=_objPlayer;
+        PlayerHPBar=_PlayerHPBar;
+        PlayerMPBar=_PlayerMPBar;
+        PlayerShieldBar=_PlayerShieldBar;
+        PlayerSkillCoolTime=_PlayerSKillCoolTime;
     }
 
     //게임 오브젝트 레이케스트
@@ -125,11 +124,11 @@ public class GameManager : MonoSingleton<GameManager>
 
         //int m_nLayerMask = 1 << LayerMask.NameToLayer("Player");
         //m_nLayerMask = ~m_nLayerMask;
-        int m_nLayerMask = 1 << LayerMask.NameToLayer("Floor");
+        int m_nLayerMask = 1 << LayerMask.NameToLayer("Floor")| 1 << LayerMask.NameToLayer("NPC");
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            m_nLayerMask = 1 << LayerMask.NameToLayer("Player");
+            m_nLayerMask = 1 << LayerMask.NameToLayer("Player")| 1 << LayerMask.NameToLayer("Floor");
             m_nLayerMask = ~m_nLayerMask;
         }
 
@@ -175,7 +174,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     void CtrlPlayer()
     {
-        if (objPlayer != null || objPlayer.activeSelf != false)
+        if (objPlayer != null || objPlayer.activeSelf != false && UIObj==null)
         {
             Char_Status CS = objPlayer.GetComponent<Char_Status>();
             Char_Dynamics CD = objPlayer.GetComponent<Char_Dynamics>();
@@ -217,7 +216,7 @@ public class GameManager : MonoSingleton<GameManager>
                 }
 
 
-                if (Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButtonDown(1) && MBTarget.layer == LayerMask.NameToLayer("Floor"))
                 {
                     CD.setMovePoint(MBPoint);
                     if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move && !CS.getIdentitySkillUsing())
@@ -288,6 +287,22 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
 
+    void CtrlObjEvnet()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (MBTarget.layer ==LayerMask.NameToLayer("NPC"))
+            {
+                MBTarget.GetComponent<NpcEvent>().NS.ClickEvent();
+
+            }
+            
+
+        }
+    }
+
+
+
     void CtrlUI()
     {
 
@@ -351,6 +366,7 @@ public class GameManager : MonoSingleton<GameManager>
             if (Player_Inventory.Instance.objInventory.activeSelf == true)
             {
                 Player_Inventory.Instance.objInventory.SetActive(false);
+                
             }
             else
             {
@@ -381,16 +397,9 @@ public class GameManager : MonoSingleton<GameManager>
 
         CtrlPlayer();
         CtrlUI();
-
-            
-
-       
-
-
+        CtrlObjEvnet();
 
         //Debug.DrawLine(objPlayer.transform.position, objPlayer.GetComponent<Char_Dynamics>().getStartPos());
-
-
 
     }
 }

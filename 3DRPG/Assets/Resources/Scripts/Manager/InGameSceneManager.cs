@@ -5,28 +5,26 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System;
 
 public class InGameSceneManager : MonoBehaviour
 {
-    public InGameSceneManager instance;
+    public static InGameSceneManager Instance;
 
-
+    [Serializable]
     public struct PartnerInfo {
 
         public GameObject objPartner;
         public Slider PartnerHPBar;
         public Slider PartnerMPBar;
-        public Camera Partner1Cam;
+        public Camera PartnerCam;
     }
 
     [Header("PlayerUI")]
     public Slider PlayerHPBar;
     public Slider PlayerMPBar;
     public Slider PlayerShieldBar;
-    public Slider PlayerSkillQCoolTime;
-    public Slider PlayerSkillWCoolTime;
-    public Slider PlayerSkillECoolTime;
-    public Slider PlayerSkillRCoolTime;
+    public Slider[] PlayerSkillCoolTime=new Slider[4];
 
     [Header("Partner")]
     public PartnerInfo[] PInfo = new PartnerInfo[2];
@@ -37,75 +35,108 @@ public class InGameSceneManager : MonoBehaviour
     public Text Target;
 
     [Header("UI")]
+    public GameObject objCanvas;
+    GraphicRaycaster GR;
+    PointerEventData ped;
     public GameObject objGameEnd;
     public Text objGameEndMessage;
-    bool m_bGameEnd = false;
+    public bool m_bGameEnd = false;
     public int m_nEnemyID = 0;
 
+
+    public bool CharAllDeathCheck()
+    {
+        if(GameManager.Instance.objPlayer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
+            PInfo[0].objPartner.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
+            PInfo[1].objPartner.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
+        if (Instance == null)
+            Instance = this;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        getInstanceChar();
+        //UI 등록
+        objCanvas = GameObject.FindGameObjectWithTag("Canvas");
+        GR = objCanvas.GetComponent<GraphicRaycaster>();
+        ped = new PointerEventData(null);//초기화
+
+        GameManager.Instance.SetCanvas(objCanvas);
+
+        
+
+        SLManager.Instance.RemoteStart();
+
+        Player_Inventory.Instance.RemoteStart();
 
         Player_Inventory.Instance.InventoryLoad();
+
+        getInstanceChar();
     }
 
 
     void getInstanceChar()
     {
-        m_nEnemyID = PlayerPrefs.GetInt("EnemyID");
+        m_nEnemyID = PlayerPrefs.GetInt("Enemy");
         //
         GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[PlayerPrefs.GetInt("Player")].getObjPrefab()), new Vector3(0, 0, -15), Quaternion.identity);
         GameObject Partner1Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")].getObjPrefab()), new Vector3(5, 0, -17), Quaternion.identity);
         GameObject Partner2Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")].getObjPrefab()), new Vector3(-5, 0, -17), Quaternion.identity);
         GameObject EnemyObj = Instantiate(Resources.Load<GameObject>(DBManager.EnemyData[m_nEnemyID].getObjPrefab()), new Vector3(0, 0, 15), Quaternion.identity);
 
-        objPlayer = PlayerObj;
-        objHealer = Partner1Obj;
-        objThief = Partner2Obj;
+        GameManager.Instance.objPlayer = PlayerObj;
+        PInfo[0].objPartner = Partner1Obj;
+        PInfo[1].objPartner = Partner2Obj;
         objEnemy = EnemyObj;
 
-        objPlayer.GetComponent<Char_Status>().CharStatusSetting(DBManager.PlayerData[PlayerPrefs.GetInt("Player")]);
-        objHealer.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")]);
-        objThief.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")]);
+        GameManager.Instance.objPlayer.GetComponent<Char_Status>().CharStatusSetting(DBManager.PlayerData[PlayerPrefs.GetInt("Player")]);
+        PInfo[0].objPartner.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")]);
+        PInfo[1].objPartner.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")]);
 
-        objPlayer.GetComponent<Char_Status>().setItemSlotsNum(PI.getPlayerSlot());
-        objHealer.GetComponent<Char_Status>().setItemSlotsNum(PI.getPartner1Slot());
-        objThief.GetComponent<Char_Status>().setItemSlotsNum(PI.getPartner2Slot());
+        GameManager.Instance.objPlayer.GetComponent<Char_Status>().setItemSlotsNum(Player_Inventory.Instance.getPlayerSlot());
+        PInfo[0].objPartner.GetComponent<Char_Status>().setItemSlotsNum(Player_Inventory.Instance.getPartner1Slot());
+        PInfo[1].objPartner.GetComponent<Char_Status>().setItemSlotsNum(Player_Inventory.Instance.getPartner2Slot());
 
-        objPlayer.GetComponent<Char_Status>().setItemSlots(0, PI.m_lSlot[(PI.ver * PI.hor)]);
-        objPlayer.GetComponent<Char_Status>().setItemSlots(1, PI.m_lSlot[(PI.ver * PI.hor) + 1]);
+        GameManager.Instance.objPlayer.GetComponent<Char_Status>().setItemSlots(0, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor)]);
+        GameManager.Instance.objPlayer.GetComponent<Char_Status>().setItemSlots(1, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + 1]);
 
-        objHealer.GetComponent<Char_Status>().setItemSlots(0, PI.m_lSlot[(PI.ver * PI.hor) + PI.getPlayerSlot()]);
-        objHealer.GetComponent<Char_Status>().setItemSlots(1, PI.m_lSlot[(PI.ver * PI.hor) + PI.getPlayerSlot() + 1]);
+        PInfo[0].objPartner.GetComponent<Char_Status>().setItemSlots(0, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot()]);
+        PInfo[0].objPartner.GetComponent<Char_Status>().setItemSlots(1, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot() + 1]);
 
-        objThief.GetComponent<Char_Status>().setItemSlots(0, PI.m_lSlot[(PI.ver * PI.hor) + PI.getPlayerSlot() + PI.getPartner1Slot()]);
-        objThief.GetComponent<Char_Status>().setItemSlots(1, PI.m_lSlot[(PI.ver * PI.hor) + PI.getPlayerSlot() + PI.getPartner1Slot() + 1]);
+        PInfo[1].objPartner.GetComponent<Char_Status>().setItemSlots(0, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot() + Player_Inventory.Instance.getPartner1Slot()]);
+        PInfo[1].objPartner.GetComponent<Char_Status>().setItemSlots(1, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot() + Player_Inventory.Instance.getPartner1Slot() + 1]);
 
         objEnemy.GetComponent<Char_Status>().CharStatusSetting(DBManager.EnemyData[m_nEnemyID]);
         objEnemy.GetComponent<Char_Status>().SetSuperArmor(true);
 
-        Partner1Cam.transform.parent = Partner1Obj.transform;
-        Partner1Cam.transform.localPosition = new Vector3(0, 1.4f, 1.5f);
-        Partner1Cam.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
-        Partner2Cam.transform.parent = Partner2Obj.transform;
-        Partner2Cam.transform.localPosition = new Vector3(0, 1.4f, 1.5f);
-        Partner2Cam.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        PInfo[0].PartnerCam.transform.parent = Partner1Obj.transform;
+        PInfo[0].PartnerCam.transform.localPosition = new Vector3(0, 1.4f, 1.5f);
+        PInfo[0].PartnerCam.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+
+        PInfo[1].PartnerCam.transform.parent = Partner2Obj.transform;
+        PInfo[1].PartnerCam.transform.localPosition = new Vector3(0, 1.4f, 1.5f);
+        PInfo[1].PartnerCam.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+
+        Camera.main.GetComponent<CameraPos>().Target = GameManager.Instance.objPlayer;
     }
 
     void UpdateUI()
     {
-        Char_Status CS = objPlayer.GetComponent<Char_Status>();
+        Char_Status CS = GameManager.Instance.objPlayer.GetComponent<Char_Status>();
 
-        //Debug.Log("check");
+        //Player
         PlayerHPBar.value = CS.getHP();
         PlayerMPBar.value = CS.getMP();
         PlayerShieldBar.value = CS.getIdentityPoint();
@@ -113,85 +144,75 @@ public class InGameSceneManager : MonoBehaviour
         PlayerMPBar.maxValue = CS.getMPMax();
         PlayerShieldBar.maxValue = CS.getIdentityPointMax();
 
-        PlayerSkillQCoolTime.value = 100 - CS.getSkill1CoolTimer() / 5 * 100;
-        PlayerSkillWCoolTime.value = 100 - CS.getSkill2CoolTimer() / 7 * 100;
-        PlayerSkillECoolTime.value = 100 - CS.getSkill3CoolTimer() / 15 * 100;
-        PlayerSkillRCoolTime.value = 100 - CS.getSkill4CoolTimer() / 5 * 100;
+        PlayerSkillCoolTime[0].value = 100 - CS.getSkill1CoolTimer() / 5 * 100;
+        PlayerSkillCoolTime[1].value = 100 - CS.getSkill2CoolTimer() / 7 * 100;
+        PlayerSkillCoolTime[2].value = 100 - CS.getSkill3CoolTimer() / 15 * 100;
+        PlayerSkillCoolTime[3].value = 100 - CS.getSkill4CoolTimer() / 5 * 100;
 
-        PlayerSkillQCoolTime.maxValue = 100;
-        PlayerSkillWCoolTime.maxValue = 100;
-        PlayerSkillECoolTime.maxValue = 100;
-        PlayerSkillRCoolTime.maxValue = 100;
+        PlayerSkillCoolTime[0].maxValue = 100;
+        PlayerSkillCoolTime[1].maxValue = 100;
+        PlayerSkillCoolTime[2].maxValue = 100;
+        PlayerSkillCoolTime[3].maxValue = 100;
 
-        //Debug.Log("check");
-        HealerHPBar.value = objHealer.GetComponent<Char_Status>().getHP();
-        HealerMPBar.value = objHealer.GetComponent<Char_Status>().getMP();
-        HealerHPBar.maxValue = objHealer.GetComponent<Char_Status>().getHPMax();
-        HealerMPBar.maxValue = objHealer.GetComponent<Char_Status>().getMPMax();
+        //Partner1
+        PInfo[0].PartnerHPBar.value = PInfo[0].objPartner.GetComponent<Char_Status>().getHP();
+        PInfo[0].PartnerHPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Status>().getHPMax();
+
+        PInfo[0].PartnerMPBar.value = PInfo[0].objPartner.GetComponent<Char_Status>().getMP();
+        PInfo[0].PartnerMPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Status>().getMPMax();
 
 
-        //Debug.Log("check");
-        ThiefHPBar.value = objThief.GetComponent<Char_Status>().getHP();
-        ThiefMPBar.value = objThief.GetComponent<Char_Status>().getMP();
-        ThiefHPBar.maxValue = objThief.GetComponent<Char_Status>().getHPMax();
-        ThiefMPBar.maxValue = objThief.GetComponent<Char_Status>().getMPMax();
+        //Partner2
+        PInfo[1].PartnerHPBar.value = PInfo[1].objPartner.GetComponent<Char_Status>().getHP();
+        PInfo[1].PartnerHPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Status>().getHPMax();
 
+        PInfo[1].PartnerMPBar.value = PInfo[1].objPartner.GetComponent<Char_Status>().getMP();
+        PInfo[1].PartnerMPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Status>().getMPMax();
+
+        //Enemy
         EnemyHPBar.value = objEnemy.GetComponent<Char_Status>().getHP();
         EnemyHPBar.maxValue = objEnemy.GetComponent<Char_Status>().getHPMax();
         if (objEnemy.GetComponent<Char_Status>().getObjTarget() != null)
             Target.text = "Target : " + objEnemy.GetComponent<Char_Status>().objTarget.GetComponent<Char_Status>().getName()
                 + "\n NextPattern : " + objEnemy.GetComponent<Char_Status>().getCS();
 
-        if (PI.objInventory.transform.GetChild(3).gameObject.activeSelf == true)
+        //Gold
+        if (Player_Inventory.Instance.objInventory.transform.GetChild(3).gameObject.activeSelf == true)
         {
-            //Debug.LogError(PI.objInventory.transform.GetChild(3).gameObject);
-            //Debug.LogError(PI.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text);
-            PI.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Gold : " + Gold;
+            //Debug.LogError(Player_Inventory.Instance.objInventory.transform.GetChild(3).gameObject);
+            //Debug.LogError(Player_Inventory.Instance.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text);
+            Player_Inventory.Instance.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Gold : " + GameManager.Instance.m_nGold;
         }
     }
 
 
     void GameEndText()
     {
-        if (objPlayer.GetComponent<Char_Status>().getCS() == CharState.Death &&
-            objHealer.GetComponent<Char_Status>().getCS() == CharState.Death &&
-            objThief.GetComponent<Char_Status>().getCS() == CharState.Death)
+        if (CharAllDeathCheck())
         {
             m_bGameEnd = true;
             objGameEnd.SetActive(true);
             objGameEndMessage.text = "Game Over";
         }
-        if (objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death)
+        if (objEnemy.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death)
         {
             m_bGameEnd = true;
-            objWall.SetActive(false);
-        }
-        if ((objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death && objPlayer.GetComponent<Char_Status>().getCS() == CharState.Death) || (objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death && m_nEnemyID == 1))
-        {
             objGameEnd.SetActive(true);
             objGameEndMessage.text = "Game Clear";
         }
 
     }
 
-    //public void GoMain()
-    //{
+    public void GoVillage()
+    {
 
-    //    if (m_nEnemyID != 1 && objEnemy.GetComponent<Char_Status>().getCS() == CharState.Death)
-    //    {
-    //        PlayerPrefs.SetInt("EnemyID", m_nEnemyID + 1);
-    //        SceneManager.LoadScene("InGameScene");
-    //    }
-    //    else
-    //    {
-    //        SceneManager.LoadScene("MainScene");
-    //    }
+        SceneManager.LoadScene("VillageScene");
 
-    //}
+    }
 
     //public void NextStage()
     //{
-    //    PI.InventorySave();
+    //    Player_Inventory.Instance.InventorySave();
     //    if (m_nEnemyID == 1)
     //    {
     //        SceneManager.LoadScene("MainScene");

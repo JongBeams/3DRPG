@@ -19,19 +19,19 @@ public class Portal : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer==6)
-        {
-            GameManager.instance.getPI().InventorySave();
-            if (GameManager.instance.m_nEnemyID == 1)
-            {
-                SceneManager.LoadScene("MainScene");
-            }
-            else
-            {
-                SceneManager.LoadScene("InGameScene");
-                PlayerPrefs.SetInt("EnemyID", GameManager.instance.m_nEnemyID + 1);
-            }
-        }
+        //if (other.gameObject.layer==6)
+        //{
+        //    GameManager.instance.getPI().InventorySave();
+        //    if (GameManager.instance.m_nEnemyID == 1)
+        //    {
+        //        SceneManager.LoadScene("MainScene");
+        //    }
+        //    else
+        //    {
+        //        SceneManager.LoadScene("InGameScene");
+        //        PlayerPrefs.SetInt("EnemyID", GameManager.instance.m_nEnemyID + 1);
+        //    }
+        //}
         
     }
 }

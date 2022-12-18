@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class Player_Inventory : MonoSingleton<Player_Inventory>
 {
     public Transform slot;
@@ -36,6 +36,7 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
 
     public void RemoteStart()
     {
+        m_lSlot.Clear();
         slot = Resources.Load<Transform>("Prefabs/UI/ItemSlot");
         objInventory = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Inventory"));
         objInventory.transform.parent = GameManager.Instance.objCanvas.transform;
@@ -148,7 +149,7 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
             newSlot.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(80, 60);
         }
 
-
+        objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Gold : " + GameManager.Instance.m_nGold;
 
         //AddItem(1);
         //AddItem(2);
@@ -166,7 +167,7 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
     {
         SLManager.Instance._load();
         GameData GD = SLManager.Instance.InvetoryData;
-        GameManager.Instance.Gold = GD.Gold;
+        GameManager.Instance.m_nGold = GD.Gold;
         for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
         {
 
@@ -177,7 +178,7 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
 
     public void InventorySave()
     {
-        int Gold = GameManager.Instance.Gold;
+        int Gold = GameManager.Instance.m_nGold;
         List<int> ItemID = new List<int>();
         List<string> ItemName = new List<string>();
         List<int> ItemATK = new List<int>();

@@ -51,7 +51,7 @@ public class DropItemInfo : MonoBehaviour
     {
         if(collision.gameObject.layer==LayerMask.NameToLayer("Player"))
         {
-            GameManager.instance.getPI().AddItem(ID);
+            Player_Inventory.Instance.AddItem(ID);
             Destroy(this.gameObject, 0.1f);
         }
     }

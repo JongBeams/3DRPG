@@ -62,7 +62,7 @@ public static class AlgorithmManager
         GameObject Target=null;
 
 
-        if (GameManager.instance.getGameEnd())
+        if (InGameSceneManager.Instance.m_bGameEnd)
         {
             CD.SetCharStatus(GameManager.CharState.Stay);
         }
@@ -243,7 +243,7 @@ public static class AlgorithmManager
         //≈∏∞Ÿ¡ˆ¡§
         GameObject Target = null;
 
-        if (GameManager.instance.getGameEnd())
+        if (InGameSceneManager.Instance.m_bGameEnd)
         {
             CD.SetCharStatus(GameManager.CharState.Stay);
         }
@@ -333,7 +333,7 @@ public static class AlgorithmManager
         GameObject Target = null;
 
 
-        if (GameManager.instance.getGameEnd())
+        if (InGameSceneManager.Instance.m_bGameEnd)
         {
             CD.SetCharStatus(GameManager.CharState.Stay);
         }
@@ -454,9 +454,7 @@ public static class AlgorithmManager
         
 
         //Debug.Log(i+","+count + "," + hitcol.Length);
-        if (GameManager.instance.objPlayer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
-            GameManager.instance.objHealer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
-            GameManager.instance.objThief.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death)
+        if (InGameSceneManager.Instance.CharAllDeathCheck())
         {
             CD.SetCharStatus(GameManager.CharState.Stay);
         }
@@ -584,9 +582,7 @@ public static class AlgorithmManager
         }
 
 
-        if (GameManager.instance.objPlayer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
-            GameManager.instance.objHealer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
-            GameManager.instance.objThief.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death)
+        if (InGameSceneManager.Instance.CharAllDeathCheck())
         {
             CD.SetCharStatus(GameManager.CharState.Stay);
         }
