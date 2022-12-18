@@ -127,22 +127,23 @@ public class SkillManager : MonoSingleton<SkillManager>
         }
         CS.transform.LookAt(vecEnemyLookingPoint);
 
-        bool enemyCheck = false;
-        if (CS.getTYP() == LayerMask.NameToLayer("Player") || CS.getTYP() == LayerMask.NameToLayer("Partner"))
-        {
-            enemyCheck = false;
-        }
-        else
-        {
-            enemyCheck = true;
-        }
 
-        if (CS.getObjTarget() != null || CS.getObjTarget().activeSelf == false)
-        {
-            GameObject objFireBall = Instantiate(Resources.Load<GameObject>(SkillDB.getSkillEffectResource()), AttackPos.position, Quaternion.identity);
-            objFireBall.GetComponent<Bullet>().Setting(TargetObj, (int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()), SkillDB.getSkillSpeed(), enemyCheck, SkillDB.getSkillUsingTime());
-        }
+            bool enemyCheck = false;
+            if (CS.getTYP() == LayerMask.NameToLayer("Player") || CS.getTYP() == LayerMask.NameToLayer("Partner"))
+            {
+                enemyCheck = false;
+            }
+            else
+            {
+                enemyCheck = true;
+            }
 
+            if (CS.getObjTarget() != null || CS.getObjTarget().activeSelf == false)
+            {
+                GameObject objFireBall = Instantiate(Resources.Load<GameObject>(SkillDB.getSkillEffectResource()), AttackPos.position, Quaternion.identity);
+                objFireBall.GetComponent<Bullet>().Setting(TargetObj, (int)(CS.getATK() * SkillDB.getSkillCeofficientPer1()), SkillDB.getSkillSpeed(), enemyCheck, SkillDB.getSkillUsingTime());
+            }
+        
 
     }
 

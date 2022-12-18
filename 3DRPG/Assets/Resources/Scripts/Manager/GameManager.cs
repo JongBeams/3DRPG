@@ -174,115 +174,120 @@ public class GameManager : MonoSingleton<GameManager>
 
     void CtrlPlayer()
     {
-        if (objPlayer != null || objPlayer.activeSelf != false && UIObj==null)
+        if (UIObj == null)
         {
-            Char_Status CS = objPlayer.GetComponent<Char_Status>();
-            Char_Dynamics CD = objPlayer.GetComponent<Char_Dynamics>();
 
-            //CS.SetObjTarget(objEnemy);
-            // 키 조작 조건
-            /*
-            이동 : 대기, 이동, 고유
-            공격 : 대기, 이동
-            고유 : 대기, 이동, 고유
-            스킬1 : 대기, 이동 
-            스킬2 : 대기, 이동
-            스킬3 : 대기, 이동
-            스킬4 : 대기, 이동
-            
-            이동 = 고유 같은 취급
-             */
 
-            if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move || CS.getCS() == CharState.IdentitySkill&&UIObj==null)
+            if ( objPlayer != null || objPlayer.activeSelf != false)
             {
+                Char_Status CS = objPlayer.GetComponent<Char_Status>();
+                Char_Dynamics CD = objPlayer.GetComponent<Char_Dynamics>();
 
-                if (Input.GetKeyDown(KeyCode.Space))
+                //CS.SetObjTarget(objEnemy);
+                // 키 조작 조건
+                /*
+                이동 : 대기, 이동, 고유
+                공격 : 대기, 이동
+                고유 : 대기, 이동, 고유
+                스킬1 : 대기, 이동 
+                스킬2 : 대기, 이동
+                스킬3 : 대기, 이동
+                스킬4 : 대기, 이동
+
+                이동 = 고유 같은 취급
+                 */
+
+                if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move || CS.getCS() == CharState.IdentitySkill && UIObj == null)
                 {
-                    if (CS.getIdentityPoint() > 0)
+
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        if (CS.getIdentityPoint() > 0)
+                        {
+                            CD.setMovePoint(MBPoint);
+                            CD.SetCharStatus(CharState.IdentitySkill);
+                        }
+
+                    }
+                    if (Input.GetKeyUp(KeyCode.Space))
+                    {
+                        if (CS.getCS() == CharState.IdentitySkill)
+                        {
+                            CS.delGetDamae = CS.GetDamage;
+                            CD.SetCharStatus(CharState.Idle);
+                            CS.setIdentitySkillUsing(false);
+                        }
+                    }
+
+
+                    if (Input.GetMouseButtonDown(1) && MBTarget.layer == LayerMask.NameToLayer("Floor"))
                     {
                         CD.setMovePoint(MBPoint);
-                        CD.SetCharStatus(CharState.IdentitySkill);
+                        if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move && !CS.getIdentitySkillUsing())
+                        {
+                            CD.SetCharStatus(CharState.Move);
+                        }
+
                     }
 
-                }
-                if (Input.GetKeyUp(KeyCode.Space))
-                {
-                    if (CS.getCS()==CharState.IdentitySkill)
+
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        CS.delGetDamae = CS.GetDamage;
-                        CD.SetCharStatus(CharState.Idle);
-                        CS.setIdentitySkillUsing(false);
-                    }
-                }
 
-
-                if (Input.GetMouseButtonDown(1) && MBTarget.layer == LayerMask.NameToLayer("Floor"))
-                {
-                    CD.setMovePoint(MBPoint);
-                    if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move && !CS.getIdentitySkillUsing())
-                    {
-                        CD.SetCharStatus(CharState.Move);
-                    }
-
-                }
-
-
-                if (Input.GetMouseButtonDown(0))
-                {
-                    
-                    CD.setMovePoint(MBPoint);
-                    CS.SetObjTarget(MBTarget);
-                    CD.SetCharStatus(CharState.Attack);
-
-                }
-
-                if (Input.GetKeyDown(KeyCode.Q))
-                {
-
-                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[0]].getSkillUsingMana() && CS.getSkill1On())
-                    {
-                        CD.setMovePoint(MBPoint);
-                        CS.SetObjTarget(MBTarget);
-                        CD.SetCharStatus(CharState.Skill1);
-                    }
-                    
-                }
-
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[1]].getSkillUsingMana() && CS.getSkill2On())
-                    {
                         CD.setMovePoint(MBPoint);
                         CS.SetObjTarget(MBTarget);
-                        CD.SetCharStatus(CharState.Skill2);
-                    }
-                }
+                        CD.SetCharStatus(CharState.Attack);
 
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[2]].getSkillUsingMana() && CS.getSkill3On())
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.Q))
                     {
-                        CD.setMovePoint(MBPoint);
-                        CS.SetObjTarget(MBTarget);
-                        CD.SetCharStatus(CharState.Skill3);
-                    }
-                }
 
-                if (Input.GetKeyDown(KeyCode.R))
-                {
-                    if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[3]].getSkillUsingMana() && CS.getSkill4On())
+                        if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[0]].getSkillUsingMana() && CS.getSkill1On())
+                        {
+                            CD.setMovePoint(MBPoint);
+                            CS.SetObjTarget(MBTarget);
+                            CD.SetCharStatus(CharState.Skill1);
+                        }
+
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.W))
                     {
-                        CD.setMovePoint(MBPoint);
-                        CS.SetObjTarget(MBTarget);
-                        CD.SetCharStatus(CharState.Skill4);
+                        if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[1]].getSkillUsingMana() && CS.getSkill2On())
+                        {
+                            CD.setMovePoint(MBPoint);
+                            CS.SetObjTarget(MBTarget);
+                            CD.SetCharStatus(CharState.Skill2);
+                        }
                     }
+
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[2]].getSkillUsingMana() && CS.getSkill3On())
+                        {
+                            CD.setMovePoint(MBPoint);
+                            CS.SetObjTarget(MBTarget);
+                            CD.SetCharStatus(CharState.Skill3);
+                        }
+                    }
+
+                    if (Input.GetKeyDown(KeyCode.R))
+                    {
+                        if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[3]].getSkillUsingMana() && CS.getSkill4On())
+                        {
+                            CD.setMovePoint(MBPoint);
+                            CS.SetObjTarget(MBTarget);
+                            CD.SetCharStatus(CharState.Skill4);
+                        }
+                    }
+
+
+
+
                 }
-
-
-
 
             }
-
         }
     }
 
