@@ -5,6 +5,20 @@ using UnityEditor;
 
 
 [System.Serializable]
+public class TradeNPCData
+{
+    public int ID;
+    //아이템 드랍 DB
+    public List<int> TI;
+
+    TradeNPCData()
+    {
+        TI = new List<int>();
+
+    }
+}
+
+[System.Serializable]
 public class ItemDropData
 {
     public int ID;
@@ -393,20 +407,22 @@ public class ItemData : CharData
         Name = "Empty";
         ATK = 0;
         DEF = 0;
-        SPD = 0;
+        HP = 0;
+        MP = 0;
         IMG = "";
         Mesh="";
         Material="";
         TYP = 0;
     }
 
-    public ItemData(int _ID, string _Name, int _ATK, int _DEF, float _Speed,string _ItemSprite, string _Mesh, string _Material, int _ItemType)
+    public ItemData(int _ID, string _Name, int _ATK, int _DEF, int _HP,int _MP, string _ItemSprite, string _Mesh, string _Material, int _ItemType)
     {
         ID = _ID;
         Name = _Name;
         ATK = _ATK;
         DEF = _DEF;
-        SPD = _Speed;
+        HP = _HP;
+        MP = _MP;
         IMG = _ItemSprite;
         Mesh = _Mesh;
         Material = _Material;

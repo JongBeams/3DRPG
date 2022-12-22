@@ -401,8 +401,6 @@ public class SkillManager : MonoSingleton<SkillManager>
         SkillData SkillDB = DBManager.SkillData[SkillID];
 
 
-
-
         // 타깃 바라보기
         Vector3 vecEnemyLookingPoint;
         Char_Dynamics CD = CS.gameObject.GetComponent<Char_Dynamics>();

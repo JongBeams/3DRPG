@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AlgorithmManager" Collapsed="true">
+    <Position X="8.5" Y="6" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAIAAAAAAEAAgAAAAACAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Character\AlgorithmManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Char_Dynamics">
+    <Position X="12.25" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQQAwAAAiAAAgAAAAAAAAACAAARAQADAAAgAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Character\Char_Dynamics.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Char_Status" Collapsed="true">
+    <Position X="14.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQUCgADxADgCKSSAXACMAOgEDBXQ5CQBAQBecEqA8g0=</HashCode>
+      <FileName>Assets\Resources\Scripts\Character\Char_Status.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MoveManager" Collapsed="true">
+    <Position X="10.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAACAAAAAAAAgAAAAIAAgAAgAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Character\MoveManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SkillManager" Collapsed="true">
+    <Position X="21.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>UCAAgAAEAAAAAFAAAAQQAAEQAYAAAAAAkAAARAAAAQA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Character\SkillManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemDropData">
+    <Position X="4.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\DataBase\DataForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SkillData" Collapsed="true">
+    <Position X="11.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQECoAAAAgAAkEAAEAQIQAQAhgAAAJIAAYAAAAAAIAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\DataBase\DataForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CharData" Collapsed="true">
+    <Position X="6.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAEAQAACqAHACgAACBQAQoGIBAAJAAAEImIQABQ=</HashCode>
+      <FileName>Assets\Resources\Scripts\DataBase\DataForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerCharData" Collapsed="true">
+    <Position X="3.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\DataBase\DataForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PartnerCharData" Collapsed="true">
+    <Position X="7.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\DataBase\DataForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EnemyCharData" Collapsed="true">
+    <Position X="9.75" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\DataBase\DataForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemData" Collapsed="true">
+    <Position X="5.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAAAAAkAAAAAAAAAAQAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\DataBase\DataForm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBManager" Collapsed="true">
+    <Position X="14.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAkAUAgBAABBgAAAAAAAAAAgAAIAIAAAAAAAgAAQEQ=</HashCode>
+      <FileName>Assets\Resources\Scripts\DataBase\DBManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameManager" Collapsed="true">
+    <Position X="12.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQAAABAASAQACAEABhAAASIBEAAygBCQAACgCAAESA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Manager\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InGameSceneManager" Collapsed="true">
+    <Position X="13" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQQACVAACAAACAAAIgAACIAARAACABIQAAQACBAAEA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Manager\InGameSceneManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MainScenceManager" Collapsed="true">
+    <Position X="17.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACACAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Manager\MainScenceManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SelectSceneManager" Collapsed="true">
+    <Position X="15.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAwkBAACJCIAAIAAgAAAIgkAAACQBAQAAAACAAgEE=</HashCode>
+      <FileName>Assets\Resources\Scripts\Manager\SelectSceneManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameData" Collapsed="true">
+    <Position X="1.25" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAQAAAAAAgABAAAAAAAAAIAIAAAAABAAQAgE=</HashCode>
+      <FileName>Assets\Resources\Scripts\Manager\SLManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SLManager" Collapsed="true">
+    <Position X="19.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAABAwAAAAAAAAAAQAAAAAAAAAAAAgAAAgIAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Manager\SLManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NpcEvent">
+    <Position X="9.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Assets\Resources\Scripts\NPC\NpcEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NPCState">
+    <Position X="6.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\NPC\NPCState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="QuestNPC">
+    <Position X="5.25" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\NPC\NPCState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TradeNPC">
+    <Position X="7.75" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\NPC\NPCState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonoSingleton&lt;T&gt;" Collapsed="true">
+    <Position X="17" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Singleton\MonoSingleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Bullet" Collapsed="true">
+    <Position X="1" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAADCACAAAgAAAAAAEGAEAAAACAAAQAAAAABAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\Skill\Bullet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FireBreath" Collapsed="true">
+    <Position X="2.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAAAAACgACARAAAAAEEAAAAAAAAgAgAAAAABAAAE=</HashCode>
+      <FileName>Assets\Resources\Scripts\Skill\FireBreath.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ItemSlot">
+    <Position X="17" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAQAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\UI\ItemSlot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Player_Inventory" Collapsed="true">
+    <Position X="17" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IUAIIAAABAAAAAAAYCAAoAAAgAGBAAAkBAACAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\UI\Player_Inventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraPos" Collapsed="true">
+    <Position X="1.5" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAABCAAAAAAAAAAACABAACAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\CameraPos.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DropItemInfo">
+    <Position X="2.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAhAAAAAAQAAAAAAAhAQAIAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Resources\Scripts\DropItemInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

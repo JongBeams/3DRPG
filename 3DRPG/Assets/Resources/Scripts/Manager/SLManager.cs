@@ -14,7 +14,8 @@ public class GameData
     public List<string> ItemName = new List<string>();
     public List<int> ItemATK = new List<int>();
     public List<int> ItemDEF = new List<int>();
-    public List<float> ItemSPD = new List<float>();
+    public List<int> ItemHP = new List<int>();
+    public List<int> ItemMP = new List<int>();
     public List<string> ItemSprite = new List<string>();
     public List<string> ItemMesh = new List<string>();
     public List<string> ItemMaterial = new List<string>();
@@ -22,14 +23,15 @@ public class GameData
 
 
 
-    public GameData(int _Gold, List<int> _ItemID, List<string> _ItemName, List<int> _ItemATK, List<int> _ItemDEF, List<float> _ItemSPD, List<string> _ItemSprite, List<string> _ItemMesh, List<string> _ItemMaterial, List<int> _ItemType)
+    public GameData(int _Gold, List<int> _ItemID, List<string> _ItemName, List<int> _ItemATK, List<int> _ItemDEF, List<int> _ItemHP, List<int> _ItemMP, List<string> _ItemSprite, List<string> _ItemMesh, List<string> _ItemMaterial, List<int> _ItemType)
     {
         Gold = _Gold;
         ItemID = _ItemID;
         ItemName = _ItemName;
         ItemATK = _ItemATK;
         ItemDEF = _ItemDEF;
-        ItemSPD = _ItemSPD;
+        ItemHP = _ItemHP;
+        ItemMP = _ItemMP;
         ItemSprite = _ItemSprite;
         ItemMesh= _ItemMesh;
         ItemMaterial= _ItemMaterial;
@@ -132,7 +134,7 @@ public class SLManager : MonoSingleton<SLManager>
         else
         {
             
-            InvetoryData = new GameData(100,new List<int>(),new List<string>(),new List<int>(),new List<int>(),new List<float>(),new List<string>(), new List<string>(), new List<string>(), new List<int>());
+            InvetoryData = new GameData(100,new List<int>(),new List<string>(),new List<int>(),new List<int>(),new List<int>(), new List<int>(), new List<string>(), new List<string>(), new List<string>(), new List<int>());
 
 
 

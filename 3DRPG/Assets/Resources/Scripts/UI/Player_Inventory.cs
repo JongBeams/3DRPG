@@ -40,7 +40,7 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
         slot = Resources.Load<Transform>("Prefabs/UI/ItemSlot");
         objInventory = Instantiate(Resources.Load<GameObject>("Prefabs/UI/Inventory"));
         objInventory.transform.parent = GameManager.Instance.objCanvas.transform;
-        objInventory.GetComponent<RectTransform>().anchoredPosition = Vector3.zero;
+        objInventory.GetComponent<RectTransform>().anchoredPosition = new Vector3(250,0,0);
         
 
         //인벤토리 슬롯
@@ -171,7 +171,7 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
         for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
         {
 
-            m_lSlot[i].GetComponent<ItemSlot>().item=new ItemData(GD.ItemID[i], GD.ItemName[i], GD.ItemATK[i], GD.ItemDEF[i], GD.ItemSPD[i], GD.ItemSprite[i], GD.ItemMesh[i], GD.ItemMaterial[i], GD.ItemType[i]);
+            m_lSlot[i].GetComponent<ItemSlot>().item=new ItemData(GD.ItemID[i], GD.ItemName[i], GD.ItemATK[i], GD.ItemDEF[i], GD.ItemHP[i], GD.ItemMP[i], GD.ItemSprite[i], GD.ItemMesh[i], GD.ItemMaterial[i], GD.ItemType[i]);
             ItemImageChange(m_lSlot[i].transform);
         }
     }
@@ -183,7 +183,8 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
         List<string> ItemName = new List<string>();
         List<int> ItemATK = new List<int>();
         List<int> ItemDEF = new List<int>();
-        List<float> ItemSPD = new List<float>();
+        List<int> ItemHP = new List<int>();
+        List<int> ItemMP = new List<int>();
         List<string> ItemSprite = new List<string>();
         List<string> ItemMesh = new List<string>();
         List<string> ItemMaterial = new List<string>();
@@ -196,14 +197,15 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
             ItemName.Add(m_lSlot[i].item.getName());
             ItemATK.Add(m_lSlot[i].item.getATK());
             ItemDEF.Add(m_lSlot[i].item.getDEF());
-            ItemSPD.Add(m_lSlot[i].item.getSpeed());
+            ItemHP.Add(m_lSlot[i].item.getHP());
+            ItemMP.Add(m_lSlot[i].item.getMP());
             ItemSprite.Add(m_lSlot[i].item.getItemSprite());
             ItemMesh.Add(m_lSlot[i].item.getItemMesh());
             ItemMaterial.Add(m_lSlot[i].item.getItemMaterial());
             ItemType.Add((int)m_lSlot[i].item.getTYP());
 
         }
-        SLManager.Instance.InvetoryData = new GameData(Gold,ItemID, ItemName, ItemATK, ItemDEF, ItemSPD, ItemSprite,ItemMesh,ItemMaterial, ItemType);
+        SLManager.Instance.InvetoryData = new GameData(Gold,ItemID, ItemName, ItemATK, ItemDEF, ItemHP, ItemMP, ItemSprite,ItemMesh,ItemMaterial, ItemType);
         SLManager.Instance._save();
     }
 
