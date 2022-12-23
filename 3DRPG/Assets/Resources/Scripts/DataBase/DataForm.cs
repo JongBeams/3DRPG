@@ -401,6 +401,10 @@ public class ItemData : CharData
     public string Mesh;
     public string Material;
 
+    public int BG;
+    public int SG;
+
+
     public ItemData()
     {
         ID = 0;
@@ -413,9 +417,11 @@ public class ItemData : CharData
         Mesh="";
         Material="";
         TYP = 0;
+        BG = 0;
+        SG = 0;
     }
 
-    public ItemData(int _ID, string _Name, int _ATK, int _DEF, int _HP,int _MP, string _ItemSprite, string _Mesh, string _Material, int _ItemType)
+    public ItemData(int _ID, string _Name, int _ATK, int _DEF, int _HP,int _MP, string _ItemSprite, string _Mesh, string _Material, int _ItemType,int _BG,int _SG)
     {
         ID = _ID;
         Name = _Name;
@@ -427,6 +433,8 @@ public class ItemData : CharData
         Mesh = _Mesh;
         Material = _Material;
         TYP = _ItemType;
+        BG = _BG;
+        SG = _SG;
     }
 
     public string getItemSprite()

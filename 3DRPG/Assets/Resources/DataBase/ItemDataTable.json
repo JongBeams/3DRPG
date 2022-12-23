@@ -9,7 +9,9 @@
     "IMG": "",
     "TYP": 0,
     "Mesh": "",
-    "Material": ""
+    "Material": "",
+    "BG": 0,
+    "SG": 0
   },
   {
     "ID": 1,
@@ -21,7 +23,9 @@
     "IMG": "Sprites/Sword",
     "TYP": 1,
     "Mesh": "Mesh/Sword",
-    "Material": "Mesh/Materials/Weapons"
+    "Material": "Mesh/Materials/Weapons",
+    "BG": 100,
+    "SG": 50
   },
   {
     "ID": 2,
@@ -31,8 +35,24 @@
     "HP": 0,
     "MP": 0,
     "IMG": "Sprites/Shield",
-    "TYP": 2,
+    "TYP": 1,
     "Mesh": "Mesh/Shield",
-    "Material": "Mesh/Materials/Weapons"
+    "Material": "Mesh/Materials/Weapons",
+    "BG": 150,
+    "SG": 75
+  },
+  {
+    "ID": 3,
+    "Name": "체력회복약",
+    "ATK": 0,
+    "DEF": 0,
+    "HP": 10,
+    "MP": 0,
+    "IMG": "Sprites/Potion",
+    "TYP": 2,
+    "Mesh": "Mesh/Potion_Health",
+    "Material": "Mesh/Materials/Potions",
+    "BG": 10,
+    "SG": 5
   }
 ]

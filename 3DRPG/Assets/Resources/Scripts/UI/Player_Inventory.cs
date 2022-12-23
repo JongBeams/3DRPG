@@ -171,7 +171,7 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
         for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
         {
 
-            m_lSlot[i].GetComponent<ItemSlot>().item=new ItemData(GD.ItemID[i], GD.ItemName[i], GD.ItemATK[i], GD.ItemDEF[i], GD.ItemHP[i], GD.ItemMP[i], GD.ItemSprite[i], GD.ItemMesh[i], GD.ItemMaterial[i], GD.ItemType[i]);
+            m_lSlot[i].GetComponent<ItemSlot>().item=new ItemData(GD.ItemID[i], GD.ItemName[i], GD.ItemATK[i], GD.ItemDEF[i], GD.ItemHP[i], GD.ItemMP[i], GD.ItemSprite[i], GD.ItemMesh[i], GD.ItemMaterial[i], GD.ItemType[i], GD.BuyGoid[i], GD.SellGold[i]);
             ItemImageChange(m_lSlot[i].transform);
         }
     }
@@ -189,6 +189,8 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
         List<string> ItemMesh = new List<string>();
         List<string> ItemMaterial = new List<string>();
         List<int> ItemType = new List<int>();
+        List<int> BuyGold = new List<int>();
+        List<int> SellGold = new List<int>();
 
 
         for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
@@ -205,7 +207,7 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
             ItemType.Add((int)m_lSlot[i].item.getTYP());
 
         }
-        SLManager.Instance.InvetoryData = new GameData(Gold,ItemID, ItemName, ItemATK, ItemDEF, ItemHP, ItemMP, ItemSprite,ItemMesh,ItemMaterial, ItemType);
+        SLManager.Instance.InvetoryData = new GameData(Gold,ItemID, ItemName, ItemATK, ItemDEF, ItemHP, ItemMP, ItemSprite,ItemMesh,ItemMaterial, ItemType, BuyGold,SellGold);
         SLManager.Instance._save();
     }
 
