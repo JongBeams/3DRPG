@@ -2,16 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class MainScenceManager : MonoBehaviour
 {
 
 
-    public void GameStart()
+    public void newGameStart()
     {
+        PlayerPrefs.SetInt("GameSet",0);
         SceneManager.LoadScene("VillageScene");
     }
-
+    public void ContinueGameStart()
+    {
+        if (File.Exists(Application.dataPath + "/Save/InventoryData.json"))
+        {
+            PlayerPrefs.SetInt("GameSet", 1);
+            SceneManager.LoadScene("VillageScene");
+        }
+        else{
+            Debug.LogError(Application.dataPath + "/Save/InventoryData.json");
+            Debug.LogError(File.Exists(Application.dataPath + "/Save/InventoryData.json"));
+        }
+        
+    }
 
     public void SetResolution()
     {

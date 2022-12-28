@@ -177,7 +177,6 @@ public class GameManager : MonoSingleton<GameManager>
         if (UIObj == null)
         {
 
-
             if ( objPlayer != null || objPlayer.activeSelf != false)
             {
                 Char_Status CS = objPlayer.GetComponent<Char_Status>();

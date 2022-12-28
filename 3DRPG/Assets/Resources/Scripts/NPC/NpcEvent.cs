@@ -9,14 +9,15 @@ public class NpcEvent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NS = new QuestNPC();
-        NS.EventUI = SelectSceneManager.Instance.objEnemySelectUI;
-        Debug.Log(NS.EventUI);
+        //NS = new QuestNPC();
+        //NS.EventUI = SelectSceneManager.Instance.objEnemySelectUI;
+        //Debug.Log(NS.EventUI);
     }
 
-    public void Set(NPCState _NS)
+    public void Set(NPCState _NS,GameObject _EventUI)
     {
         NS = _NS;
+        NS.EventUI = _EventUI;
     }
 
 

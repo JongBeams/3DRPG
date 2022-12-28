@@ -37,6 +37,9 @@ public class SelectSceneManager : MonoBehaviour
     public Text EnemyName;
     public GameObject objEnemySelectUI;
 
+    [Header("NPC")]
+    public GameObject[] objNPC;
+
 
     private void Awake()
     {
@@ -61,11 +64,32 @@ public class SelectSceneManager : MonoBehaviour
 
         Player_Inventory.Instance.RemoteStart();
 
-        Player_Inventory.Instance.InventoryLoad();
 
+        if (PlayerPrefs.GetInt("GameSet")==0) {
+            Player_Inventory.Instance.InventorySave();
+        }
+        else if(PlayerPrefs.GetInt("GameSet") == 1)
+        {
+            Player_Inventory.Instance.InventoryLoad();
+        }
+
+        TradeUI.Instance.RemoteStart();
 
         GameManager.Instance.GetInstancePlayerChar(new Vector3 (0, 0, 0));
+
+        setNPC();
     }
+
+    void setNPC()
+    {
+        objNPC[0].GetComponent<NpcEvent>().NS = new QuestNPC();
+        objNPC[0].GetComponent<NpcEvent>().NS.EventUI = objEnemySelectUI;
+
+        objNPC[1].GetComponent<NpcEvent>().NS = new TradeNPC();
+        objNPC[1].GetComponent<NpcEvent>().NS.EventUI = TradeUI.Instance.objInventory;
+    }
+
+
 
 
     void SetCharSelectUI()

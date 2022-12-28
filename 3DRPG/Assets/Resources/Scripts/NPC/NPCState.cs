@@ -41,11 +41,15 @@ public class QuestNPC : NPCState
 
 public class TradeNPC : NPCState
 {
+
+    public List<int> ItemList = new List<int>();
+
     public override void ClickEvent()
     {
         if (EventUI.activeSelf == false)
         {
             EventUI.SetActive(true);
+            Player_Inventory.Instance.objInventory.SetActive(true);
         }
 
     }
