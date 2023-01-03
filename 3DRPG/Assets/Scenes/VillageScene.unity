@@ -1207,9 +1207,41 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2035629368078175184, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035629368078175184, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035629368078175184, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1666100021}
+    - target: {fileID: 2035629368078175184, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035629368078175184, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Trading
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035629368078175184, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TradeUI, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2035629368078175184, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3136358866864127483, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
       propertyPath: m_Name
       value: TradeShop
+      objectReference: {fileID: 0}
+    - target: {fileID: 3136358866864127483, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7352259096465212291, guid: 5bf0ffc80dcc4d5408109a6811c08603, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1485,8 +1517,8 @@ MonoBehaviour:
   hor: 2
   TradeItem: {fileID: 0}
   buttontext: {fileID: 231105055}
-  n_bBuyItem: 0
-  n_bSellItem: 0
+  m_bBuyItem: 0
+  m_bSellItem: 0
   objInventory: {fileID: 2003841907}
 --- !u!114 &1697414236 stripped
 MonoBehaviour:

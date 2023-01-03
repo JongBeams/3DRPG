@@ -176,13 +176,7 @@ public class InGameSceneManager : MonoBehaviour
             Target.text = "Target : " + objEnemy.GetComponent<Char_Status>().objTarget.GetComponent<Char_Status>().getName()
                 + "\n NextPattern : " + objEnemy.GetComponent<Char_Status>().getCS();
 
-        //Gold
-        if (Player_Inventory.Instance.objInventory.transform.GetChild(3).gameObject.activeSelf == true)
-        {
-            //Debug.LogError(Player_Inventory.Instance.objInventory.transform.GetChild(3).gameObject);
-            //Debug.LogError(Player_Inventory.Instance.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text);
-            Player_Inventory.Instance.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Gold : " + GameManager.Instance.m_nGold;
-        }
+        
     }
 
 

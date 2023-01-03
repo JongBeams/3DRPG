@@ -169,7 +169,17 @@ public class GameManager : MonoSingleton<GameManager>
 
 
 
-
+    void UpdateUI()
+    {
+        //Gold
+        if (Player_Inventory.Instance.objInventory.activeSelf == true)
+        {
+            //Debug.LogError(Player_Inventory.Instance.objInventory.transform.GetChild(3).gameObject);
+            //Debug.Log(Player_Inventory.Instance.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text);
+            //Debug.Log("Check");
+            Player_Inventory.Instance.objInventory.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = "Gold : " + GameManager.Instance.m_nGold;
+        }
+    }
 
 
     void CtrlPlayer()
@@ -331,7 +341,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             if (DragingItem != null)
             {
-                if (UIObj.tag != "ItemSlot")
+                if (UIObj == null || UIObj.tag != "ItemSlot")
                 {
                     DragingItemSprite.transform.parent = DragingItem.transform;
                     DragingItemSprite.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
@@ -402,6 +412,8 @@ public class GameManager : MonoSingleton<GameManager>
         CtrlPlayer();
         CtrlUI();
         CtrlObjEvnet();
+
+        UpdateUI();
 
         //Debug.DrawLine(objPlayer.transform.position, objPlayer.GetComponent<Char_Dynamics>().getStartPos());
 

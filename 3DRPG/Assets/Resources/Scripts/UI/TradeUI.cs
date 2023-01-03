@@ -23,9 +23,9 @@ public class TradeUI : MonoBehaviour
 
     public TextMeshProUGUI buttontext;
 
-    public bool n_bBuyItem = false;
+    public bool m_bBuyItem = false;
 
-    public bool n_bSellItem = false;
+    public bool m_bSellItem = false;
 
     public GameObject objInventory;
 
@@ -76,7 +76,7 @@ public class TradeUI : MonoBehaviour
 
         AddItem(3);
         //AddItem(2);
-
+        objInventory.SetActive(false);
     }
 
 
@@ -115,58 +115,73 @@ public class TradeUI : MonoBehaviour
     }
 
 
-    void ClickItem()
+    public void ClickItem()
     {
         if (GameManager.Instance.UIObj != null)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if (GameManager.Instance.UIObj.tag == "TItemSlot")
+                if (GameManager.Instance.UIObj.tag == "TItemSlot"&& GameManager.Instance.UIObj.GetComponent<ItemSlot>().item.getTYP()!=0)
                 {
-                    if (GameManager.Instance.UIObj.GetComponent<ItemSlot>().item.getID() != 0)//NullReference
+                    //Debug.Log(GameManager.Instance.UIObj.transform);
+                    if (TradeItem == GameManager.Instance.UIObj.transform)
                     {
+                        TradeItem = null;
+                        m_bBuyItem = false;
+                        buttontext.GetComponent<TextMeshProUGUI>().text = "Trade";
+                    }
+                    else
+                    {
+                        TradeItem = GameManager.Instance.UIObj.transform;
+                        m_bBuyItem = true;
+                        m_bSellItem = false;
+                        buttontext.GetComponent<TextMeshProUGUI>().text = "BUY";
+                    }
 
-                        //Debug.Log(GameManager.Instance.UIObj.transform.parent);
-                        //Debug.Log(this.gameObject.transform);
-                        if (GameManager.Instance.UIObj.transform.parent == this.gameObject.transform)
-                        {
-                            //Debug.Log(GameManager.Instance.UIObj.transform);
-                            if (TradeItem == GameManager.Instance.UIObj.transform)
-                            {
-                                TradeItem = null;
-                                n_bBuyItem = false;
-                                buttontext.GetComponent<Text>().text = "T\nr\na\nd\ne";
-                            }
-                            else
-                            {
-                                TradeItem = GameManager.Instance.UIObj.transform;
-                                n_bBuyItem = true;
-                                n_bSellItem = false;
-                                buttontext.GetComponent<Text>().text = "B\nU\nY";
-                            }
-                        }
-                        else
-                        {
-                            if (TradeItem == GameManager.Instance.UIObj.transform)
-                            {
-                                TradeItem = null;
-                                n_bSellItem = false;
-                                buttontext.GetComponent<Text>().text = "T\nr\na\nd\ne";
-                            }
-                            else
-                            {
-                                TradeItem = GameManager.Instance.UIObj.transform;
-                                n_bSellItem = true;
-                                n_bBuyItem = false;
-                                buttontext.GetComponent<Text>().text = "S\ne\nl\nl";
-                            }
-                        }
+                }
+
+
+                if (GameManager.Instance.UIObj.tag == "ItemSlot" && GameManager.Instance.UIObj.GetComponent<ItemSlot>().item.getTYP() != 0)
+                {
+                    if (TradeItem == GameManager.Instance.UIObj.transform)
+                    {
+                        TradeItem = null;
+                        m_bSellItem = false;
+                        buttontext.GetComponent<TextMeshProUGUI>().text = "Trade";
+                    }
+                    else
+                    {
+                        TradeItem = GameManager.Instance.UIObj.transform;
+                        m_bSellItem = true;
+                        m_bBuyItem = false;
+                        buttontext.GetComponent<TextMeshProUGUI>().text = "Sell";
                     }
                 }
 
             }
 
 
+        }
+    }
+
+
+    public void Trading()
+    {
+        if (m_bBuyItem)
+        {
+            if (GameManager.Instance.m_nGold >= TradeItem.gameObject.GetComponent<ItemSlot>().item.BG)
+            {
+                Player_Inventory.Instance.AddItem(TradeItem.gameObject.GetComponent<ItemSlot>().item.getID());
+                GameManager.Instance.m_nGold -= TradeItem.gameObject.GetComponent<ItemSlot>().item.BG;
+            }
+            
+            
+        }
+        if (m_bSellItem)
+        {
+            GameManager.Instance.m_nGold += TradeItem.gameObject.GetComponent<ItemSlot>().item.SG;
+            Player_Inventory.Instance.RemoveItem(TradeItem.gameObject.GetComponent<ItemSlot>().m_nSlotNum);
+            TradeItem = null;
         }
     }
 

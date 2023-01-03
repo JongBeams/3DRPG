@@ -78,6 +78,8 @@ public class SelectSceneManager : MonoBehaviour
         GameManager.Instance.GetInstancePlayerChar(new Vector3 (0, 0, 0));
 
         setNPC();
+
+        
     }
 
     void setNPC()
@@ -268,6 +270,7 @@ public class SelectSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        TradeUI.Instance.ClickItem();
         //PlayerName.text = DBManager.PlayerData[CharID[0]].getName();
         //PartnerName[0].text = DBManager.PartnerData[CharID[1]].getName();
         //PartnerName[1].text = DBManager.PartnerData[CharID[2]].getName();
