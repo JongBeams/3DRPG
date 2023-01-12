@@ -182,6 +182,8 @@ public class TradeUI : MonoBehaviour
             GameManager.Instance.m_nGold += TradeItem.gameObject.GetComponent<ItemSlot>().item.SG;
             Player_Inventory.Instance.RemoveItem(TradeItem.gameObject.GetComponent<ItemSlot>().m_nSlotNum);
             TradeItem = null;
+            m_bSellItem = false;
+            buttontext.GetComponent<TextMeshProUGUI>().text = "Trade";
         }
     }
 

@@ -171,6 +171,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     void UpdateUI()
     {
+
         //Gold
         if (Player_Inventory.Instance.objInventory.activeSelf == true)
         {
@@ -370,7 +371,11 @@ public class GameManager : MonoSingleton<GameManager>
         if (Input.GetMouseButtonDown(1))
         {
 
-
+            if (UIObj != null && UIObj.tag == "ItemSlot"&& UIObj.GetComponent<ItemSlot>().item.getTYP()==2)
+            {
+                objPlayer.GetComponent<Char_Status>().HealingHP(UIObj.GetComponent<ItemSlot>().item.getHP());
+                Player_Inventory.Instance.RemoveItem(UIObj.GetComponent<ItemSlot>().m_nSlotNum);
+            }
 
         }
 

@@ -92,7 +92,29 @@ public class SelectSceneManager : MonoBehaviour
     }
 
 
+    void UpdateUI()
+    {
+        Char_Status CS = GameManager.Instance.objPlayer.GetComponent<Char_Status>();
 
+        //Player
+        PlayerHPBar.value = CS.getHP();
+        PlayerMPBar.value = CS.getMP();
+        PlayerShieldBar.value = CS.getIdentityPoint();
+        PlayerHPBar.maxValue = CS.getHPMax();
+        PlayerMPBar.maxValue = CS.getMPMax();
+        PlayerShieldBar.maxValue = CS.getIdentityPointMax();
+
+        PlayerSkillCoolTime[0].value = 100 - CS.getSkill1CoolTimer() / 5 * 100;
+        PlayerSkillCoolTime[1].value = 100 - CS.getSkill2CoolTimer() / 7 * 100;
+        PlayerSkillCoolTime[2].value = 100 - CS.getSkill3CoolTimer() / 15 * 100;
+        PlayerSkillCoolTime[3].value = 100 - CS.getSkill4CoolTimer() / 5 * 100;
+
+        PlayerSkillCoolTime[0].maxValue = 100;
+        PlayerSkillCoolTime[1].maxValue = 100;
+        PlayerSkillCoolTime[2].maxValue = 100;
+        PlayerSkillCoolTime[3].maxValue = 100;
+
+    }
 
     void SetCharSelectUI()
     {
@@ -271,6 +293,8 @@ public class SelectSceneManager : MonoBehaviour
     void Update()
     {
         TradeUI.Instance.ClickItem();
+
+        UpdateUI();
         //PlayerName.text = DBManager.PlayerData[CharID[0]].getName();
         //PartnerName[0].text = DBManager.PartnerData[CharID[1]].getName();
         //PartnerName[1].text = DBManager.PartnerData[CharID[2]].getName();

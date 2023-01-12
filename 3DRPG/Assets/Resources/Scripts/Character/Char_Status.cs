@@ -19,7 +19,7 @@ public class Char_Status : MonoBehaviour
     int m_nDEF = 0;
     //HP
     public int m_nPlayerHP = 10;
-    int m_nPlayerHPMax = 10;
+    public int m_nPlayerHPMax = 10;
     //MP
     int m_nPlayerMP = 100;
     int m_nPlayerMPMax = 100;

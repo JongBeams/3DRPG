@@ -14,8 +14,15 @@
       <FileName>Assets\Resources\Scripts\Character\Char_Dynamics.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Char_Status" Collapsed="true">
+  <Class Name="Char_Status">
     <Position X="14.25" Y="7.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="Char_Status.Del" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Resources\Scripts\Character\Char_Status.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
     <TypeIdentifier>
       <HashCode>BQUCgADxADgCKSSAXACMAOgEDBXQ5CQBAQBecEqA8g0=</HashCode>
       <FileName>Assets\Resources\Scripts\Character\Char_Status.cs</FileName>
@@ -80,7 +87,7 @@
   <Class Name="ItemData" Collapsed="true">
     <Position X="5.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEQAAAAAkAAAAAAAAAAQAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <HashCode>AEQCAAEAkAAAAAAAAAAQAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
       <FileName>Assets\Resources\Scripts\DataBase\DataForm.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -94,7 +101,7 @@
   <Class Name="GameManager" Collapsed="true">
     <Position X="12.5" Y="6" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAQAAABAASAQACAEABhAAASIBEAAygBCQAACgCAAESA=</HashCode>
+      <HashCode>QAQQAABAASAQACAEABhAAASIBEAAygBCQAACgCAAESA=</HashCode>
       <FileName>Assets\Resources\Scripts\Manager\GameManager.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -108,21 +115,21 @@
   <Class Name="MainScenceManager" Collapsed="true">
     <Position X="17.75" Y="0.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAACACAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
+      <HashCode>BAQAAQAAACAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAA=</HashCode>
       <FileName>Assets\Resources\Scripts\Manager\MainScenceManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="SelectSceneManager" Collapsed="true">
     <Position X="15.5" Y="0.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAQAwkBAACJCIAAIAAgAAAIgkAAACQBAQAAAACAAgEE=</HashCode>
+      <HashCode>AAQQwkBAACJCIgAJAAgAAAIgkAAACQBAQAAAACAAgEE=</HashCode>
       <FileName>Assets\Resources\Scripts\Manager\SelectSceneManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="GameData" Collapsed="true">
     <Position X="1.25" Y="4.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAQAAAAAAgABAAAAAAAAAIAIAAAAABAAQAgE=</HashCode>
+      <HashCode>AAAEAAAgAQAAAAAAgABAAAAAAAAgIAAAAgAABAAQAkE=</HashCode>
       <FileName>Assets\Resources\Scripts\Manager\SLManager.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -157,7 +164,7 @@
   <Class Name="TradeNPC">
     <Position X="7.75" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AARAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Assets\Resources\Scripts\NPC\NPCState.cs</FileName>
     </TypeIdentifier>
   </Class>
