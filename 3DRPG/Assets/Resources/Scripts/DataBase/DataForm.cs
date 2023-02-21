@@ -161,6 +161,307 @@ public class SkillData
     }
 }
 
+/*
+[System.Serializable]
+public class CharData {
+    //ID
+    public int ID;
+    //이름
+    public string Name;
+    //타입 구분
+    public int TYP;
+
+
+}
+
+[System.Serializable]
+public class PlayerCharData : CharData {
+
+    //게임 오브젝트 프리펩 위치
+    public string PFL;
+    //공격력
+    public int ATK;
+    //방어력
+    public int DEF;
+    //HP
+    public int HP;
+    //MP
+    public int MP;
+    //이동속도
+    public float SPD;
+    //마나 회복 속도
+    public float MPRP;
+
+    //캐릭터 스킬 ID
+    // AI 캐릭터, 플레이어 사용
+    public int S0ID;
+    // 적 유닛, AI 캐릭터, 플레이어 사용
+    public int S1ID;
+    public int S2ID;
+    // 적 유닛, 플레이어 사용
+    public int S3ID;
+    public int S4ID;
+    // 플레이어 사용
+    public int ISID;
+
+    //플레이어 고유 스킬
+    public int ISP;
+    public int ISPRP;
+    public float ISPRT;
+
+    public PlayerCharData()
+    {
+        ID = 0;
+        Name = "Empty";
+        ATK = 0;
+        DEF = 0;
+        HP = 0;
+        MP = 0;
+        SPD = 0;
+        MPRP = 0;
+        TYP = 0;
+        S0ID = 0;
+        S1ID = 0;
+        S2ID = 0;
+        S3ID = 0;
+        S4ID = 0;
+        ISID = 0;
+        ISP = 0;
+        ISPRP = 0;
+        ISPRT = 0;
+        PFL = "";
+    }
+
+
+
+    public PlayerCharData(
+        int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer,
+        int _AttackID, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID,
+        int _IdentitySkillID, int _IdentitySkillPoint, int _IdentitySkillPointRecovery, float _IdentityPointRecoveryTime, string _ObjPrefab)
+    {
+        ID = _ID;
+        Name = _Name;
+        ATK = _ATK;
+        DEF = _DEF;
+        HP = _HP;
+        MP = _MP;
+        SPD = _Speed;
+        MPRP = _MP_Recovery;
+        TYP = _Layer;
+        S0ID = _AttackID;
+        S1ID = _Skill1ID;
+        S2ID = _Skill2ID;
+        S3ID = _Skill3ID;
+        S4ID = _Skill4ID;
+        ISID = _IdentitySkillID;
+        ISP = _IdentitySkillPoint;
+        ISPRP = _IdentitySkillPointRecovery;
+        ISPRT = _IdentityPointRecoveryTime;
+        PFL = _ObjPrefab;
+    }
+
+
+
+}
+
+[System.Serializable]
+public class PartnerCharData : CharData
+{
+    //게임 오브젝트 프리펩 위치
+    public string PFL;
+    //공격력
+    public int ATK;
+    //방어력
+    public int DEF;
+    //HP
+    public int HP;
+    //MP
+    public int MP;
+    //이동속도
+    public float SPD;
+    //마나 회복 속도
+    public float MPRP;
+
+    //캐릭터 스킬 ID
+    // AI 캐릭터, 플레이어 사용
+    public int S0ID;
+    // 적 유닛, AI 캐릭터, 플레이어 사용
+    public int S1ID;
+    public int S2ID;
+
+    public PartnerCharData()
+    {
+        ID = 0;
+        Name = "Empty";
+        ATK = 0;
+        DEF = 0;
+        HP = 0;
+        MP = 0;
+        SPD = 0;
+        MPRP = 0;
+        TYP = 0;
+        S0ID = 0;
+        S1ID = 0;
+        S2ID = 0;
+        PFL = "";
+    }
+
+
+    public PartnerCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer, int _AttackID, int _Skill1ID, int _Skill2ID, string _ObjPrefab)
+    {
+        ID = _ID;
+        Name = _Name;
+        ATK = _ATK;
+        DEF = _DEF;
+        HP = _HP;
+        MP = _MP;
+        SPD = _Speed;
+        MPRP = _MP_Recovery;
+        TYP = _Layer;
+        S0ID = _AttackID;
+        S1ID = _Skill1ID;
+        S2ID = _Skill2ID;
+        PFL = _ObjPrefab;
+    }
+
+}
+
+
+[System.Serializable]
+public class EnemyCharData : CharData
+{
+    //게임 오브젝트 프리펩 위치
+    public string PFL;
+    //공격력
+    public int ATK;
+    //방어력
+    public int DEF;
+    //HP
+    public int HP;
+    //이동속도
+    public float SPD;
+
+
+    //캐릭터 스킬 ID
+    // 적 유닛, AI 캐릭터, 플레이어 사용
+    public int S1ID;
+    public int S2ID;
+    // 적 유닛, 플레이어 사용
+    public int S3ID;
+    public int S4ID;
+    // 플레이어 사용
+    public int ISID;
+
+    public EnemyCharData()
+    {
+        ID = 0;
+        Name = "Empty";
+        ATK = 0;
+        DEF = 0;
+        HP = 0;
+        SPD = 0;
+        TYP = 0;
+        S1ID = 0;
+        S2ID = 0;
+        S3ID = 0;
+        S4ID = 0;
+        PFL = "";
+
+    }
+
+    public EnemyCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, float _Speed, int _Layer, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID, string _ObjPrefab)
+    {
+        ID = _ID;
+        Name = _Name;
+        ATK = _ATK;
+        DEF = _DEF;
+        HP = _HP;
+        SPD = _Speed;
+        TYP = _Layer;
+        S1ID = _Skill1ID;
+        S2ID = _Skill2ID;
+        S3ID = _Skill3ID;
+        S4ID = _Skill4ID;
+        PFL = _ObjPrefab;
+
+    }
+
+
+
+}
+
+
+[System.Serializable]
+public class ItemData : CharData
+{
+    //공격력
+    public int ATK;
+    //방어력
+    public int DEF;
+    //HP
+    public int HP;
+    //MP
+    public int MP;
+
+    //이미지
+    public string IMG;
+    public string Mesh;
+    public string Material;
+
+    //가격
+    public int BG;
+    public int SG;
+
+
+    public ItemData()
+    {
+        ID = 0;
+        Name = "Empty";
+        ATK = 0;
+        DEF = 0;
+        HP = 0;
+        MP = 0;
+        IMG = "";
+        Mesh = "";
+        Material = "";
+        TYP = 0;
+        BG = 0;
+        SG = 0;
+    }
+
+    public ItemData(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, string _ItemSprite, string _Mesh, string _Material, int _ItemType, int _BG, int _SG)
+    {
+        ID = _ID;
+        Name = _Name;
+        ATK = _ATK;
+        DEF = _DEF;
+        HP = _HP;
+        MP = _MP;
+        IMG = _ItemSprite;
+        Mesh = _Mesh;
+        Material = _Material;
+        TYP = _ItemType;
+        BG = _BG;
+        SG = _SG;
+    }
+
+    public string getItemSprite()
+    {
+        return IMG;
+    }
+    public string getItemMesh()
+    {
+        return Mesh;
+    }
+    public string getItemMaterial()
+    {
+        return Material;
+    }
+
+}
+*/
+
+
 
 [System.Serializable]
 public class CharData

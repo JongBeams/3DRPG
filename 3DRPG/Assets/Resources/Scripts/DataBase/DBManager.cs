@@ -58,16 +58,16 @@ public class DBManager : MonoSingleton<DBManager>
     //람다식 + Linq 공부할것
     public static PlayerCharData GetPlayerStatusByIdx(int idx)
     {
-        return DeepCopy(PlayerData.Find(x => x.getID() == idx));
+        return DeepCopy(PlayerData.Find(x => x.ID == idx));
     }
 
     public static PartnerCharData GetPartnerStatusByIdx(int idx)
     {
-        return DeepCopy(PartnerData.Find(x => x.getID() == idx));
+        return DeepCopy(PartnerData.Find(x => x.ID == idx));
     }
     public static EnemyCharData GetEnemyStatusByIdx(int idx)
     {
-        return DeepCopy(EnemyData.Find(x => x.getID() == idx));
+        return DeepCopy(EnemyData.Find(x => x.ID == idx));
     }
     public static SkillData GetSkillStatusByIdx(int idx)
     {
@@ -75,7 +75,7 @@ public class DBManager : MonoSingleton<DBManager>
     }
     public static ItemData GetItemStatusByIdx(int idx)
     {
-        return DeepCopy(ItemData.Find(x => x.getID() == idx));
+        return DeepCopy(ItemData.Find(x => x.ID == idx));
     }
     public static ItemDropData GetItemDropDataByIdx(int idx)
     {

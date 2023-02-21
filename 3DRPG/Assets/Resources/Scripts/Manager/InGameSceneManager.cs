@@ -191,15 +191,15 @@ public class InGameSceneManager : MonoBehaviour
         if (objEnemy.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death)
         {
             m_bGameEnd = true;
-            objGameEnd.SetActive(true);
-            objGameEndMessage.text = "Game Clear";
+            //objGameEnd.SetActive(true);
+            //objGameEndMessage.text = "Game Clear";
         }
 
     }
 
     public void GoVillage()
     {
-
+        Player_Inventory.Instance.InventorySave();
         SceneManager.LoadScene("VillageScene");
 
     }
@@ -226,5 +226,13 @@ public class InGameSceneManager : MonoBehaviour
         UpdateUI();
 
         GameEndText();
+
+
+        if (m_bGameEnd &&Input.GetKeyDown(KeyCode.B))
+        {
+            GoVillage();
+        }
+
+
     }
 }
