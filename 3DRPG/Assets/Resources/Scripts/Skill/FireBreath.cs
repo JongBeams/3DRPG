@@ -5,12 +5,10 @@ using System.Linq;
 
 public class FireBreath : MonoBehaviour
 {
-    int m_nDamage = 0;
+    Char_Base Attacker;
+
+    int SkillID;
     float m_fDis = 0f;
-    float m_fMaxDis = 5;
-    float m_fSpeed = 3;
-    int m_nLayerMask = 0;
-    float m_fwidth = 0;
 
     public List<GameObject> Hitobj = new List<GameObject>();
 
@@ -20,23 +18,19 @@ public class FireBreath : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-
+        
         Gizmos.DrawRay(this.transform.position + (transform.right), transform.forward * m_fDis);
         Gizmos.DrawRay(this.transform.position + (-transform.right), transform.forward * m_fDis);
-
-        Gizmos.DrawRay(this.transform.position + (transform.forward * m_fDis) + (-transform.right* m_fwidth / 2), transform.right * m_fwidth);
+        Gizmos.DrawRay(this.transform.position + (transform.forward * m_fDis) + (-transform.right* DBManager.SkillData[SkillID].SR2 / 2), transform.right * DBManager.SkillData[SkillID].SR2);
     }
 
-    public void Setting( int _Damage, float _Speed, float _MaxDis, int _LayerMask,float _width)
+    public void Setting( Char_Base _attacker,int _SkillID)
     {
         if (FirstSetting)
         {
-            m_nDamage = _Damage;
-            m_fSpeed = _Speed;
+            Attacker = _attacker;
+            SkillID = _SkillID;
             FirstSetting = false;
-            m_fMaxDis= _MaxDis;
-            m_nLayerMask= _LayerMask;
-            m_fwidth = _width;
         }
 
 
@@ -51,16 +45,18 @@ public class FireBreath : MonoBehaviour
 
     void SetRaycast()
     {
-        if (m_fDis < m_fMaxDis)
+        SkillData sd = DBManager.SkillData[SkillID];
+
+        if (m_fDis < DBManager.SkillData[SkillID].SR1)
         {
             RaycastHit Hit;
 
-            int layerMask = m_nLayerMask;
+            int layerMask = Attacker.m_nTargetLayer[0];
 
 
-            if (Physics.Raycast(this.transform.position + (transform.forward * m_fDis) + (-transform.right * m_fwidth / 2), transform.right * m_fwidth, out Hit, 2, layerMask, QueryTriggerInteraction.Ignore) ||
-                Physics.Raycast(this.transform.position + (-transform.right * m_fwidth), transform.forward, out Hit, m_fDis, layerMask, QueryTriggerInteraction.Ignore) ||
-                Physics.Raycast(this.transform.position + (transform.right * m_fwidth), transform.forward, out Hit, m_fDis, layerMask, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(this.transform.position + (transform.forward * m_fDis) + (-transform.right * sd.SR2 / 2), transform.right * sd.SR2, out Hit, 2, layerMask, QueryTriggerInteraction.Ignore) ||
+                Physics.Raycast(this.transform.position + (-transform.right * sd.SR2), transform.forward, out Hit, m_fDis, layerMask, QueryTriggerInteraction.Ignore) ||
+                Physics.Raycast(this.transform.position + (transform.right * sd.SR2), transform.forward, out Hit, m_fDis, layerMask, QueryTriggerInteraction.Ignore))
             {
                 Hitobj.Add(Hit.collider.gameObject);
                 if (Hitobj.Count != Hitobj.Distinct().Count())
@@ -69,13 +65,14 @@ public class FireBreath : MonoBehaviour
                 }
                 else
                 {
-                    Hit.collider.gameObject.GetComponent<Char_Status>().delGetDamae(m_nDamage);
+                    Hit.collider.gameObject.GetComponent<Char_Base>().delGetDamage((int)(Attacker.CharStatus.ATK * sd.getSkillCeofficientPer1()));
                     Debug.Log("Hit");
                 }
-
+                //(int)(CharStatus.ATK * SkillDB.getSkillCeofficientPer1()), SkillDB.getSkillSpeed(),
+                //SkillDB.getSkillRange1(), SetTargetLayerMask(SkillDB.getTargetSelect()), SkillDB.getSkillRange2()
             }
 
-            m_fDis += m_fSpeed * Time.deltaTime;
+            m_fDis += sd.SSPD * Time.deltaTime;
         }
         else
         {

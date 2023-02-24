@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.AI;
 
 public class SelectSceneManager : MonoBehaviour
 {
@@ -78,8 +79,8 @@ public class SelectSceneManager : MonoBehaviour
         GameManager.Instance.GetInstancePlayerChar(new Vector3 (0, 0, 0));
 
         setNPC();
+        GameManager.Instance.m_nScreenIdx = SceneManager.GetActiveScene().buildIndex;
 
-        
     }
 
     void setNPC()
@@ -94,25 +95,25 @@ public class SelectSceneManager : MonoBehaviour
 
     void UpdateUI()
     {
-        Char_Status CS = GameManager.Instance.objPlayer.GetComponent<Char_Status>();
+        Char_Base CS = GameManager.Instance.objPlayer.GetComponent<Char_Base>();
 
         //Player
-        PlayerHPBar.value = CS.getHP();
-        PlayerMPBar.value = CS.getMP();
-        PlayerShieldBar.value = CS.getIdentityPoint();
-        PlayerHPBar.maxValue = CS.getHPMax();
-        PlayerMPBar.maxValue = CS.getMPMax();
-        PlayerShieldBar.maxValue = CS.getIdentityPointMax();
+        PlayerHPBar.value = CS.m_nPlayerHP;
+        PlayerMPBar.value = CS.m_nPlayerMP;
+        PlayerShieldBar.value = CS.m_nIdentityPoint;
+        PlayerHPBar.maxValue = CS.CharStatus.HP;
+        PlayerMPBar.maxValue = CS.CharStatus.MP;
+        PlayerShieldBar.maxValue = CS.CharStatus.ISP;
 
-        PlayerSkillCoolTime[0].value = 100 - CS.getSkill1CoolTimer() / 5 * 100;
-        PlayerSkillCoolTime[1].value = 100 - CS.getSkill2CoolTimer() / 7 * 100;
-        PlayerSkillCoolTime[2].value = 100 - CS.getSkill3CoolTimer() / 15 * 100;
-        PlayerSkillCoolTime[3].value = 100 - CS.getSkill4CoolTimer() / 5 * 100;
+        PlayerSkillCoolTime[0].value = 100f - CS.m_fSkillCoolTimer[1] / 5f * 100f;
+        PlayerSkillCoolTime[1].value = 100f - CS.m_fSkillCoolTimer[2] / 7f * 100f;
+        PlayerSkillCoolTime[2].value = 100f - CS.m_fSkillCoolTimer[3] / 15f * 100f;
+        PlayerSkillCoolTime[3].value = 100f - CS.m_fSkillCoolTimer[4] / 5f * 100f;
 
-        PlayerSkillCoolTime[0].maxValue = 100;
-        PlayerSkillCoolTime[1].maxValue = 100;
-        PlayerSkillCoolTime[2].maxValue = 100;
-        PlayerSkillCoolTime[3].maxValue = 100;
+        PlayerSkillCoolTime[0].maxValue = 100f;
+        PlayerSkillCoolTime[1].maxValue = 100f;
+        PlayerSkillCoolTime[2].maxValue = 100f;
+        PlayerSkillCoolTime[3].maxValue = 100f;
 
     }
 
@@ -124,22 +125,24 @@ public class SelectSceneManager : MonoBehaviour
             CharID[i] = 0;
         }
 
-        CharName[0].text = DBManager.PlayerData[CharID[0]].getName();
-        CharName[1].text = DBManager.PartnerData[CharID[0]].getName();
-        CharName[2].text = DBManager.PartnerData[CharID[1]].getName();
+        CharName[0].text = DBManager.PlayerData[CharID[0]].Name;
+        CharName[1].text = DBManager.PartnerData[CharID[0]].Name;
+        CharName[2].text = DBManager.PartnerData[CharID[1]].Name;
 
-        GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[0]].getObjPrefab()), new Vector3(0, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)) );
+        GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[0]].PFL), new Vector3(0, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)) );
+        Player.GetComponent<NavMeshAgent>().enabled = false;
         Player.transform.parent = objBackGround.transform;
         Player.transform.localPosition = new Vector3(-0.3f, 0, -1);
         Player.GetComponent<Rigidbody>().isKinematic = true;
         CharObj[0] = Player;
-        GameObject Partner1 = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[0]].getObjPrefab()), new Vector3(10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+        GameObject Partner1 = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[0]].PFL), new Vector3(10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+        Partner1.GetComponent<NavMeshAgent>().enabled = false;
         Partner1.transform.parent = objBackGround.transform;
         Partner1.transform.localPosition = new Vector3(0, 0, -1);
         Partner1.GetComponent<Rigidbody>().isKinematic = true;
         CharObj[1] = Partner1;
-        GameObject Partner2 = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[0]].getObjPrefab()), new Vector3(20, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
-
+        GameObject Partner2 = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[0]].PFL), new Vector3(20, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+        Partner2.GetComponent<NavMeshAgent>().enabled = false;
         Partner2.transform.parent = objBackGround.transform;
         Partner2.transform.localPosition = new Vector3(0.3f, 0, -1);
         Partner2.GetComponent<Rigidbody>().isKinematic = true;
@@ -149,7 +152,7 @@ public class SelectSceneManager : MonoBehaviour
 
         //Enemy
         EnemyID = 0;
-        EnemyName.text = DBManager.EnemyData[EnemyID].getName();
+        EnemyName.text = DBManager.EnemyData[EnemyID].Name;
         objEnemySelectUI.SetActive(false);
     }
 
@@ -186,13 +189,14 @@ public class SelectSceneManager : MonoBehaviour
                 {
                     CharID[ID]--;
                 }
-            GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[ID]].getObjPrefab()), new Vector3(ID, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[ID]].PFL), new Vector3(ID, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            Player.GetComponent<NavMeshAgent>().enabled = false;
             Player.transform.parent = objBackGround.transform;
             Player.transform.localPosition = new Vector3(-0.3f, 0, -1);
             Player.GetComponent<Rigidbody>().isKinematic = true;
             CharObj[ID] = Player;
 
-            CharName[ID].text = DBManager.PlayerData[CharID[ID]].getName();
+            CharName[ID].text = DBManager.PlayerData[CharID[ID]].Name;
         }
         else
         {
@@ -206,12 +210,13 @@ public class SelectSceneManager : MonoBehaviour
                 CharID[ID]--;
             }
             
-            GameObject Partner = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[ID]].getObjPrefab()), new Vector3(ID*10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            GameObject Partner = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[ID]].PFL), new Vector3(ID*10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            Partner.GetComponent<NavMeshAgent>().enabled = false;
             Partner.transform.parent = objBackGround.transform;
             Partner.transform.localPosition = new Vector3((ID - 1) * 0.3f, 0, -1);
             Partner.GetComponent<Rigidbody>().isKinematic = true;
             CharObj[ID] = Partner;
-            CharName[ID].text = DBManager.PartnerData[CharID[ID]].getName();
+            CharName[ID].text = DBManager.PartnerData[CharID[ID]].Name;
         }
 
         
@@ -235,13 +240,14 @@ public class SelectSceneManager : MonoBehaviour
                     CharID[ID]++;
                 }
 
-            GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[ID]].getObjPrefab()), new Vector3(ID, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            GameObject Player = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[CharID[ID]].PFL), new Vector3(ID, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            Player.GetComponent<NavMeshAgent>().enabled = false;
             Player.transform.parent = objBackGround.transform;
             Player.transform.localPosition = new Vector3(-0.3f, 0, -1);
             Player.GetComponent<Rigidbody>().isKinematic = true;
             CharObj[ID] = Player;
 
-            CharName[ID].text = DBManager.PlayerData[CharID[ID]].getName();
+            CharName[ID].text = DBManager.PlayerData[CharID[ID]].Name;
         }
         else
         {
@@ -254,12 +260,13 @@ public class SelectSceneManager : MonoBehaviour
                 {
                     CharID[ID]++;
                 }
-            GameObject Partner = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[ID]].getObjPrefab()), new Vector3(ID * 10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            GameObject Partner = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[CharID[ID]].PFL), new Vector3(ID * 10, 0, -1), Quaternion.Euler(new Vector3(0, 180, 0)));
+            Partner.GetComponent<NavMeshAgent>().enabled = false;
             Partner.transform.parent = objBackGround.transform;
             Partner.transform.localPosition = new Vector3((ID-1) * 0.3f, 0, -1);
             Partner.GetComponent<Rigidbody>().isKinematic = true;
             CharObj[ID] = Partner;
-            CharName[ID].text = DBManager.PartnerData[CharID[ID]].getName();
+            CharName[ID].text = DBManager.PartnerData[CharID[ID]].Name;
         }
     }
 
@@ -274,7 +281,7 @@ public class SelectSceneManager : MonoBehaviour
         {
             EnemyID--;
         }
-        EnemyName.text = DBManager.EnemyData[EnemyID].getName();
+        EnemyName.text = DBManager.EnemyData[EnemyID].Name;
     }
     public void NextEnemy()
     {
@@ -286,7 +293,7 @@ public class SelectSceneManager : MonoBehaviour
         {
             EnemyID++;
         }
-        EnemyName.text = DBManager.EnemyData[EnemyID].getName();
+        EnemyName.text = DBManager.EnemyData[EnemyID].Name;
     }
 
     // Update is called once per frame

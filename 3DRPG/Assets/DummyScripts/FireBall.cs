@@ -80,7 +80,7 @@ public class FireBall : MonoBehaviour
     //    {
     //        Burning.Stop();
     //        Explosion.Play();
-    //        collision.gameObject.GetComponent<Char_Status>().GetDamage(8);
+    //        collision.gameObject.GetComponent<Char_Base>().GetDamage(8);
     //        Destroy(this.gameObject, 1f);
 
     //    }
@@ -95,8 +95,8 @@ public class FireBall : MonoBehaviour
                 hit = true;
                 Burning.Stop();
                 Explosion.Play();
-                //other.gameObject.GetComponent<Char_Status>().GetDamage(Damage);
-                other.gameObject.GetComponent<Char_Status>().delGetDamae(Damage);
+                //other.gameObject.GetComponent<Char_Base>().GetDamage(Damage);
+                other.gameObject.GetComponent<Char_Base>().delGetDamage(Damage);
                 Destroy(this.gameObject, 1f);
 
             }
@@ -107,8 +107,8 @@ public class FireBall : MonoBehaviour
                 hit = true;
                 Burning.Stop();
                 Explosion.Play();
-                other.gameObject.GetComponent<Char_Status>().GetDamage(Damage);
-                other.gameObject.GetComponent<Char_Status>().delGetDamae(Damage);
+                other.gameObject.GetComponent<Char_Base>().GetDamage(Damage);
+                other.gameObject.GetComponent<Char_Base>().delGetDamage(Damage);
                 Destroy(this.gameObject, 1f);
 
             }

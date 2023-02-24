@@ -8,28 +8,7 @@ using TMPro;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    public enum CharState
-    {
-        Idle,
-        Move,
-        Attack,
-        IdentitySkill,
-        Skill1,
-        Skill2,
-        Skill3,
-        Skill4,
-        Hit,
-        Death,
-        Stay,
-        Delay,
-    }
-
-    public enum ItemType
-    {
-        Empty,
-        Wearable,
-        Expendalbe
-    }
+   
 
     
 
@@ -39,7 +18,6 @@ public class GameManager : MonoSingleton<GameManager>
     public Slider PlayerMPBar;
     public Slider PlayerShieldBar;
     public Slider[] PlayerSkillCoolTime;
-
 
 
     [Header("Mouse,Button")]
@@ -61,6 +39,10 @@ public class GameManager : MonoSingleton<GameManager>
     public bool OnUIScreen = false;
     public List<GameObject> m_lOnUI = new List<GameObject>();
 
+    [Header("Scenes")]
+    public int m_nScreenIdx;
+
+
     public void CallGameManager()
     {
         Debug.Log("CallGM");
@@ -70,7 +52,8 @@ public class GameManager : MonoSingleton<GameManager>
     // Start is called before the first frame update
     void Start()
     {
-        
+
+        m_nScreenIdx = SceneManager.GetActiveScene().buildIndex;
     }
 
 
@@ -86,20 +69,20 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void GetInstancePlayerChar(Vector3 Pos)
     {
-        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[0].getObjPrefab()), Pos, Quaternion.identity);
+        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[0].PFL), Pos, Quaternion.identity);
 
 
         objPlayer = PlayerObj;
 
 
-        objPlayer.GetComponent<Char_Status>().CharStatusSetting(DBManager.PlayerData[PlayerPrefs.GetInt("Player")]);
+        objPlayer.GetComponent<Char_Base>().CharStatus=(DBManager.PlayerData[PlayerPrefs.GetInt("Player")]);
 
 
-        objPlayer.GetComponent<Char_Status>().setItemSlotsNum(Player_Inventory.Instance.getPlayerSlot());
+        objPlayer.GetComponent<Char_Base>().itemSlots=new ItemSlot[Player_Inventory.Instance.getPlayerSlot()];
 
 
-        objPlayer.GetComponent<Char_Status>().setItemSlots(0, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor)]);
-        objPlayer.GetComponent<Char_Status>().setItemSlots(1, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + 1]);
+        objPlayer.GetComponent<Char_Base>().itemSlots[0] =Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor)];
+        objPlayer.GetComponent<Char_Base>().itemSlots[1]= Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + 1];
 
         Camera.main.GetComponent<CameraPos>().Target = objPlayer;
 
@@ -124,7 +107,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         //int m_nLayerMask = 1 << LayerMask.NameToLayer("Player");
         //m_nLayerMask = ~m_nLayerMask;
-        int m_nLayerMask = 1 << LayerMask.NameToLayer("Floor")| 1 << LayerMask.NameToLayer("NPC");
+        int m_nLayerMask = 1 << LayerMask.NameToLayer("Floor") | 1 << LayerMask.NameToLayer("NPC");
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -190,8 +173,7 @@ public class GameManager : MonoSingleton<GameManager>
 
             if ( objPlayer != null || objPlayer.activeSelf != false)
             {
-                Char_Status CS = objPlayer.GetComponent<Char_Status>();
-                Char_Dynamics CD = objPlayer.GetComponent<Char_Dynamics>();
+                Char_Base CS = objPlayer.GetComponent<Char_Base>();
 
                 //CS.SetObjTarget(objEnemy);
                 // 키 조작 조건
@@ -207,36 +189,38 @@ public class GameManager : MonoSingleton<GameManager>
                 이동 = 고유 같은 취급
                  */
 
-                if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move || CS.getCS() == CharState.IdentitySkill && UIObj == null)
+                if (CS.CS == CharState.Idle || CS.CS == CharState.Move || (CS.CS == CharState.Action&&CS.m_nActionIdx==5))
                 {
 
                     if (Input.GetKeyDown(KeyCode.Space))
                     {
-                        if (CS.getIdentityPoint() > 0)
+                        if (CS.m_nIdentityPoint > 0&& !CS.m_bSkillUsing[5])
                         {
-                            CD.setMovePoint(MBPoint);
-                            CD.SetCharStatus(CharState.IdentitySkill);
+                            CS.vecMovePoint =MBPoint;
+                            CS.m_nActionIdx = 5;
+                            CS.SetCharStatus(CharState.Action);
                         }
 
                     }
                     if (Input.GetKeyUp(KeyCode.Space))
                     {
-                        if (CS.getCS() == CharState.IdentitySkill)
+                        if (CS.m_bSkillUsing[5])
                         {
-                            CS.delGetDamae = CS.GetDamage;
-                            CD.SetCharStatus(CharState.Idle);
-                            CS.setIdentitySkillUsing(false);
+                            CS.delGetDamage = CS.GetDamage;
+                            CS.SetCharStatus(CharState.Idle);
+                            CS.m_bSkillUsing[5]=false;
                         }
                     }
 
 
                     if (Input.GetMouseButtonDown(1) && MBTarget.layer == LayerMask.NameToLayer("Floor"))
                     {
-                        CD.setMovePoint(MBPoint);
-                        if (CS.getCS() == CharState.Idle || CS.getCS() == CharState.Move && !CS.getIdentitySkillUsing())
+                        CS.vecMovePoint = MBPoint;
+                        if (CS.CS == CharState.Idle || CS.CS == CharState.Move)
                         {
-                            CD.SetCharStatus(CharState.Move);
+                            CS.SetCharStatus(CharState.Move);
                         }
+
 
                     }
 
@@ -244,51 +228,58 @@ public class GameManager : MonoSingleton<GameManager>
                     if (Input.GetMouseButtonDown(0))
                     {
 
-                        CD.setMovePoint(MBPoint);
-                        CS.SetObjTarget(MBTarget);
-                        CD.SetCharStatus(CharState.Attack);
+                        CS.vecMovePoint = MBPoint;
+                        CS.objTarget=MBTarget;
+                        CS.m_nActionIdx = 0;
+                        CS.SetCharStatus(CharState.Action);
 
                     }
+
+
 
                     if (Input.GetKeyDown(KeyCode.Q))
                     {
 
-                        if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[0]].getSkillUsingMana() && CS.getSkill1On())
+                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[1]].getSkillUsingMana() && CS.m_bSkillOn[1])
                         {
-                            CD.setMovePoint(MBPoint);
-                            CS.SetObjTarget(MBTarget);
-                            CD.SetCharStatus(CharState.Skill1);
+                            CS.vecMovePoint = MBPoint;
+                            CS.objTarget = MBTarget;
+                            CS.m_nActionIdx = 1;
+                            CS.SetCharStatus(CharState.Action);
                         }
 
                     }
 
                     if (Input.GetKeyDown(KeyCode.W))
                     {
-                        if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[1]].getSkillUsingMana() && CS.getSkill2On())
+                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[2]].getSkillUsingMana() && CS.m_bSkillOn[2])
                         {
-                            CD.setMovePoint(MBPoint);
-                            CS.SetObjTarget(MBTarget);
-                            CD.SetCharStatus(CharState.Skill2);
+                            CS.vecMovePoint = MBPoint;
+                            CS.objTarget = MBTarget;
+                            CS.m_nActionIdx = 2;
+                            CS.SetCharStatus(CharState.Action);
                         }
                     }
 
                     if (Input.GetKeyDown(KeyCode.E))
                     {
-                        if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[2]].getSkillUsingMana() && CS.getSkill3On())
+                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[3]].getSkillUsingMana() && CS.m_bSkillOn[3])
                         {
-                            CD.setMovePoint(MBPoint);
-                            CS.SetObjTarget(MBTarget);
-                            CD.SetCharStatus(CharState.Skill3);
+                            CS.vecMovePoint = MBPoint;
+                            CS.objTarget = MBTarget;
+                            CS.m_nActionIdx = 3;
+                            CS.SetCharStatus(CharState.Action);
                         }
                     }
 
                     if (Input.GetKeyDown(KeyCode.R))
                     {
-                        if (CS.getMP() >= DBManager.SkillData[CS.getSkillID()[3]].getSkillUsingMana() && CS.getSkill4On())
+                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[4]].getSkillUsingMana() && CS.m_bSkillOn[4])
                         {
-                            CD.setMovePoint(MBPoint);
-                            CS.SetObjTarget(MBTarget);
-                            CD.SetCharStatus(CharState.Skill4);
+                            CS.vecMovePoint = MBPoint;
+                            CS.objTarget = MBTarget;
+                            CS.m_nActionIdx = 4;
+                            CS.SetCharStatus(CharState.Action);
                         }
                     }
 
@@ -371,9 +362,9 @@ public class GameManager : MonoSingleton<GameManager>
         if (Input.GetMouseButtonDown(1))
         {
 
-            if (UIObj != null && UIObj.tag == "ItemSlot"&& UIObj.GetComponent<ItemSlot>().item.getTYP()==2)
+            if (UIObj != null && UIObj.tag == "ItemSlot"&& UIObj.GetComponent<ItemSlot>().item.TYP==2)
             {
-                objPlayer.GetComponent<Char_Status>().HealingHP(UIObj.GetComponent<ItemSlot>().item.getHP());
+                objPlayer.GetComponent<Char_Base>().HealingHP(UIObj.GetComponent<ItemSlot>().item.HP);
                 Player_Inventory.Instance.RemoveItem(UIObj.GetComponent<ItemSlot>().m_nSlotNum);
             }
 
@@ -398,12 +389,6 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     
-
-    
-
-
-
-
 
 
     // Update is called once per frame

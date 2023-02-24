@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    float m_fSpeed = 2;
+    int SkillID;
 
     public GameObject Target;
 
-    int Damage = 0;
+    public Char_Base Attacker;
 
     public ParticleSystem Burning;
     public ParticleSystem Explosion;
@@ -19,20 +19,14 @@ public class Bullet : MonoBehaviour
 
     bool FirstSetting = true;
 
-    bool EnemyCheck = false;
-
-    float LifeTime = 5;
-
-    public void Setting(GameObject _Target, int _Damage, float _Speed, bool _EnemyCheck, float _LifeTime)
+    public void Setting(GameObject _Target, Char_Base _Attacker, int _SkillID)
     {
         if (FirstSetting)
         {
             Target = _Target;
-            Damage = _Damage;
-            m_fSpeed = _Speed;
+            Attacker = _Attacker;
+            SkillID = _SkillID;
             FirstSetting = false;
-            EnemyCheck = _EnemyCheck;
-            LifeTime = _LifeTime;
         }
 
 
@@ -43,7 +37,8 @@ public class Bullet : MonoBehaviour
     {
         Burning = this.transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
         Explosion = this.transform.GetChild(1).gameObject.GetComponent<ParticleSystem>();
-        Destroy(this.gameObject, LifeTime);
+        SkillData sd = DBManager.SkillData[SkillID];
+        Destroy(this.gameObject, sd.SLT);
     }
 
     // Update is called once per frame
@@ -64,7 +59,8 @@ public class Bullet : MonoBehaviour
                 {
                     transform.LookAt(Target.transform.position);
                     Vector3 vecTraget = new Vector3(Target.transform.position.x, 1, Target.transform.position.z);
-                    transform.position = Vector3.MoveTowards(transform.position, vecTraget, m_fSpeed * Time.deltaTime);
+                    SkillData sd = DBManager.SkillData[SkillID];
+                    transform.position = Vector3.MoveTowards(transform.position, vecTraget, sd.SSPD * Time.deltaTime);
                 }
             }
 
@@ -76,31 +72,15 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (EnemyCheck)
+        if (other.gameObject.layer == Attacker.m_nTargetLayer[0])
         {
-            if (other.gameObject.layer == 6 || other.gameObject.layer == 9)
-            {
-                hit = true;
-                Burning.Stop();
-                Explosion.Play();
-                //other.gameObject.GetComponent<Char_Status>().GetDamage(Damage);
-                other.gameObject.GetComponent<Char_Status>().delGetDamae(Damage);
-                Destroy(this.gameObject, 1f);
+            hit = true;
+            Burning.Stop();
+            Explosion.Play();
+            SkillData sd = DBManager.SkillData[SkillID];
+            other.gameObject.GetComponent<Char_Base>().delGetDamage((int)(Attacker.CharStatus.ATK*sd.SDP1));
+            Destroy(this.gameObject, 1f);
 
-            }
-        }
-        else
-        {
-            if (other.gameObject.layer == 8)
-            {
-                hit = true;
-                Burning.Stop();
-                Explosion.Play();
-                other.gameObject.GetComponent<Char_Status>().GetDamage(Damage);
-                other.gameObject.GetComponent<Char_Status>().delGetDamae(Damage);
-                Destroy(this.gameObject, 1f);
-
-            }
         }
 
     }

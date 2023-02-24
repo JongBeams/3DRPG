@@ -207,16 +207,16 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
 
         for (int i = 0; i < (ver * hor) + n_mPlayerSlot + n_mPartner1Slot + n_mPartner2Slot; i++)
         {
-            ItemID.Add(m_lSlot[i].item.getID());
-            ItemName.Add(m_lSlot[i].item.getName());
-            ItemATK.Add(m_lSlot[i].item.getATK());
-            ItemDEF.Add(m_lSlot[i].item.getDEF());
-            ItemHP.Add(m_lSlot[i].item.getHP());
-            ItemMP.Add(m_lSlot[i].item.getMP());
-            ItemSprite.Add(m_lSlot[i].item.getItemSprite());
-            ItemMesh.Add(m_lSlot[i].item.getItemMesh());
-            ItemMaterial.Add(m_lSlot[i].item.getItemMaterial());
-            ItemType.Add((int)m_lSlot[i].item.getTYP());
+            ItemID.Add(m_lSlot[i].item.ID);
+            ItemName.Add(m_lSlot[i].item.Name);
+            ItemATK.Add(m_lSlot[i].item.ATK);
+            ItemDEF.Add(m_lSlot[i].item.DEF);
+            ItemHP.Add(m_lSlot[i].item.HP);
+            ItemMP.Add(m_lSlot[i].item.MP);
+            ItemSprite.Add(m_lSlot[i].item.IMG);
+            ItemMesh.Add(m_lSlot[i].item.Mesh);
+            ItemMaterial.Add(m_lSlot[i].item.Material);
+            ItemType.Add((int)m_lSlot[i].item.TYP);
             BuyGold.Add(m_lSlot[i].item.BG);
             SellGold.Add(m_lSlot[i].item.SG);
 
@@ -233,7 +233,7 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
         for (i = 0; i < m_lSlot.Count; i++)
         {
             //            Debug.Log((i+1)+"¹øÂ° Ä­ ItemID : "+slotScripts[i].item.ItemID);
-            if (m_lSlot[i].item.getID() == 0)
+            if (m_lSlot[i].item.ID == 0)
             {
                 m_lSlot[i].item = DBManager.ItemData[itmeID];
                 ItemImageChange(m_lSlot[i].transform);
@@ -250,12 +250,12 @@ public class Player_Inventory : MonoSingleton<Player_Inventory>
 
     void ItemImageChange(Transform _slot)
     {
-        if (_slot.GetComponent<ItemSlot>().item.getID() == 0)
+        if (_slot.GetComponent<ItemSlot>().item.ID == 0)
             _slot.GetChild(0).gameObject.SetActive(false);
         else
         {
             _slot.GetChild(0).gameObject.SetActive(true);
-            _slot.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>(_slot.GetComponent<ItemSlot>().item.getItemSprite());
+            _slot.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>(_slot.GetComponent<ItemSlot>().item.IMG);
             _slot.GetChild(0).GetComponent<RectTransform>().sizeDelta = _slot.GetComponent<RectTransform>().sizeDelta;
         }
     }

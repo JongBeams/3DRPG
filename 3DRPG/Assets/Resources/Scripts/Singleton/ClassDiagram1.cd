@@ -14,18 +14,18 @@
       <FileName>Assets\Resources\Scripts\Character\Char_Dynamics.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Char_Status">
+  <Class Name="Char_Base">
     <Position X="14.25" Y="7.5" Width="1.5" />
     <NestedTypes>
-      <Delegate Name="Char_Status.Del" Collapsed="true">
+      <Delegate Name="Char_Base.Del" Collapsed="true">
         <TypeIdentifier>
-          <NewMemberFileName>Assets\Resources\Scripts\Character\Char_Status.cs</NewMemberFileName>
+          <NewMemberFileName>Assets\Resources\Scripts\Character\Char_Base.cs</NewMemberFileName>
         </TypeIdentifier>
       </Delegate>
     </NestedTypes>
     <TypeIdentifier>
       <HashCode>BQUCgADxADgCKSSAXACMAOgEDBXQ5CQBAQBecEqA8g0=</HashCode>
-      <FileName>Assets\Resources\Scripts\Character\Char_Status.cs</FileName>
+      <FileName>Assets\Resources\Scripts\Character\Char_Base.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="MoveManager" Collapsed="true">

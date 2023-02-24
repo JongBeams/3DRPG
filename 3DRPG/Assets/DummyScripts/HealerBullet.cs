@@ -56,7 +56,7 @@ public class HealerBullet : MonoBehaviour
     //    {
     //        Burning.Stop();
     //        Explosion.Play();
-    //        collision.gameObject.GetComponent<Char_Status>().GetDamage(8);
+    //        collision.gameObject.GetComponent<Char_Base>().GetDamage(8);
     //        Destroy(this.gameObject, 1f);
 
     //    }
@@ -70,8 +70,8 @@ public class HealerBullet : MonoBehaviour
             {
                 this.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 Explosion.Play();
-                //other.gameObject.GetComponent<Char_Status>().GetDamage(Damage);
-                other.gameObject.GetComponent<Char_Status>().delGetDamae(Damage);
+                //other.gameObject.GetComponent<Char_Base>().GetDamage(Damage);
+                other.gameObject.GetComponent<Char_Base>().delGetDamage(Damage);
                 
                 Destroy(this.gameObject, 0.5f);
 
@@ -83,7 +83,7 @@ public class HealerBullet : MonoBehaviour
             {
                 this.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 Explosion.Play();
-                other.gameObject.GetComponent<Char_Status>().delGetDamae(Damage);
+                other.gameObject.GetComponent<Char_Base>().delGetDamage(Damage);
                 Destroy(this.gameObject, 0.5f);
 
             }
