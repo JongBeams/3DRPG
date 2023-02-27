@@ -13,6 +13,7 @@ public class RedDragon_Char : Char_Base
         SetComponents();
         SetCheck(2);
         m_nPlayerHP = CharStatus.HP;
+        m_bSuperArmor = true;
     }
 
     // Update is called once per frame
@@ -30,6 +31,13 @@ public class RedDragon_Char : Char_Base
     {
 
     }
+
+    protected override void SetSkillCoolTime()
+    {
+        m_bSkillOn[m_nActionIdx-1] = false;
+        m_fSkillCoolTimer[m_nActionIdx-1] = DBManager.SkillData[CharStatus.SID[m_nActionIdx-1]].SCT;
+    }
+
 
     #endregion
 
@@ -144,7 +152,7 @@ public class RedDragon_Char : Char_Base
                 MoveAlgorithm();
                 break;
             case CharState.Action:
-                if (m_bSkillUsing[m_nActionIdx])
+                if (m_bSkillUsing[m_nActionIdx-1])
                 {
                     skillAction?.Invoke();
                 }
@@ -382,7 +390,6 @@ public class RedDragon_Char : Char_Base
 
         //스킬 정보
         SkillData SkillDB = DBManager.SkillData[CharStatus.SID[3]];
-
 
 
         if (objTarget != null || objTarget.activeSelf == false)

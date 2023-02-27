@@ -42,6 +42,13 @@ public class Wizard_Char : Char_Base
         }
     }
 
+    protected override void SetSkillCoolTime()
+    {
+        m_bSkillOn[m_nActionIdx] = false;
+        m_fSkillCoolTimer[m_nActionIdx] = DBManager.SkillData[CharStatus.SID[m_nActionIdx]].SCT;
+    }
+
+
     #endregion
 
 

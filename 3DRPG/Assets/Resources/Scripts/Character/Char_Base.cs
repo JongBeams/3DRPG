@@ -124,11 +124,8 @@ public abstract class Char_Base : MonoBehaviour
         }
     }
 
-    protected void SetSkillCoolTime()
-    {
-        m_bSkillOn[m_nActionIdx] = false;
-        m_fSkillCoolTimer[m_nActionIdx] = DBManager.SkillData[m_nActionIdx].SCT;
-    }
+    protected abstract void SetSkillCoolTime();
+
 
     #endregion
 
@@ -269,6 +266,7 @@ public abstract class Char_Base : MonoBehaviour
     #endregion
 
     #region 알고리즘
+
 
     #endregion
 

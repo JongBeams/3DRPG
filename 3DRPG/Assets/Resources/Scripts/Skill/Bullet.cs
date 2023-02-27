@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    int SkillID;
+    public int SkillID;
 
     public GameObject Target;
 
@@ -28,7 +28,6 @@ public class Bullet : MonoBehaviour
             SkillID = _SkillID;
             FirstSetting = false;
         }
-
 
     }
 
@@ -72,8 +71,10 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == Attacker.m_nTargetLayer[0])
+        
+        if (other.gameObject.layer == Target.layer)
         {
+            Debug.Log(other.gameObject.layer+" "+ Target.layer);
             hit = true;
             Burning.Stop();
             Explosion.Play();

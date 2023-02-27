@@ -13,6 +13,7 @@ public class GreenDragon_Char : Char_Base
         SetComponents();
         SetCheck(2);
         m_nPlayerHP = CharStatus.HP;
+        m_bSuperArmor = true;
     }
 
     // Update is called once per frame
@@ -29,6 +30,13 @@ public class GreenDragon_Char : Char_Base
     public override void Recovery()
     {
 
+    }
+
+
+    protected override void SetSkillCoolTime()
+    {
+        m_bSkillOn[m_nActionIdx-1] = false;
+        m_fSkillCoolTimer[m_nActionIdx - 1] = DBManager.SkillData[CharStatus.SID[m_nActionIdx-1]].SCT;
     }
 
     #endregion
