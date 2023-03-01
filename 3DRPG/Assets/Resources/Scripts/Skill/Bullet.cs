@@ -71,10 +71,12 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
-        if (other.gameObject.layer == Target.layer)
+
+        if ((1<<other.gameObject.layer & Attacker.m_nTargetLayer[0]) != 0)
         {
-            Debug.Log(other.gameObject.layer+" "+ Target.layer);
+
+            //Debug.Log(other.gameObject.layer+" "+ Target.layer+" "+Attacker.m_nTargetLayer);
+
             hit = true;
             Burning.Stop();
             Explosion.Play();

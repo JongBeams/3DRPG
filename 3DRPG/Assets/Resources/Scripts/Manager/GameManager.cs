@@ -196,7 +196,7 @@ public class GameManager : MonoSingleton<GameManager>
                     {
                         if (CS.m_nIdentityPoint > 0&& !CS.m_bSkillUsing[5])
                         {
-                            CS.vecMovePoint =MBPoint;
+                            //CS.vecMovePoint =MBPoint;
                             CS.m_nActionIdx = 5;
                             CS.SetCharStatus(CharState.Action);
                         }
@@ -206,8 +206,8 @@ public class GameManager : MonoSingleton<GameManager>
                     {
                         if (CS.m_bSkillUsing[5])
                         {
-                            CS.delGetDamage = CS.GetDamage;
-                            CS.SetCharStatus(CharState.Idle);
+                            //CS.delGetDamage = CS.GetDamage;
+                            //CS.SetCharStatus(CharState.Idle);
                             CS.m_bSkillUsing[5]=false;
                         }
                     }

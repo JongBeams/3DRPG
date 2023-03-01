@@ -187,9 +187,10 @@ public class RedDragon_Char : Char_Base
 
     void SetAlgorithm()
     {
-
+        Debug.Log(m_nTargetLayer[0]);
         int m_nMask = m_nTargetLayer[0];
 
+        //Debug.Log(m_nMask);
         Collider[] hitcol = Physics.OverlapSphere(transform.position, 30f, m_nMask);
         int count = 0;
 
@@ -399,6 +400,7 @@ public class RedDragon_Char : Char_Base
             FireBreathEffect.transform.parent = AttackPos;
             FireBreathEffect.transform.localPosition = Vector3.zero;
             FireBreathEffect.transform.localRotation = Quaternion.identity;
+            FireBreathEffect.transform.parent = null;
             FireBreathEffect.GetComponent<ParticleSystem>().Play();
             FireBreathEffect.GetComponent<FireBreath>().Setting(this, CharStatus.SID[3]);
 

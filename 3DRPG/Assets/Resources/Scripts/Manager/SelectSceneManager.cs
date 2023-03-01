@@ -105,6 +105,9 @@ public class SelectSceneManager : MonoBehaviour
         PlayerMPBar.maxValue = CS.CharStatus.MP;
         PlayerShieldBar.maxValue = CS.CharStatus.ISP;
 
+        //Debug.Log(PlayerSkillCoolTime[0].value);
+        //Debug.Log(100f - CS.m_fSkillCoolTimer[1] / 5f * 100f);
+
         PlayerSkillCoolTime[0].value = 100f - CS.m_fSkillCoolTimer[1] / 5f * 100f;
         PlayerSkillCoolTime[1].value = 100f - CS.m_fSkillCoolTimer[2] / 7f * 100f;
         PlayerSkillCoolTime[2].value = 100f - CS.m_fSkillCoolTimer[3] / 15f * 100f;
@@ -301,7 +304,7 @@ public class SelectSceneManager : MonoBehaviour
     {
         TradeUI.Instance.ClickItem();
 
-        UpdateUI();
+        Invoke("UpdateUI",1f);
         //PlayerName.text = DBManager.PlayerData[CharID[0]].getName();
         //PartnerName[0].text = DBManager.PartnerData[CharID[1]].getName();
         //PartnerName[1].text = DBManager.PartnerData[CharID[2]].getName();

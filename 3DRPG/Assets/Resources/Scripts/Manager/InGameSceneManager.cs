@@ -224,6 +224,7 @@ public class InGameSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         UpdateUI();
 
         GameEndText();

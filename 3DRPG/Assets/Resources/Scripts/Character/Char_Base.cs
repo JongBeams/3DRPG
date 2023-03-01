@@ -75,12 +75,11 @@ public abstract class Char_Base : MonoBehaviour
         if (CharStatus.TYP == LayerMask.NameToLayer("Player"))
         {
 
-            m_fSkillCoolTimer = new float[5];
-            m_bSkillOn = new bool[5];
-            m_bSkillUsing = new bool[5];
-            m_nTargetLayer[0] = 1 << (LayerMask.NameToLayer("Enemy"));
-            m_nTargetLayer[1] = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
-
+            m_fSkillCoolTimer = new float[6];
+            m_bSkillOn = new bool[6];
+            m_bSkillUsing = new bool[6];
+            m_nTargetLayer[0] = 1<<(LayerMask.NameToLayer("Enemy"));
+            m_nTargetLayer[1] = 1<< (LayerMask.NameToLayer("Player")) | 1<<(LayerMask.NameToLayer("Partner"));
 
             return;
         }
@@ -90,8 +89,8 @@ public abstract class Char_Base : MonoBehaviour
             m_fSkillCoolTimer = new float[3];
             m_bSkillOn = new bool[3];
             m_bSkillUsing = new bool[3];
-            m_nTargetLayer[0] = 1 << (LayerMask.NameToLayer("Enemy"));
-            m_nTargetLayer[1] = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
+            m_nTargetLayer[0] = 1<<(LayerMask.NameToLayer("Enemy"));
+            m_nTargetLayer[1] = 1<<(LayerMask.NameToLayer("Player")) | 1<<(LayerMask.NameToLayer("Partner"));
             return;
         }
         if (CharStatus.TYP == LayerMask.NameToLayer("Enemy"))
@@ -100,8 +99,8 @@ public abstract class Char_Base : MonoBehaviour
             m_fSkillCoolTimer = new float[4];
             m_bSkillOn = new bool[4];
             m_bSkillUsing = new bool[4];
-            m_nTargetLayer[0] = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
-            m_nTargetLayer[1] = 1 << (LayerMask.NameToLayer("Enemy"));
+            m_nTargetLayer[0] = 1<<(LayerMask.NameToLayer("Player")) |  1<<(LayerMask.NameToLayer("Partner"));
+            m_nTargetLayer[1] = 1<< (LayerMask.NameToLayer("Enemy"));
             return;
         }
     }
@@ -175,6 +174,7 @@ public abstract class Char_Base : MonoBehaviour
         {
             m_nPlayerHP = CharStatus.HP;
         }
+
     }
 
     public void GetDamage(int _Damage)

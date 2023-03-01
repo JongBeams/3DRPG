@@ -136,6 +136,8 @@ public class Char_Knight : Char_Base
         animator.SetBool("Skill4", false);
         animator.SetBool("Hit", false);
         animator.SetBool("Identity", false);
+
+       
     }
 
 
@@ -147,6 +149,8 @@ public class Char_Knight : Char_Base
             case CharState.Idle:
                 objTarget = null;
                 agent.velocity = Vector3.zero;
+                delGetDamage = GetDamage;
+                agent.updateRotation = true;
                 agent.SetDestination(this.transform.position);
                 AniBoolOffAll();
                 break;
@@ -424,8 +428,7 @@ public class Char_Knight : Char_Base
         //스킬 정보
         SkillData SkillDB = DBManager.SkillData[5];
 
-        float dis = Vector3.Distance(transform.position, PlayerLookingPoint());
-
+        
 
         if (!m_bSkillUsing[5])
         {
@@ -433,27 +436,25 @@ public class Char_Knight : Char_Base
             transform.LookAt(PlayerLookingPoint());
 
 
-            if (m_nIdentityPoint > 0)
+            if (delGetDamage == GetDamage)
             {
                 delGetDamage = UseIdentitiy;
                 m_bSkillUsing[5] = true;
+                agent.updateRotation = false;
+                return;
                 //변동확인hp = 지금HP
             }
-            else
-            {
-                delGetDamage = GetDamage;
-                m_bSkillUsing[5] = false;
-                SetCharStatus(CharState.Idle);
-            }
+
 
         }
         else
         {
-            dis = Vector3.Distance(transform.position, PlayerLookingPoint());
-
-            //if(변동확인hp < 지금HP)
 
             //체력이 맞아서 줄고 그체력을 다시 회복시키고 고유자원을 깐다
+            if (agent.destination!=vecMovePoint)
+            {
+                agent.SetDestination(vecMovePoint);
+            }
 
             if (m_nIdentityPoint <= 0)
             {
