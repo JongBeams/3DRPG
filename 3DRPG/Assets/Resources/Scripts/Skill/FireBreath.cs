@@ -17,14 +17,6 @@ public class FireBreath : MonoBehaviour
     public bool FirstSetting = true;
 
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-        
-    //    Gizmos.DrawRay(this.transform.position + (transform.right), transform.forward * m_fDis);
-    //    Gizmos.DrawRay(this.transform.position + (-transform.right), transform.forward * m_fDis);
-    //    Gizmos.DrawRay(this.transform.position + (transform.forward * m_fDis) + (-transform.right* DBManager.SkillData[SkillID].SR2 / 2), transform.right * DBManager.SkillData[SkillID].SR2);
-    //}
 
     public void Setting( Char_Base _attacker,int _SkillID)
     {
@@ -78,12 +70,35 @@ public class FireBreath : MonoBehaviour
         SkillData sd = DBManager.SkillData[SkillID];
         Vector3 a1 = this.transform.position + (transform.right * sd.SR2 / 2);
         Vector3 a2 = this.transform.position - (transform.right * sd.SR2 / 2);
-        Vector3 b1 = this.transform.position + (transform.right * sd.SR2 / 2);
-        Vector3 b2 = this.transform.position - (transform.right * sd.SR2 / 2);
-        if (InsideCheck())
-        {
+        Vector3 b1 = this.transform.position + (transform.right * sd.SR2 / 2) + (transform.forward * m_fDis);
+        Vector3 b2 = this.transform.position - (transform.right * sd.SR2 / 2) + (transform.forward * m_fDis);
 
+        for(int i = 0; i < objTarget.Count; i++)
+        {
+            if (InsideCheck(a1, a2, b1, b2,objTarget[i]))
+            {
+                Hitobj.Add(objTarget[i]);
+                if (Hitobj.Count != Hitobj.Distinct().Count())
+                {
+                    Hitobj = Hitobj.Distinct().ToList();
+                }
+                else
+                {
+                    Debug.Log(objTarget[i]);
+                    objTarget[i].GetComponent<Char_Base>().delGetDamage((int)(Attacker.CharStatus.ATK * sd.getSkillCeofficientPer1()));
+                    Debug.Log("Hit");
+                }
+
+            }
         }
+        m_fDis += sd.SSPD * Time.deltaTime;
+
+        if (m_fDis >= DBManager.SkillData[SkillID].SR1)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+            
     }
 
     void SetRaycast()
