@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class Priest_Char : Char_Base
 {
+
     // Start is called before the first frame update
     void Start()
     {
@@ -202,10 +203,11 @@ public class Priest_Char : Char_Base
 
         int count = 0;
         //적 아군 확인 체크
-        m_bCheck[1] = false;
+        m_bCheck[0] = false;
         //자신 체력의 회복 여부 확인
         bool mineCheck = false;
-        //타겟지정
+        //
+        m_bCheck[1] = false;
 
 
         List<GameObject> targetobj = new List<GameObject>();
@@ -308,19 +310,24 @@ public class Priest_Char : Char_Base
                     SetCharStatus(CharState.Move);
                     return;
                 }
+
                 if (dis < 15f) //거리 15보다 가까울때
                 {
-                    vecMovePoint = (this.transform.position - (this.transform.forward * 15));
+                    m_bCheck[1] = true;
+                    transform.LookAt(PlayerLookingPoint());
+                    vecMovePoint = (this.transform.position - (this.transform.forward * 10));
                     agent.SetDestination(vecMovePoint);
                     SetCharStatus(CharState.Move);
                     return;
                 }
+
                 if(dis >= 15f&& dis <= 20f) //적정거리
                 {
                     m_nActionIdx = 0;
                     SetCharStatus(CharState.Action);
                     return;
                 }
+
             }
         }
 
@@ -330,11 +337,19 @@ public class Priest_Char : Char_Base
     void MoveAlgorithm()
     {
 
-        float dis = Vector3.Distance(gameObject.transform.position, vecMovePoint);
+        float dis = Vector3.Distance(transform.position, vecMovePoint);
 
+        if (m_bCheck[1])
+        {
+            m_bCheck[1] = false;
+            SetCharStatus(CharState.Idle);
+            return;
+        }
         if (dis >= 15 && dis <= 20)
         {
-            SetCharStatus(CharState.Idle);
+            Debug.Log("Check");
+            m_nActionIdx = 0;
+            SetCharStatus(CharState.Action);
             return;
         }
 

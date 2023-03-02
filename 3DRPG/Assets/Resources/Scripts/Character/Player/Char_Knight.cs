@@ -36,6 +36,7 @@ public class Char_Knight : Char_Base
 
 
     #region 스테이터스
+
     float m_nIdentityRecovery=0;
 
 
@@ -262,6 +263,7 @@ public class Char_Knight : Char_Base
 
 
     #region 스킬
+
     bool m_bAttackCheck;
 
     void AttackCheck()
@@ -289,6 +291,7 @@ public class Char_Knight : Char_Base
 
             if (hitcol.Length != 0)
             {
+                Debug.Log(hitcol[0]);
                 hitcol[0].GetComponent<Char_Base>().delGetDamage((int)(CharStatus.ATK * SkillDB.getSkillCeofficientPer1()));
             }
             m_bAttackCheck = false;

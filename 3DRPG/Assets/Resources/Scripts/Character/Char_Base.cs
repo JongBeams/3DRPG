@@ -254,6 +254,7 @@ public abstract class Char_Base : MonoBehaviour
     {
         m_bTaunt = true;
         objTarget = _Target;
+        agent.SetDestination(objTarget.transform.position);
         yield return new WaitForSeconds(_Time);
         m_bTaunt = false;
     }

@@ -10,18 +10,24 @@ public class RedDragon_Char : Char_Base
     // Start is called before the first frame update
     void Start()
     {
+
         SetComponents();
         SetCheck(2);
         m_nPlayerHP = CharStatus.HP;
         m_bSuperArmor = true;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
         UpdateCharStatus();
+
         Recovery();
+
         SkillCooTimer();
+
     }
 
 
@@ -192,15 +198,18 @@ public class RedDragon_Char : Char_Base
         List<GameObject> targetobj = new List<GameObject>();
         if (CharStatus.TYP == LayerMask.NameToLayer("Enemy"))
         {
+
             targetobj.Add(GameManager.Instance.objPlayer);
             targetobj.Add(InGameSceneManager.Instance.PInfo[0].objPartner);
             targetobj.Add(InGameSceneManager.Instance.PInfo[1].objPartner);
             
         }
+
         if (CharStatus.TYP == LayerMask.NameToLayer("Player")|| CharStatus.TYP == LayerMask.NameToLayer("Partner"))
         {
             targetobj.Add(InGameSceneManager.Instance.objEnemy);
         }
+
         for (int i = 0; i < targetobj.Count; i++)
         {
             if(targetobj[i].GetComponent<Char_Base>().CS== CharState.Death)
@@ -220,8 +229,8 @@ public class RedDragon_Char : Char_Base
             int TargetRan = Random.Range(0, targetobj.Count);
             objTarget = targetobj[TargetRan].gameObject;
         }
-
-        vecMovePoint = objTarget.transform.position;
+        if(objTarget!=null)
+            vecMovePoint = objTarget.transform.position;
 
         //Debug.Log(i+","+count + "," + hitcol.Length);
         if (GameManager.Instance.m_nScreenIdx != 2)
@@ -290,9 +299,7 @@ public class RedDragon_Char : Char_Base
         {
             agent.SetDestination(vecMovePoint);
             SetCharStatus(CharState.Move);
-
         }
-
 
     }
 
@@ -302,7 +309,7 @@ public class RedDragon_Char : Char_Base
         // 타겟과의 거리
         float dis = Vector3.Distance(transform.position, vecMovePoint);
 
-        float Range = 7.5f;
+        float Range = 8f;
 
         if (dis <= Range)
         {
@@ -318,7 +325,8 @@ public class RedDragon_Char : Char_Base
 
 
     #region 스킬
-    bool m_bAttackCheck;
+    bool m_bAttackCheck=false;
+
 
     void AttackCheck()
     {

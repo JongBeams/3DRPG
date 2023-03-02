@@ -260,20 +260,16 @@ public class GreenDragon_Char : Char_Base
     {
 
         // 타겟과의 거리
-        Vector3 vecEnemyLookingPoint = new Vector3(objTarget.transform.position.x, transform.position.y, objTarget.transform.position.z);
-        float dis = Vector3.Distance(transform.position, vecEnemyLookingPoint);
+        // 타겟과의 거리
+        float dis = Vector3.Distance(transform.position, vecMovePoint);
+        float Range = 8f;
 
-
-        float Range = 6f;
-
-
-        if (agent.remainingDistance <= Range)
+        if (dis <= Range)
         {
             agent.velocity = Vector3.zero;
             SetCharStatus(CharState.Idle);
             return;
         }
-
 
     }
 
@@ -281,7 +277,7 @@ public class GreenDragon_Char : Char_Base
 
 
     #region 스킬
-    bool m_bAttackCheck;
+    bool m_bAttackCheck=false;
 
     void AttackCheck()
     {
