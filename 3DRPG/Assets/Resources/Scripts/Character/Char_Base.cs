@@ -193,7 +193,41 @@ public abstract class Char_Base : MonoBehaviour
             m_nPlayerHP -= totalDamage;
 
         }
+        if (m_nPlayerHP <= 0)
+        {
+            SetCharStatus(CharState.Death);
+        }
+
+
     }
+
+    public void UseIdentitiy(int _Cost)
+    {
+
+        if (m_nIdentityPoint <= 0)
+        {
+            m_nIdentityPoint = 0;
+        }
+        else
+        {
+            m_nIdentityPoint -= _Cost;
+        }
+
+    }
+
+    protected void UseMana(int _Cost)
+    {
+        if (m_nPlayerMP >= _Cost)
+        {
+            m_nPlayerMP -= _Cost;
+        }
+        else
+        {
+            Debug.Log("NO Mana");
+        }
+    }
+
+
 
     #endregion
 
@@ -224,19 +258,7 @@ public abstract class Char_Base : MonoBehaviour
         m_bTaunt = false;
     }
 
-    public void UseIdentitiy(int _Cost)
-    {
-
-        if (m_nIdentityPoint <= 0)
-        {
-            m_nIdentityPoint = 0;
-        }
-        else
-        {
-            m_nIdentityPoint -= _Cost;
-        }
-
-    }
+    
 
     #endregion
 

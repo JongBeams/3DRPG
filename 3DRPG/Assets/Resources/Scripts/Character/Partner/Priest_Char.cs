@@ -64,6 +64,16 @@ public class Priest_Char : Char_Base
 
     void SetAction(int _idx)
     {
+
+        if (m_nPlayerMP<DBManager.SkillData[CharStatus.SID[_idx]].SM)
+        {
+            skillAction = SingleTargetBullet;
+            animator.SetBool("Attack", true);
+            strActionAniName = "Attack";
+            m_nActionIdx = 0;
+            return;
+        }
+
         switch ((ActionState)_idx)
         {
             case ActionState.Attack:
@@ -161,6 +171,7 @@ public class Priest_Char : Char_Base
                 {
                     if (CheckEndAni(strActionAniName))
                     {
+                        UseMana(DBManager.SkillData[CharStatus.SID[m_nActionIdx]].SM);
                         SetCharStatus(CharState.Idle);
                     }
                 }
@@ -188,24 +199,45 @@ public class Priest_Char : Char_Base
 
     void SetAlgorithm()
     {
-        //Debug.Log("Check");
 
-        // 범위 탐색
-        int m_nMask = m_nTargetLayer[0] | m_nTargetLayer[1];
-        Collider[] hitcol = Physics.OverlapSphere(transform.position, 30f, m_nMask);
         int count = 0;
-
-        //공격 딜레이 타임
-        //PD.setAttackDelayTimer(PD.getAttackDelayTime());
         //적 아군 확인 체크
         m_bCheck[1] = false;
         //자신 체력의 회복 여부 확인
         bool mineCheck = false;
         //타겟지정
-        GameObject Target = null;
 
 
-        if (GameManager.Instance.m_nScreenIdx !=2)
+        List<GameObject> targetobj = new List<GameObject>();
+        List<GameObject> allyobj = new List<GameObject>();
+        if (CharStatus.TYP == LayerMask.NameToLayer("Enemy"))
+        {
+            targetobj.Add(GameManager.Instance.objPlayer);
+            targetobj.Add(InGameSceneManager.Instance.PInfo[0].objPartner);
+            targetobj.Add(InGameSceneManager.Instance.PInfo[1].objPartner);
+            allyobj.Add(InGameSceneManager.Instance.objEnemy);
+        }
+        if (CharStatus.TYP == LayerMask.NameToLayer("Player") || CharStatus.TYP == LayerMask.NameToLayer("Partner"))
+        {
+            targetobj.Add(InGameSceneManager.Instance.objEnemy);
+            allyobj.Add(GameManager.Instance.objPlayer);
+            allyobj.Add(InGameSceneManager.Instance.PInfo[0].objPartner);
+            allyobj.Add(InGameSceneManager.Instance.PInfo[1].objPartner);
+        }
+        for (int i = 0; i < targetobj.Count; i++)
+        {
+            if (targetobj[i].GetComponent<Char_Base>().CS == CharState.Death)
+            {
+                targetobj.RemoveAt(i);
+            }
+        }
+
+        if (targetobj.Count == 0)
+        {
+            SetCharStatus(CharState.Stay);
+            return;
+        }
+        if (GameManager.Instance.m_nScreenIdx != 2)
         {
             SetCharStatus(CharState.Stay);
             return;
@@ -219,46 +251,38 @@ public class Priest_Char : Char_Base
 
         if (!m_bTaunt)
         {
-            Char_Base pcs = GameManager.Instance.objPlayer.GetComponent<Char_Base>();
-            if (pcs.m_nPlayerHP <= pcs.CharStatus.HP / 2 &&  pcs.CS != CharState.Death)
+            if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[1]].SM)
             {
-                objTarget = GameManager.Instance.objPlayer;
-                //Target = GameManager.Instance.objPlayer;
-                m_bCheck[1] = true;
-                count++;
-            }
-            for (int i=0;i<InGameSceneManager.Instance.PInfo.Length; i++)
-            {
-                Char_Base pacs = InGameSceneManager.Instance.PInfo[i].objPartner.GetComponent<Char_Base>();
-                if (pacs.m_nPlayerHP <= pacs.CharStatus.HP / 2 && pacs.CS != CharState.Death)
+                for (int i = 0; i < allyobj.Count; i++)
                 {
-                    if (InGameSceneManager.Instance.PInfo[i].objPartner == this.gameObject)
+                    Char_Base Allychar = allyobj[i].GetComponent<Char_Base>();
+                    if (Allychar.m_nPlayerHP <= Allychar.CharStatus.HP / 2)
                     {
-                        objTarget = this.gameObject;
+                        objTarget = allyobj[i];
+                        m_bCheck[0] = true;
+                        count++;
+                    }
+                    if (allyobj[i]==this.gameObject)
+                    {
                         mineCheck = true;
-                        m_bCheck[1] = true;
-                        count++;
                     }
-                    else
-                    {
-                        objTarget = InGameSceneManager.Instance.PInfo[i].objPartner;
-                        m_bCheck[1] = true;
-                        count++;
-                    }
+                        
                 }
             }
         }
 
-
-        if (!m_bCheck[1])
+        if (!m_bCheck[0])
         {
             objTarget = InGameSceneManager.Instance.objEnemy;
         }
 
+        
 
         if (objTarget!= null)
         {
-            if (m_bCheck[1])
+            vecMovePoint = objTarget.transform.position;
+
+            if (m_bCheck[0])// 아군 타깃
             {
                 if (count > 1)
                 {
@@ -273,26 +297,29 @@ public class Priest_Char : Char_Base
                     return;
                 }
             }
-            else
+
+            if(!m_bCheck[0])// 적군 타깃
             {
                 float dis = Vector3.Distance(transform.position, objTarget.transform.position);
+
                 if (dis > 20f)//거리 20 보다 멀때
                 {
-                    m_bCheck[0] = false;// RunAway Dist Check
                     agent.SetDestination(PlayerLookingPoint());
                     SetCharStatus(CharState.Move);
+                    return;
                 }
-                else if (dis < 15f) //거리 15보다 가까울때
+                if (dis < 15f) //거리 15보다 가까울때
                 {
-                    m_bCheck[0] = true;// RunAway Dist Check
-                    vecMovePoint = (this.transform.position - (this.transform.forward * 12));
+                    vecMovePoint = (this.transform.position - (this.transform.forward * 15));
                     agent.SetDestination(vecMovePoint);
                     SetCharStatus(CharState.Move);
+                    return;
                 }
-                else //적정거리
+                if(dis >= 15f&& dis <= 20f) //적정거리
                 {
                     m_nActionIdx = 0;
                     SetCharStatus(CharState.Action);
+                    return;
                 }
             }
         }
@@ -303,60 +330,10 @@ public class Priest_Char : Char_Base
     void MoveAlgorithm()
     {
 
+        float dis = Vector3.Distance(gameObject.transform.position, vecMovePoint);
 
-        // 타겟과의 거리
-        Vector3 vecEnemyLookingPoint = new Vector3(objTarget.transform.position.x, gameObject.transform.position.y, objTarget.transform.position.z);
-        float dis = Vector3.Distance(gameObject.transform.position, vecEnemyLookingPoint);
-
-        //Debug.Log("PartnerTargetObj : "+ TargetObj + ", ParterTargetPos : "+vecEnemyLookingPoint+", Dis : "+ dis);
-        // 타겟 체크
-        if (m_bCheck[1])//타겟이 적일 때
+        if (dis >= 15 && dis <= 20)
         {
-            //if (dis > 20f) //거리가 20보다 멀때
-            //{
-            //    agent.SetDestination(vecEnemyLookingPoint);
-            //    return;
-            //}
-            //if (dis < 15)//거리가 15보다 가까울때
-            //{
-
-            //    vecMovePoint = (this.transform.position - (this.transform.forward * 12));
-            //    agent.SetDestination(vecMovePoint);
-            //    return;
-            //}
-            if (dis >= 15 && dis <= 20)
-            {
-                agent.SetDestination(this.transform.position);
-                agent.velocity = Vector3.zero;
-                m_nActionIdx = 0;
-                SetCharStatus(CharState.Action);
-                //SetAlgorithm();
-                //AlgorithmManager.SetAlgorithm(_id,_PD);
-                return;
-            }
-        }
-        else // 타겟이 아군일때
-        {
-            SetAlgorithm();
-            //if (dis > 15) //거리가 15보다 멀때
-            //{
-            //    transform.LookAt(vecEnemyLookingPoint);
-
-            //    agent.SetDestination(vecEnemyLookingPoint);
-
-            //    return;
-            //}
-            //else //적정 거리
-            //{
-            //    SetAlgorithm();
-            //    return;
-            //}
-        }
-
-
-        if (agent.remainingDistance <= 0.2f)
-        {
-            agent.velocity = Vector3.zero;
             SetCharStatus(CharState.Idle);
             return;
         }
@@ -397,16 +374,15 @@ public class Priest_Char : Char_Base
     void AllHealing()
     {
 
-
         //스킬 정보
         SkillData SkillDB = DBManager.SkillData[CharStatus.SID[2]];
 
 
         //objTarget.GetComponent<Char_Base>().HealingHP((int)(CharStatus.MP * SkillDB.getSkillCeofficientPer1()));
 
-        int m_nMask = 0;
+        int m_nMask = m_nMask = m_nTargetLayer[1];
         //m_nMask = 1 << (LayerMask.NameToLayer("Player")) | 1 << (LayerMask.NameToLayer("Partner"));
-        m_nMask = m_nTargetLayer[1];
+
         Collider[] hitcol = Physics.OverlapSphere(transform.position, SkillDB.getSkillRange1(), m_nMask);
         int count = 0;
 

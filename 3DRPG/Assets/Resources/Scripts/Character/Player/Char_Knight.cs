@@ -90,6 +90,15 @@ public class Char_Knight : Char_Base
 
     void SetAction(int _idx)
     {
+
+        if (m_nPlayerMP < DBManager.SkillData[CharStatus.SID[_idx]].SM)
+        {
+            skillAction = MeleeAttack;
+            animator.SetBool("Attack", true);
+            strActionAniName = "Attack";
+            return;
+        }
+
         switch ((ActionState)_idx)
         {
             case ActionState.Attack:
@@ -211,6 +220,7 @@ public class Char_Knight : Char_Base
                     {
                         if (CheckEndAni(strActionAniName))
                         {
+                            UseMana(DBManager.SkillData[CharStatus.SID[m_nActionIdx]].SM);
                             SetCharStatus(CharState.Idle);
                         }
                     }

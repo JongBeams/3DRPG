@@ -64,6 +64,17 @@ public class Thief_Char : Char_Base
 
     void SetAction(int _idx)
     {
+
+        if (m_nPlayerMP < DBManager.SkillData[CharStatus.SID[_idx]].SM)
+        {
+            Debug.Log(m_nPlayerMP + " "+ DBManager.SkillData[CharStatus.SID[_idx]].SM);
+            skillAction = MeleeAttack_BackAttackOn;
+            animator.SetBool("Attack", true);
+            strActionAniName = "Attack";
+            m_nActionIdx = 0;
+            return;
+        }
+
         switch ((ActionState)_idx)
         {
             case ActionState.Attack:
@@ -161,6 +172,7 @@ public class Thief_Char : Char_Base
                 {
                     if (CheckEndAni(strActionAniName))
                     {
+                        UseMana(DBManager.SkillData[CharStatus.SID[m_nActionIdx]].SM);
                         SetCharStatus(CharState.Idle);
                     }
                 }
@@ -189,16 +201,9 @@ public class Thief_Char : Char_Base
     void SetAlgorithm()
     {
 
-
-        // ¹üÀ§ Å½»ö
-        int m_nMask = m_nTargetLayer[0];
-        Collider[] hitcol = Physics.OverlapSphere(gameObject.transform.position, 30f, m_nMask);
-
-
         //°ø°Ý µô·¹ÀÌ Å¸ÀÓ
         //PD.setAttackDelayTimer(PD.getAttackDelayTime());
         //Å¸°ÙÁöÁ¤
-        GameObject Target = null;
 
         if (GameManager.Instance.m_nScreenIdx != 2)
         {
@@ -211,68 +216,48 @@ public class Thief_Char : Char_Base
             return;
         }
 
-        if (hitcol != null)
-            {
 
-                if (!m_bTaunt)
-                {
-                    objTarget=hitcol[0].gameObject;
-                    Target = hitcol[0].gameObject;
-                }
+        if (!m_bTaunt)
+        {
+            objTarget = InGameSceneManager.Instance.objEnemy;
+            vecMovePoint = objTarget.transform.position;
+        }
 
+        m_nActionIdx = 0;
+        if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[2]].SM && m_bCheck[0] && m_bSkillOn[2])
+        {
+            m_nActionIdx = 2;
+        }
+        if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[1]].SM && !m_bCheck[0] && m_bSkillOn[1])
+        {
+            m_nActionIdx = 1;
 
-                Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, transform.position.y, Target.transform.position.z);
-                float dis = Vector3.Distance(transform.position, vecEnemyLookingPoint);
+        }
 
+        float dis = Vector3.Distance(transform.position, objTarget.transform.position);
 
-                if (dis > 3.5f)
-                {
-                    SetCharStatus(CharState.Move);
-                }
-                else
-                {
-                    if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[1]].getSkillUsingMana() && m_bCheck[0] && m_bSkillOn[1])
-                    {
-                        m_nActionIdx = 1;
-                        
-                    }
-                    else if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[2]].getSkillUsingMana() && !m_bCheck[1] && m_bSkillOn[2])
-                    {
-                        m_nActionIdx = 2;
-                    }
-                    else
-                    {
-                        m_nActionIdx = 0;
-                    }
-                    SetCharStatus(CharState.Action);
+        //Debug.Log(transform.position+", "+ PlayerLookingPoint()+", "+ objTarget.transform.position + ", " + dis);
 
-                }
-            }
+        if (dis > 3.5f)
+        {
+            //Debug.Log("Check");
+            agent.SetDestination(vecMovePoint);
+            SetCharStatus(CharState.Move);
+        }
+        else
+        {
+            SetCharStatus(CharState.Action);
+        }
 
-        
     }
 
     void MoveAlgorithm()
     {
+        float dis = Vector3.Distance(transform.position, objTarget.transform.position);
 
-
-        // Å¸°Ù°úÀÇ °Å¸®
-        Vector3 vecEnemyLookingPoint = new Vector3(objTarget.transform.position.x, gameObject.transform.position.y, objTarget.transform.position.z);
-        float dis = Vector3.Distance(gameObject.transform.position, vecEnemyLookingPoint);
-
-
-        if (dis > 3.5f)
+        if (dis <= 3.5f)
         {
-
-            transform.LookAt(vecEnemyLookingPoint);
-
-            transform.position = Vector3.MoveTowards(transform.position, vecEnemyLookingPoint, CharStatus.SPD * Time.deltaTime);
-            //Debug.Log(dis);
-            return;
-        }
-        else
-        {
-            SetAlgorithm();
+            SetCharStatus(CharState.Action);
             return;
         }
 

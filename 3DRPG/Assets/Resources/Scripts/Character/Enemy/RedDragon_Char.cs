@@ -122,6 +122,8 @@ public class RedDragon_Char : Char_Base
                 animator.SetBool("Hit", true);
                 break;
             case CharState.Death:
+                if(CS!= CharState.Death)
+                    ItemDrop();
                 animator.SetBool("Death", true);
                 this.GetComponent<Rigidbody>().isKinematic = true;
                 this.GetComponent<Collider>().isTrigger = true;
@@ -187,31 +189,39 @@ public class RedDragon_Char : Char_Base
 
     void SetAlgorithm()
     {
-        Debug.Log(m_nTargetLayer[0]);
-        int m_nMask = m_nTargetLayer[0];
+        List<GameObject> targetobj = new List<GameObject>();
+        if (CharStatus.TYP == LayerMask.NameToLayer("Enemy"))
+        {
+            targetobj.Add(GameManager.Instance.objPlayer);
+            targetobj.Add(InGameSceneManager.Instance.PInfo[0].objPartner);
+            targetobj.Add(InGameSceneManager.Instance.PInfo[1].objPartner);
+            
+        }
+        if (CharStatus.TYP == LayerMask.NameToLayer("Player")|| CharStatus.TYP == LayerMask.NameToLayer("Partner"))
+        {
+            targetobj.Add(InGameSceneManager.Instance.objEnemy);
+        }
+        for (int i = 0; i < targetobj.Count; i++)
+        {
+            if(targetobj[i].GetComponent<Char_Base>().CS== CharState.Death)
+            {
+                targetobj.RemoveAt(i);
+            }
+        }
 
-        //Debug.Log(m_nMask);
-        Collider[] hitcol = Physics.OverlapSphere(transform.position, 30f, m_nMask);
-        int count = 0;
+        if (targetobj.Count == 0)
+        {
+            SetCharStatus(CharState.Stay);
+            return;
+        }
 
         if (!m_bTaunt)
         {
-            int TargetRan = Random.Range(0, hitcol.Length);
-            while (count < hitcol.Length)
-            {
-                if (hitcol[TargetRan].GetComponent<Char_Base>().CS != CharState.Death)
-                {
-                    objTarget = hitcol[TargetRan].gameObject;
-                    break;
-                }
-                else
-                {
-                    TargetRan = Random.Range(0, hitcol.Length);
-
-                }
-                count++;
-            }
+            int TargetRan = Random.Range(0, targetobj.Count);
+            objTarget = targetobj[TargetRan].gameObject;
         }
+
+        vecMovePoint = objTarget.transform.position;
 
         //Debug.Log(i+","+count + "," + hitcol.Length);
         if (GameManager.Instance.m_nScreenIdx != 2)
@@ -272,12 +282,13 @@ public class RedDragon_Char : Char_Base
             }
             else
             {
+                agent.SetDestination(vecMovePoint);
                 SetCharStatus(CharState.Move);
             }
         }
         else
         {
-
+            agent.SetDestination(vecMovePoint);
             SetCharStatus(CharState.Move);
 
         }
@@ -289,14 +300,11 @@ public class RedDragon_Char : Char_Base
     {
 
         // 타겟과의 거리
-        Vector3 vecEnemyLookingPoint = new Vector3(objTarget.transform.position.x, transform.position.y, objTarget.transform.position.z);
-        float dis = Vector3.Distance(transform.position, vecEnemyLookingPoint);
+        float dis = Vector3.Distance(transform.position, vecMovePoint);
 
+        float Range = 7.5f;
 
-        float Range = 6f;
-
-
-        if (agent.remainingDistance <= Range)
+        if (dis <= Range)
         {
             agent.velocity = Vector3.zero;
             SetCharStatus(CharState.Idle);
@@ -424,4 +432,36 @@ public class RedDragon_Char : Char_Base
     #endregion
 
 
-}
+    #region 아이템드랍
+
+    void ItemDrop()
+    {
+        if (this.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            ItemDropData IDD = DBManager.GetItemDropDataByIdx(CharStatus.ID);
+            GameManager.Instance.m_nGold += 100;
+            //Debug.Log(IDD.IDP.Count);
+            for (int i = 0; i < IDD.IDP.Count; i++)
+            {
+                int ran = Random.Range(0, 100);
+                //Debug.Log(i+"번째 아이템 드랍 "+(ran+1)+"/100");
+                if (ran < IDD.IDP[i])
+                {
+                    GameObject Item = Instantiate(Resources.Load<GameObject>("Prefabs/Item/DropItem"), this.transform.position, Quaternion.identity);
+                    //Debug.Log("드랍성공");
+                    //Debug.Log("ItemID : "+ IDD.IDT[i]);
+                    //Debug.Log("ItemMesh : "+ DBManager.GetItemStatusByIdx(IDD.IDT[i]).Mesh);
+                    //Debug.Log("ItemMaterial : "+ DBManager.GetItemStatusByIdx(IDD.IDT[i]).Material);
+                    Item.GetComponent<DropItemInfo>().SetItem(IDD.IDT[i], DBManager.GetItemStatusByIdx(IDD.IDT[i]).Mesh, DBManager.GetItemStatusByIdx(IDD.IDT[i]).Material);
+                }
+                else
+                {
+                    //Debug.Log("드랍 실패!");
+                }
+            }
+        }
+    }
+
+    #endregion
+
+    }

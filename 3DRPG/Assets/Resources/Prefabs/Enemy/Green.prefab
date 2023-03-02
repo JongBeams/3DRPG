@@ -2218,7 +2218,7 @@ GameObject:
   - component: {fileID: 5631856585598765690}
   - component: {fileID: 8027688599808176714}
   - component: {fileID: 7262681281056975171}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2358,6 +2358,7 @@ MonoBehaviour:
   m_bSkillUsing: 
   m_nTargetLayer: 
   m_nActionIdx: 0
+  strActionAniName: 
 --- !u!1 &5631856585591474635
 GameObject:
   m_ObjectHideFlags: 0

@@ -240,7 +240,7 @@ public class GameManager : MonoSingleton<GameManager>
                     if (Input.GetKeyDown(KeyCode.Q))
                     {
 
-                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[1]].getSkillUsingMana() && CS.m_bSkillOn[1])
+                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[1]].SM && CS.m_bSkillOn[1])
                         {
                             CS.vecMovePoint = MBPoint;
                             CS.objTarget = MBTarget;
@@ -252,7 +252,7 @@ public class GameManager : MonoSingleton<GameManager>
 
                     if (Input.GetKeyDown(KeyCode.W))
                     {
-                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[2]].getSkillUsingMana() && CS.m_bSkillOn[2])
+                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[2]].SM && CS.m_bSkillOn[2])
                         {
                             CS.vecMovePoint = MBPoint;
                             CS.objTarget = MBTarget;
@@ -263,7 +263,7 @@ public class GameManager : MonoSingleton<GameManager>
 
                     if (Input.GetKeyDown(KeyCode.E))
                     {
-                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[3]].getSkillUsingMana() && CS.m_bSkillOn[3])
+                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[3]].SM && CS.m_bSkillOn[3])
                         {
                             CS.vecMovePoint = MBPoint;
                             CS.objTarget = MBTarget;
@@ -274,7 +274,7 @@ public class GameManager : MonoSingleton<GameManager>
 
                     if (Input.GetKeyDown(KeyCode.R))
                     {
-                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[4]].getSkillUsingMana() && CS.m_bSkillOn[4])
+                        if (CS.CharStatus.MP >= DBManager.SkillData[CS.CharStatus.SID[4]].SM && CS.m_bSkillOn[4])
                         {
                             CS.vecMovePoint = MBPoint;
                             CS.objTarget = MBTarget;

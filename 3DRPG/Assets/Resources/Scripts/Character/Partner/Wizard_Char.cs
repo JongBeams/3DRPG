@@ -64,6 +64,16 @@ public class Wizard_Char : Char_Base
 
     void SetAction(int _idx)
     {
+
+        if (m_nPlayerMP < DBManager.SkillData[CharStatus.SID[_idx]].SM)
+        {
+            skillAction = SingleTargetBullet;
+            animator.SetBool("Attack", true);
+            strActionAniName = "Attack";
+            m_nActionIdx = 0;
+            return;
+        }
+
         switch ((ActionState)_idx)
         {
             case ActionState.Attack:
@@ -161,6 +171,7 @@ public class Wizard_Char : Char_Base
                 {
                     if (CheckEndAni(strActionAniName))
                     {
+                        UseMana(DBManager.SkillData[CharStatus.SID[m_nActionIdx]].SM);
                         SetCharStatus(CharState.Idle);
                     }
                 }
@@ -219,6 +230,7 @@ public class Wizard_Char : Char_Base
             {
                 objTarget = hitcol[0].gameObject;
                 Target = hitcol[0].gameObject;
+                vecMovePoint = objTarget.transform.position;
             }
 
 
