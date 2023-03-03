@@ -15,6 +15,7 @@ public class Priest_Char : Char_Base
         SetCheck(2);
         m_nPlayerHP = CharStatus.HP;
         m_nPlayerMP = CharStatus.MP;
+        agent.speed = CharStatus.SPD;
     }
 
     // Update is called once per frame

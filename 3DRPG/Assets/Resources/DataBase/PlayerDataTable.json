@@ -3,7 +3,7 @@
     "ID": 0,
     "Name": "기사",
     "PFL": "Prefabs/Character/Player",
-    "ATK": 2,
+    "ATK": 5,
     "DEF": 5,
     "HP": 40,
     "MP": 100,

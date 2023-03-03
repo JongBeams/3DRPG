@@ -15,7 +15,7 @@ public class RedDragon_Char : Char_Base
         SetCheck(2);
         m_nPlayerHP = CharStatus.HP;
         m_bSuperArmor = true;
-
+        agent.speed = CharStatus.SPD;
     }
 
     // Update is called once per frame
@@ -460,15 +460,19 @@ public class RedDragon_Char : Char_Base
         {
             ItemDropData IDD = DBManager.GetItemDropDataByIdx(CharStatus.ID);
             GameManager.Instance.m_nGold += 100;
+
             //Debug.Log(IDD.IDP.Count);
+
             for (int i = 0; i < IDD.IDP.Count; i++)
             {
                 int ran = Random.Range(0, 100);
-                //Debug.Log(i+"번째 아이템 드랍 "+(ran+1)+"/100");
+                Debug.Log(i+"번째 아이템 드랍 "+(ran+1)+"/100");
                 if (ran < IDD.IDP[i])
                 {
-                    GameObject Item = Instantiate(Resources.Load<GameObject>("Prefabs/Item/DropItem"), this.transform.position, Quaternion.identity);
-                    //Debug.Log("드랍성공");
+                    GameObject Item = Instantiate(Resources.Load<GameObject>("Prefabs/Item/DropItem"));
+                    Item.transform.position = this.transform.position + Vector3.up;
+                    Item.transform.rotation = Quaternion.identity;
+                    Debug.Log("드랍성공");
                     //Debug.Log("ItemID : "+ IDD.IDT[i]);
                     //Debug.Log("ItemMesh : "+ DBManager.GetItemStatusByIdx(IDD.IDT[i]).Mesh);
                     //Debug.Log("ItemMaterial : "+ DBManager.GetItemStatusByIdx(IDD.IDT[i]).Material);
@@ -476,7 +480,7 @@ public class RedDragon_Char : Char_Base
                 }
                 else
                 {
-                    //Debug.Log("드랍 실패!");
+                    Debug.Log("드랍 실패!");
                 }
             }
         }

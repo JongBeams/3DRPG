@@ -14,6 +14,7 @@ public class Char_Knight : Char_Base
         m_nPlayerHP = CharStatus.HP;
         m_nPlayerMP = CharStatus.MP;
         m_nIdentityPoint = CharStatus.ISP;
+        agent.speed = CharStatus.SPD;
     }
 
     // Update is called once per frame
@@ -455,7 +456,6 @@ public class Char_Knight : Char_Base
                 m_bSkillUsing[5] = true;
                 agent.updateRotation = false;
                 return;
-                //변동확인hp = 지금HP
             }
 
 

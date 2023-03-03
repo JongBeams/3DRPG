@@ -13,6 +13,7 @@ public class Wizard_Char : Char_Base
         SetCheck(2);
         m_nPlayerHP = CharStatus.HP;
         m_nPlayerMP = CharStatus.MP;
+        agent.speed = CharStatus.SPD;
     }
 
     private void FixedUpdate()

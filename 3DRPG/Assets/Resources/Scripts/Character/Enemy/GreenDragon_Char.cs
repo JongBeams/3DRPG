@@ -14,6 +14,7 @@ public class GreenDragon_Char : Char_Base
         SetCheck(2);
         m_nPlayerHP = CharStatus.HP;
         m_bSuperArmor = true;
+        agent.speed = CharStatus.SPD;
     }
 
     // Update is called once per frame

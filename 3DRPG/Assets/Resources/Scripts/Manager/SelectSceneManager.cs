@@ -161,8 +161,7 @@ public class SelectSceneManager : MonoBehaviour
 
     public void GameStart()
     {
-        SceneManager.LoadScene("InGameScene");
-
+        Player_Inventory.Instance.InventorySave();
         
         PlayerPrefs.SetInt("Player", CharID[0]);
         PlayerPrefs.SetInt("Partner1", CharID[1]);
@@ -170,6 +169,7 @@ public class SelectSceneManager : MonoBehaviour
 
         PlayerPrefs.SetInt("Enemy",EnemyID);
 
+        SceneManager.LoadScene("InGameScene");
     }
 
     public void SelectChar()
