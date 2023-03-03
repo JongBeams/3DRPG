@@ -84,9 +84,9 @@ public class FireBreath : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(objTarget[i]);
+                    //Debug.Log(objTarget[i]);
                     objTarget[i].GetComponent<Char_Base>().delGetDamage((int)(Attacker.CharStatus.ATK * sd.getSkillCeofficientPer1()));
-                    Debug.Log("Hit");
+                    //Debug.Log("Hit - ATK : "+ Attacker.CharStatus.ATK+" °è¼ö : "+ sd.getSkillCeofficientPer1());
                 }
 
             }
@@ -101,51 +101,6 @@ public class FireBreath : MonoBehaviour
             
     }
 
-    void SetRaycast()
-    {
-        SkillData sd = DBManager.SkillData[SkillID];
-
-        if (m_fDis < DBManager.SkillData[SkillID].SR1)
-        {
-            RaycastHit Hit;
-
-
-            int layerMask = Attacker.m_nTargetLayer[0];
-
-
-            if (Physics.Raycast(this.transform.position + (transform.forward * m_fDis) + (-transform.right * sd.SR2 / 2), transform.right, out Hit, sd.SR2, layerMask, QueryTriggerInteraction.Collide) ||
-                Physics.Raycast(this.transform.position + (-transform.right * sd.SR2 / 2), transform.forward, out Hit, m_fDis, layerMask, QueryTriggerInteraction.Collide) ||
-                Physics.Raycast(this.transform.position + (transform.right * sd.SR2 / 2), transform.forward, out Hit, m_fDis, layerMask, QueryTriggerInteraction.Collide))
-            {
-
-                Debug.Log("Hit : " + Hit.collider.gameObject);
-                Hitobj.Add(Hit.collider.gameObject);
-
-                if (Hitobj.Count != Hitobj.Distinct().Count())
-                {
-                    Hitobj = Hitobj.Distinct().ToList();
-                }
-                else
-                {
-                    Debug.Log(Hit.collider.gameObject);
-                    Hit.collider.gameObject.GetComponent<Char_Base>().delGetDamage((int)(Attacker.CharStatus.ATK * sd.getSkillCeofficientPer1()));
-                    Debug.Log("Hit");
-                }
-
-
-            }
-
-            m_fDis += sd.SSPD * Time.deltaTime;
-        }
-        else
-        {
-            Destroy(this.gameObject, 1);
-        }
-
-
-
-
-    }
 
 
     // Update is called once per frame

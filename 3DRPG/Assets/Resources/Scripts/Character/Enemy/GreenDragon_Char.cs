@@ -19,6 +19,7 @@ public class GreenDragon_Char : Char_Base
     // Update is called once per frame
     void Update()
     {
+        //Invoke("UpdateCharStatus", 0.1f);
         UpdateCharStatus();
         Recovery();
         SkillCooTimer();

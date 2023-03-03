@@ -5,19 +5,6 @@ using UnityEngine.AI;
 
 public abstract class Char_Base : MonoBehaviour 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
 
     #region 스테이터스
 

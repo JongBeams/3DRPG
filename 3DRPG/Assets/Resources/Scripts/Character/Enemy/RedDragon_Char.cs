@@ -22,6 +22,7 @@ public class RedDragon_Char : Char_Base
     void Update()
     {
 
+        //Invoke("UpdateCharStatus", 0.1f);
         UpdateCharStatus();
 
         Recovery();
@@ -223,15 +224,6 @@ public class RedDragon_Char : Char_Base
             SetCharStatus(CharState.Stay);
             return;
         }
-
-        if (!m_bTaunt)
-        {
-            int TargetRan = Random.Range(0, targetobj.Count);
-            objTarget = targetobj[TargetRan].gameObject;
-        }
-        if(objTarget!=null)
-            vecMovePoint = objTarget.transform.position;
-
         //Debug.Log(i+","+count + "," + hitcol.Length);
         if (GameManager.Instance.m_nScreenIdx != 2)
         {
@@ -244,62 +236,81 @@ public class RedDragon_Char : Char_Base
             return;
         }
 
-        int random = Random.Range(0, 100);
-        if (Vector3.Distance(objTarget.transform.position, transform.position) < 8f)
+
+        if (!m_bTaunt)
         {
-            if (random < 75)
-            {
-
-                if (Random.Range(0, 2) == 0)
-                {
-                    m_nActionIdx = 1;
-                }
-                else
-                {
-                    m_nActionIdx = 2;
-                }
-
-            }
-            else
-            {
-                //AttackDelayTimer = AttackDelayTime * 2;
-                if (Random.Range(0, 2) == 0)
-                {
-                    m_nActionIdx = 3;
-                }
-                else
-                {
-                    m_nActionIdx = 4;
-                }
-
-            }
-            SetCharStatus(CharState.Action);
+            int TargetRan = Random.Range(0, targetobj.Count);
+            objTarget = targetobj[TargetRan].gameObject;
         }
-        else if (Vector3.Distance(objTarget.transform.position, transform.position) >= 8f && Vector3.Distance(objTarget.transform.position, transform.position) < 20f)
+
+        if (objTarget != null)
         {
-            if (random < 75)
+            vecMovePoint = objTarget.transform.position;
+
+
+
+            int random = Random.Range(0, 100);
+            if (Vector3.Distance(objTarget.transform.position, transform.position) < 8f)
             {
-                if (Random.Range(0, 2) == 0)
+                if (random < 75)
                 {
-                    m_nActionIdx = 3;
+
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        m_nActionIdx = 1;
+                    }
+                    else
+                    {
+                        m_nActionIdx = 2;
+                    }
+
                 }
                 else
                 {
-                    m_nActionIdx = 4;
+                    //AttackDelayTimer = AttackDelayTime * 2;
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        m_nActionIdx = 3;
+                    }
+                    else
+                    {
+                        m_nActionIdx = 4;
+                    }
+
                 }
                 SetCharStatus(CharState.Action);
+                return;
             }
-            else
+            if (Vector3.Distance(objTarget.transform.position, transform.position) >= 8f && Vector3.Distance(objTarget.transform.position, transform.position) <= 20f)
+            {
+                if (random < 75)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        m_nActionIdx = 3;
+                    }
+                    else
+                    {
+                        m_nActionIdx = 4;
+                    }
+                    SetCharStatus(CharState.Action);
+                    return;
+                }
+                else
+                {
+                    agent.SetDestination(vecMovePoint);
+                    SetCharStatus(CharState.Move);
+                    return;
+                }
+            }
+            if(Vector3.Distance(objTarget.transform.position, transform.position) > 20f)
             {
                 agent.SetDestination(vecMovePoint);
                 SetCharStatus(CharState.Move);
+                return;
             }
         }
-        else
-        {
-            agent.SetDestination(vecMovePoint);
-            SetCharStatus(CharState.Move);
-        }
+            
 
     }
 
@@ -308,10 +319,11 @@ public class RedDragon_Char : Char_Base
 
         // 타겟과의 거리
         float dis = Vector3.Distance(transform.position, vecMovePoint);
+        float dis2 = Vector3.Distance(transform.position, objTarget.transform.position);
 
         float Range = 8f;
 
-        if (dis <= Range)
+        if (dis <= Range|| dis2<5f)
         {
             agent.velocity = Vector3.zero;
             SetCharStatus(CharState.Idle);

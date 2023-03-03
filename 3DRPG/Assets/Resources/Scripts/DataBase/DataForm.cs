@@ -13,7 +13,6 @@ public enum CharState
     Hit,
     Death,
     Stay,
-    Delay,
 }
 
 [System.Serializable]

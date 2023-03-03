@@ -15,14 +15,12 @@ public class Wizard_Char : Char_Base
         m_nPlayerMP = CharStatus.MP;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
         UpdateCharStatus();
         Recovery();
         SkillCooTimer();
     }
-
 
     #region 스테이터스
 
@@ -144,7 +142,6 @@ public class Wizard_Char : Char_Base
 
         }
 
-
         CS = _CS;
     }
 
@@ -160,6 +157,7 @@ public class Wizard_Char : Char_Base
                 }
                 break;
             case CharState.Move:
+                //Invoke("MoveAlgorithm", 0.1f);
                 MoveAlgorithm();
                 break;
             case CharState.Action:
@@ -199,20 +197,37 @@ public class Wizard_Char : Char_Base
 
     void SetAlgorithm()
     {
-        //Debug.Log("Check");
 
-        // 범위 탐색
-        int m_nMask = m_nTargetLayer[0] | m_nTargetLayer[1];
-
-        Collider[] hitcol = Physics.OverlapSphere(transform.position, 30f, m_nMask);
-        int count = 0;
-
-        //공격 딜레이 타임
-        //PD.setAttackDelayTimer(PD.getAttackDelayTime());
-        //타겟지정
-        GameObject Target = null;
+        //
+        m_bCheck[1] = false;
 
 
+        List<GameObject> targetobj = new List<GameObject>();
+        if (CharStatus.TYP == LayerMask.NameToLayer("Enemy"))
+        {
+            targetobj.Add(GameManager.Instance.objPlayer);
+            targetobj.Add(InGameSceneManager.Instance.PInfo[0].objPartner);
+            targetobj.Add(InGameSceneManager.Instance.PInfo[1].objPartner);
+        }
+
+        if (CharStatus.TYP == LayerMask.NameToLayer("Player") || CharStatus.TYP == LayerMask.NameToLayer("Partner"))
+        {
+            targetobj.Add(InGameSceneManager.Instance.objEnemy);
+        }
+
+        for (int i = 0; i < targetobj.Count; i++)
+        {
+            if (targetobj[i].GetComponent<Char_Base>().CS == CharState.Death)
+            {
+                targetobj.RemoveAt(i);
+            }
+        }
+
+        if (targetobj.Count == 0)
+        {
+            SetCharStatus(CharState.Stay);
+            return;
+        }
         if (GameManager.Instance.m_nScreenIdx != 2)
         {
             SetCharStatus(CharState.Stay);
@@ -224,103 +239,88 @@ public class Wizard_Char : Char_Base
             return;
         }
 
-        if (hitcol != null)
+
+        if (!m_bTaunt)
         {
-            if (!m_bTaunt)
+            int TargetRan = UnityEngine.Random.Range(0, targetobj.Count);
+            objTarget = targetobj[TargetRan].gameObject;
+        }
+
+
+        if (objTarget != null)
+        {
+            vecMovePoint = objTarget.transform.position;
+
+
+            float dis = Vector3.Distance(transform.position, objTarget.transform.position);
+
+
+            int ran = UnityEngine.Random.Range(0, 3);
+            if (ran == 0)
             {
-                objTarget = hitcol[0].gameObject;
-                Target = hitcol[0].gameObject;
-                vecMovePoint = objTarget.transform.position;
+                m_nActionIdx = 0;
+            }
+            if (ran == 1)
+            {
+                m_nActionIdx = 1;
+            }
+            if (ran == 2)
+            {
+                m_nActionIdx = 2;
             }
 
 
-            //타겟과의 거리
-            Vector3 vecEnemyLookingPoint = new Vector3(Target.transform.position.x, gameObject.transform.position.y, Target.transform.position.z);
-            float dis = Vector3.Distance(gameObject.transform.position, vecEnemyLookingPoint);
-
-            // 행동 설정
-            if (objTarget != null)// 타겟이 존재할때
+            if (dis > 15f)//거리 20 보다 멀때
             {
+                agent.SetDestination(vecMovePoint);
+                SetCharStatus(CharState.Move);
+                return;
+            }
 
-                if (dis > 20f)//거리 20 보다 멀때
-                {
-                    SetCharStatus(CharState.Move);
-                    return;
-                }
-                if (dis < 15f) //거리 15보다 가까울때
-                {
-                    SetCharStatus(CharState.Move);
-                    return;
-                }
-                if (dis >= 15 && dis <= 20) //적정거리
-                {
-                    int ran = UnityEngine.Random.Range(0, 3);
-                    if (ran == 2)
-                    {
-                        if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[2]].getSkillUsingMana() && m_bSkillOn[2])
-                        {
-                            m_nActionIdx = 2;
+            if (dis < 10f) //거리 15보다 가까울때
+            {
+                m_bCheck[1] = true;
+                transform.LookAt(PlayerLookingPoint());
+                vecMovePoint = (this.transform.position - (this.transform.forward * 7.5f));
+                agent.SetDestination(vecMovePoint);
+                SetCharStatus(CharState.Move);
+                return;
+            }
 
-                        }
-                        else
-                        {
-                            m_nActionIdx = 0;
-                        }
-                    }
-                    else if (ran == 1)
-                    {
-                        if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[1]].getSkillUsingMana() && m_bSkillOn[1])
-                        {
-                            m_nActionIdx = 1;
-                        }
-                        else
-                        {
-                            m_nActionIdx = 0;
-                        }
-                    }
-                    else
-                    {
-                        m_nActionIdx = 0;
-                    }
-                    SetCharStatus(CharState.Action);
-                    return;
-
-                }
+            if (dis >= 10f && dis <= 15f) //적정거리
+            {
+                SetCharStatus(CharState.Action);
+                return;
             }
 
 
         }
+
     }
 
     void MoveAlgorithm()
     {
 
+        float dis = Vector3.Distance(transform.position, vecMovePoint);
+        float dis2 = Vector3.Distance(transform.position, objTarget.transform.position);
 
-        // 타겟과의 거리
-        Vector3 vecEnemyLookingPoint = new Vector3(objTarget.transform.position.x, transform.position.y, objTarget.transform.position.z);
-        float dis = Vector3.Distance(transform.position, vecEnemyLookingPoint);
-
-        //Debug.Log("PartnerTargetObj : "+ TargetObj + ", ParterTargetPos : "+vecEnemyLookingPoint+", Dis : "+ dis);
-        // 타겟 체크
-
-        if (dis > 20f) //거리가 20보다 멀때
-        {
-            agent.SetDestination(vecEnemyLookingPoint);
-            return;
-        }
-        if (dis < 15)//거리가 15보다 가까울때
+        if (m_bCheck[1] && dis < 0.5f)
         {
 
-            vecMovePoint = (this.transform.position - (this.transform.forward * 12));
-            agent.SetDestination(vecMovePoint);
+            Debug.Log("Check1");
+            m_bCheck[1] = false;
+            SetCharStatus(CharState.Idle);
+            return;
 
-            return;
         }
-        if (dis >= 15 && dis <= 20)
+
+        if (!m_bCheck[1]&&dis2 <= 15f)
         {
-            SetAlgorithm();
+            Debug.Log("Check1");
+            SetCharStatus(CharState.Action);
             return;
         }
+
 
     }
 
@@ -373,6 +373,7 @@ public class Wizard_Char : Char_Base
             FireBreathEffect.transform.parent = AttackPos;
             FireBreathEffect.transform.localPosition = Vector3.zero;
             FireBreathEffect.transform.localRotation = Quaternion.identity;
+            FireBreathEffect.transform.parent = null;
             FireBreathEffect.GetComponent<ParticleSystem>().Play();
             FireBreathEffect.GetComponent<FireBreath>().Setting(this, CharStatus.SID[2]);
 

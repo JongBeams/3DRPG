@@ -135,49 +135,56 @@ public class InGameSceneManager : MonoBehaviour
 
     void UpdateUI()
     {
+        
         Char_Base CS = GameManager.Instance.objPlayer.GetComponent<Char_Base>();
 
-        //Player
-        PlayerHPBar.value = CS.m_nPlayerHP;
-        PlayerMPBar.value = CS.m_nPlayerMP;
-        PlayerShieldBar.value = CS.m_nIdentityPoint;
-        PlayerHPBar.maxValue = CS.CharStatus.HP;
-        PlayerMPBar.maxValue = CS.CharStatus.MP;
-        PlayerShieldBar.maxValue = CS.CharStatus.ISP;
+        if (CS != null)
+        {
 
-        PlayerSkillCoolTime[0].value = 100 - CS.m_fSkillCoolTimer[1] / 5 * 100;
-        PlayerSkillCoolTime[1].value = 100 - CS.m_fSkillCoolTimer[2] / 7 * 100;
-        PlayerSkillCoolTime[2].value = 100 - CS.m_fSkillCoolTimer[3] / 15 * 100;
-        PlayerSkillCoolTime[3].value = 100 - CS.m_fSkillCoolTimer[4] / 5 * 100;
-
-        PlayerSkillCoolTime[0].maxValue = 100;
-        PlayerSkillCoolTime[1].maxValue = 100;
-        PlayerSkillCoolTime[2].maxValue = 100;
-        PlayerSkillCoolTime[3].maxValue = 100;
-
-        //Partner1
-        PInfo[0].PartnerHPBar.value = PInfo[0].objPartner.GetComponent<Char_Base>().m_nPlayerHP;
-        PInfo[0].PartnerHPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Base>().CharStatus.HP;
-
-        PInfo[0].PartnerMPBar.value = PInfo[0].objPartner.GetComponent<Char_Base>().m_nPlayerMP;
-        PInfo[0].PartnerMPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Base>().CharStatus.MP;
+            //Player
+            PlayerHPBar.value = CS.m_nPlayerHP;
+            PlayerMPBar.value = CS.m_nPlayerMP;
+            PlayerShieldBar.value = CS.m_nIdentityPoint;
+            PlayerHPBar.maxValue = CS.CharStatus.HP;
+            PlayerMPBar.maxValue = CS.CharStatus.MP;
+            PlayerShieldBar.maxValue = CS.CharStatus.ISP;
 
 
-        //Partner2
-        PInfo[1].PartnerHPBar.value = PInfo[1].objPartner.GetComponent<Char_Base>().m_nPlayerHP;
-        PInfo[1].PartnerHPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Base>().CharStatus.HP;
+            PlayerSkillCoolTime[0].value = 100 - CS.m_fSkillCoolTimer[1] / 5 * 100;
+            PlayerSkillCoolTime[1].value = 100 - CS.m_fSkillCoolTimer[2] / 7 * 100;
+            PlayerSkillCoolTime[2].value = 100 - CS.m_fSkillCoolTimer[3] / 15 * 100;
+            PlayerSkillCoolTime[3].value = 100 - CS.m_fSkillCoolTimer[4] / 5 * 100;
 
-        PInfo[1].PartnerMPBar.value = PInfo[1].objPartner.GetComponent<Char_Base>().m_nPlayerMP;
-        PInfo[1].PartnerMPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Base>().CharStatus.MP;
+            PlayerSkillCoolTime[0].maxValue = 100;
+            PlayerSkillCoolTime[1].maxValue = 100;
+            PlayerSkillCoolTime[2].maxValue = 100;
+            PlayerSkillCoolTime[3].maxValue = 100;
 
-        //Enemy
-        EnemyHPBar.value = objEnemy.GetComponent<Char_Base>().m_nPlayerHP;
-        EnemyHPBar.maxValue = objEnemy.GetComponent<Char_Base>().CharStatus.HP;
-        if (objEnemy.GetComponent<Char_Base>().objTarget != null)
-            Target.text = "Target : " + objEnemy.GetComponent<Char_Base>().objTarget.GetComponent<Char_Base>().CharStatus.Name
-                + "\n NextPattern : " + objEnemy.GetComponent<Char_Base>().CS;
+            //Partner1
+            PInfo[0].PartnerHPBar.value = PInfo[0].objPartner.GetComponent<Char_Base>().m_nPlayerHP;
+            PInfo[0].PartnerHPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Base>().CharStatus.HP;
 
-        
+            PInfo[0].PartnerMPBar.value = PInfo[0].objPartner.GetComponent<Char_Base>().m_nPlayerMP;
+            PInfo[0].PartnerMPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Base>().CharStatus.MP;
+
+
+            //Partner2
+            PInfo[1].PartnerHPBar.value = PInfo[1].objPartner.GetComponent<Char_Base>().m_nPlayerHP;
+            PInfo[1].PartnerHPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Base>().CharStatus.HP;
+
+            PInfo[1].PartnerMPBar.value = PInfo[1].objPartner.GetComponent<Char_Base>().m_nPlayerMP;
+            PInfo[1].PartnerMPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Base>().CharStatus.MP;
+
+            //Enemy
+            EnemyHPBar.value = objEnemy.GetComponent<Char_Base>().m_nPlayerHP;
+            EnemyHPBar.maxValue = objEnemy.GetComponent<Char_Base>().CharStatus.HP;
+            if (objEnemy.GetComponent<Char_Base>().objTarget != null)
+                Target.text = "Target : " + objEnemy.GetComponent<Char_Base>().objTarget.GetComponent<Char_Base>().CharStatus.Name
+                    + "\n NextPattern : " + objEnemy.GetComponent<Char_Base>().CS;
+
+        }
+
+
     }
 
 
@@ -222,7 +229,7 @@ public class InGameSceneManager : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         
         UpdateUI();

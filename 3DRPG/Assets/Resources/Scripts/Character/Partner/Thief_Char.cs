@@ -18,6 +18,7 @@ public class Thief_Char : Char_Base
     // Update is called once per frame
     void Update()
     {
+        //Invoke("UpdateCharStatus", 0.1f);
         UpdateCharStatus();
         Recovery();
         SkillCooTimer();
@@ -223,32 +224,35 @@ public class Thief_Char : Char_Base
             vecMovePoint = objTarget.transform.position;
         }
 
-        m_nActionIdx = 0;
-        if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[2]].SM && m_bCheck[0] && m_bSkillOn[2])
+        if (objTarget != null)
         {
-            m_nActionIdx = 2;
+            m_nActionIdx = 0;
+            if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[2]].SM && m_bCheck[0] && m_bSkillOn[2])
+            {
+                m_nActionIdx = 2;
+            }
+            if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[1]].SM && !m_bCheck[0] && m_bSkillOn[1])
+            {
+                m_nActionIdx = 1;
+
+            }
+
+            float dis = Vector3.Distance(transform.position, objTarget.transform.position);
+
+
+            if (dis > 3.5f)
+            {
+                //Debug.Log("Check");
+                agent.SetDestination(vecMovePoint);
+                SetCharStatus(CharState.Move);
+                return;
+            }
+            if (dis <= 3.5f)
+            {
+                SetCharStatus(CharState.Action);
+                return;
+            }
         }
-        if (m_nPlayerMP >= DBManager.SkillData[CharStatus.SID[1]].SM && !m_bCheck[0] && m_bSkillOn[1])
-        {
-            m_nActionIdx = 1;
-
-        }
-
-        float dis = Vector3.Distance(transform.position, objTarget.transform.position);
-
-        //Debug.Log(transform.position+", "+ PlayerLookingPoint()+", "+ objTarget.transform.position + ", " + dis);
-
-        if (dis > 3.5f)
-        {
-            //Debug.Log("Check");
-            agent.SetDestination(vecMovePoint);
-            SetCharStatus(CharState.Move);
-        }
-        else
-        {
-            SetCharStatus(CharState.Action);
-        }
-
     }
 
     void MoveAlgorithm()

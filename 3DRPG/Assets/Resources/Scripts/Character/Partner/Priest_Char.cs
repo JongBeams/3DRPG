@@ -20,6 +20,7 @@ public class Priest_Char : Char_Base
     // Update is called once per frame
     void Update()
     {
+        //Invoke("UpdateCharStatus", 0.1f);
         UpdateCharStatus();
         Recovery();
         SkillCooTimer();
@@ -338,14 +339,15 @@ public class Priest_Char : Char_Base
     {
 
         float dis = Vector3.Distance(transform.position, vecMovePoint);
+        float dis2 = Vector3.Distance(transform.position, objTarget.transform.position);
 
-        if (m_bCheck[1])
+        if (m_bCheck[1] && dis < 0.5f)
         {
             m_bCheck[1] = false;
             SetCharStatus(CharState.Idle);
             return;
         }
-        if (dis >= 15 && dis <= 20)
+        if (!m_bCheck[1] && dis2 <= 20)
         {
             Debug.Log("Check");
             m_nActionIdx = 0;
