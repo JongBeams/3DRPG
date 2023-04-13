@@ -5,37 +5,6 @@ using UnityEditor;
 
 
 [System.Serializable]
-public enum CharState
-{
-    Idle,
-    Move,
-    Action,
-    Hit,
-    Death,
-    Stay,
-}
-
-[System.Serializable]
-public enum ItemType
-{
-    Empty,
-    Wearable,
-    Expendalbe
-}
-
-[System.Serializable]
-public enum ActionState
-{
-    Attack,
-    Skill1,
-    Skill2,
-    Skill3,
-    Skill4,
-    IdentitySkill,
-}
-
-
-[System.Serializable]
 public class TradeNPCData
 {
     public int ID;
@@ -225,13 +194,13 @@ public class PlayerCharData : CharData {
 
     //캐릭터 스킬 ID
     // AI 캐릭터, 플레이어 사용
-    public int SID[0];
+    public int S0ID;
     // 적 유닛, AI 캐릭터, 플레이어 사용
-    public int SID[1];
-    public int SID[2];
+    public int S1ID;
+    public int S2ID;
     // 적 유닛, 플레이어 사용
-    public int SID[3];
-    public int SID[4];
+    public int S3ID;
+    public int S4ID;
     // 플레이어 사용
     public int ISID;
 
@@ -251,11 +220,11 @@ public class PlayerCharData : CharData {
         SPD = 0;
         MPRP = 0;
         TYP = 0;
-        SID[0] = 0;
-        SID[1] = 0;
-        SID[2] = 0;
-        SID[3] = 0;
-        SID[4] = 0;
+        S0ID = 0;
+        S1ID = 0;
+        S2ID = 0;
+        S3ID = 0;
+        S4ID = 0;
         ISID = 0;
         ISP = 0;
         ISPRP = 0;
@@ -279,11 +248,11 @@ public class PlayerCharData : CharData {
         SPD = _Speed;
         MPRP = _MP_Recovery;
         TYP = _Layer;
-        SID[0] = _AttackID;
-        SID[1] = _Skill1ID;
-        SID[2] = _Skill2ID;
-        SID[3] = _Skill3ID;
-        SID[4] = _Skill4ID;
+        S0ID = _AttackID;
+        S1ID = _Skill1ID;
+        S2ID = _Skill2ID;
+        S3ID = _Skill3ID;
+        S4ID = _Skill4ID;
         ISID = _IdentitySkillID;
         ISP = _IdentitySkillPoint;
         ISPRP = _IdentitySkillPointRecovery;
@@ -315,10 +284,10 @@ public class PartnerCharData : CharData
 
     //캐릭터 스킬 ID
     // AI 캐릭터, 플레이어 사용
-    public int SID[0];
+    public int S0ID;
     // 적 유닛, AI 캐릭터, 플레이어 사용
-    public int SID[1];
-    public int SID[2];
+    public int S1ID;
+    public int S2ID;
 
     public PartnerCharData()
     {
@@ -331,9 +300,9 @@ public class PartnerCharData : CharData
         SPD = 0;
         MPRP = 0;
         TYP = 0;
-        SID[0] = 0;
-        SID[1] = 0;
-        SID[2] = 0;
+        S0ID = 0;
+        S1ID = 0;
+        S2ID = 0;
         PFL = "";
     }
 
@@ -349,9 +318,9 @@ public class PartnerCharData : CharData
         SPD = _Speed;
         MPRP = _MP_Recovery;
         TYP = _Layer;
-        SID[0] = _AttackID;
-        SID[1] = _Skill1ID;
-        SID[2] = _Skill2ID;
+        S0ID = _AttackID;
+        S1ID = _Skill1ID;
+        S2ID = _Skill2ID;
         PFL = _ObjPrefab;
     }
 
@@ -375,11 +344,11 @@ public class EnemyCharData : CharData
 
     //캐릭터 스킬 ID
     // 적 유닛, AI 캐릭터, 플레이어 사용
-    public int SID[1];
-    public int SID[2];
+    public int S1ID;
+    public int S2ID;
     // 적 유닛, 플레이어 사용
-    public int SID[3];
-    public int SID[4];
+    public int S3ID;
+    public int S4ID;
     // 플레이어 사용
     public int ISID;
 
@@ -392,10 +361,10 @@ public class EnemyCharData : CharData
         HP = 0;
         SPD = 0;
         TYP = 0;
-        SID[1] = 0;
-        SID[2] = 0;
-        SID[3] = 0;
-        SID[4] = 0;
+        S1ID = 0;
+        S2ID = 0;
+        S3ID = 0;
+        S4ID = 0;
         PFL = "";
 
     }
@@ -409,10 +378,10 @@ public class EnemyCharData : CharData
         HP = _HP;
         SPD = _Speed;
         TYP = _Layer;
-        SID[1] = _Skill1ID;
-        SID[2] = _Skill2ID;
-        SID[3] = _Skill3ID;
-        SID[4] = _Skill4ID;
+        S1ID = _Skill1ID;
+        S2ID = _Skill2ID;
+        S3ID = _Skill3ID;
+        S4ID = _Skill4ID;
         PFL = _ObjPrefab;
 
     }
@@ -498,10 +467,13 @@ public class ItemData : CharData
 public class CharData
 {
 
+
     //ID
     public int ID;
     //캐릭터명
     public string Name;
+    //게임 오브젝트 프리펩 위치
+    public string PFL;
     //공격력
     public int ATK;
     //방어력
@@ -517,17 +489,23 @@ public class CharData
     //레이어 구분
     public int TYP;
 
+    //캐릭터 스킬 ID
+    // AI 캐릭터, 플레이어 사용
+    public int S0ID;
+    // 적 유닛, AI 캐릭터, 플레이어 사용
+    public int S1ID;
+    public int S2ID;
+    // 적 유닛, 플레이어 사용
+    public int S3ID;
+    public int S4ID;
+    // 플레이어 사용
+    public int ISID;
 
-    //오브젝트 프리펩 위치
-    public string PFL;
-    public int[] SID;
-
-    //고유 스킬 포인트
+    //플레이어 고유 스킬
     public int ISP;
-    //고유 스킬 회복양
     public int ISPRP;
-    //고유 스킬 회복시간
     public float ISPRT;
+
 
 
     public CharData()
@@ -535,6 +513,101 @@ public class CharData
 
     }
 
+    //ID
+    public int getID()
+    {
+        return ID;
+    }
+    //캐릭터명
+    public string getName()
+    {
+        return Name;
+    }
+    //공격력
+    public int getATK()
+    {
+        return ATK;
+    }
+    //방어력
+    public int getDEF()
+    {
+        return DEF;
+    }
+    //HP
+    public int getHP()
+    {
+        return HP;
+    }
+    //MP
+    public int getMP()
+    {
+        return MP;
+    }
+    //이동속도
+    public float getSpeed()
+    {
+        return SPD;
+    }
+    //마나 회복 속도
+    public float getMP_Recovery()
+    {
+        return MPRP;
+    }
+    //레이어 구분
+    public int getTYP()
+    {
+        return TYP;
+    }
+
+    //플레이어 고유 스킬
+    public int getIdentitySkillPoint()
+    {
+        return ISP;
+    }
+    public int getIdentitySkillPointRecovery()
+    {
+        return ISPRP;
+    }
+    public float getIdentityPointRecoveryTime()
+    {
+        return ISPRT;
+    }
+
+    //캐릭터 스킬 ID
+    // AI 캐릭터, 플레이어 사용
+    public int getAttackID()
+    {
+        return S0ID;
+    }
+    // 적 유닛, AI 캐릭터, 플레이어 사용
+    public int getSkill1ID()
+    {
+        return S1ID;
+    }
+    public int getSkill2ID()
+    {
+        return S2ID;
+    }
+    // 적 유닛, 플레이어 사용
+    public int getSkill3ID()
+    {
+        return S3ID;
+    }
+    public int getSkill4ID()
+    {
+        return S4ID;
+    }
+    // 플레이어 사용
+    public int getIdentitySkillID()
+    {
+        return ISID;
+    }
+
+    //게임 오브젝트 프리펩 위치
+    public string getObjPrefab()
+    {
+        return PFL;
+    }
 
 }
 
@@ -543,21 +616,11 @@ public class CharData
 [System.Serializable]
 public class PlayerCharData : CharData
 {
-    
-
-
-
-    public PlayerCharData()
-    {
-
-    }
-
     public PlayerCharData(
         int _ID, string _Name, int _ATK, int _DEF,int _HP,int _MP,float _Speed,float _MP_Recovery,int _Layer,
         int _AttackID,int _Skill1ID,int _Skill2ID,int _Skill3ID,int _Skill4ID,
         int _IdentitySkillID,int _IdentitySkillPoint, int _IdentitySkillPointRecovery,float _IdentityPointRecoveryTime,string _ObjPrefab)
     {
-        SID = new int[5];
         ID = _ID;
         Name = _Name;
         ATK = _ATK;
@@ -567,12 +630,12 @@ public class PlayerCharData : CharData
         SPD = _Speed;
         MPRP = _MP_Recovery;
         TYP = _Layer;
-        SID[0] = _AttackID;
-        SID[1] = _Skill1ID;
-        SID[2] = _Skill2ID;
-        SID[3] = _Skill3ID;
-        SID[4] = _Skill4ID;
-        SID[5] = _IdentitySkillID;
+        S0ID = _AttackID;
+        S1ID = _Skill1ID;
+        S2ID = _Skill2ID;
+        S3ID = _Skill3ID;
+        S4ID = _Skill4ID;
+        ISID = _IdentitySkillID;
         ISP = _IdentitySkillPoint;
         ISPRP = _IdentitySkillPointRecovery;
         ISPRT = _IdentityPointRecoveryTime;
@@ -586,10 +649,8 @@ public class PlayerCharData : CharData
 [System.Serializable]
 public class PartnerCharData : CharData
 {
-
     public PartnerCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, int _MP, float _Speed, float _MP_Recovery, int _Layer, int _AttackID, int _Skill1ID, int _Skill2ID, string _ObjPrefab)
     {
-        SID = new int[3];
         ID = _ID;
         Name = _Name;
         ATK = _ATK;
@@ -599,9 +660,9 @@ public class PartnerCharData : CharData
         SPD = _Speed;
         MPRP = _MP_Recovery;
         TYP = _Layer;
-        SID[0] = _AttackID;
-        SID[1] = _Skill1ID;
-        SID[2] = _Skill2ID;
+        S0ID = _AttackID;
+        S1ID = _Skill1ID;
+        S2ID = _Skill2ID;
         PFL = _ObjPrefab;
     }
 
@@ -612,10 +673,8 @@ public class PartnerCharData : CharData
 public class EnemyCharData : CharData
 {
 
-
     public EnemyCharData(int _ID, string _Name, int _ATK, int _DEF, int _HP, float _Speed, int _Layer, int _Skill1ID, int _Skill2ID, int _Skill3ID, int _Skill4ID, string _ObjPrefab)
     {
-        SID = new int[4];
         ID = _ID;
         Name = _Name;
         ATK = _ATK;
@@ -623,10 +682,10 @@ public class EnemyCharData : CharData
         HP = _HP;
         SPD = _Speed;
         TYP = _Layer;
-        SID[0] = _Skill1ID;
-        SID[1] = _Skill2ID;
-        SID[2] = _Skill3ID;
-        SID[3] = _Skill4ID;
+        S1ID = _Skill1ID;
+        S2ID = _Skill2ID;
+        S3ID = _Skill3ID;
+        S4ID = _Skill4ID;
         PFL = _ObjPrefab;
 
     }
@@ -679,5 +738,17 @@ public class ItemData : CharData
         SG = _SG;
     }
 
+    public string getItemSprite()
+    {
+        return IMG;
+    }
+    public string getItemMesh()
+    {
+        return Mesh;
+    }
+    public string getItemMaterial()
+    {
+        return Material;
+    }
 
 }

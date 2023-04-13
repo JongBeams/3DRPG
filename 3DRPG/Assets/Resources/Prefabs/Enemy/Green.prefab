@@ -2216,9 +2216,9 @@ GameObject:
   - component: {fileID: 5631856585598765671}
   - component: {fileID: 5631856585598765691}
   - component: {fileID: 5631856585598765690}
-  - component: {fileID: 8027688599808176714}
-  - component: {fileID: 7262681281056975171}
-  m_Layer: 8
+  - component: {fileID: 5631856585598765689}
+  - component: {fileID: 5631856585598765688}
+  m_Layer: 0
   m_Name: Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2291,29 +2291,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4, y: 4, z: 4}
   m_Center: {x: 0, y: 2, z: 0}
---- !u!195 &8027688599808176714
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5631856585591474327}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 720
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!114 &7262681281056975171
+--- !u!114 &5631856585598765689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2322,43 +2300,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 5631856585591474327}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b97ed0752d13fa4cb33534e95cf4728, type: 3}
+  m_Script: {fileID: 11500000, guid: eaf1c78d98a4f714eb9fc7d82d983f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharStatus:
-    ID: 0
-    Name: 
-    ATK: 0
-    DEF: 0
-    HP: 0
-    MP: 0
-    SPD: 0
-    MPRP: 0
-    TYP: 0
-    PFL: 
-    SID: 
-    ISP: 0
-    ISPRP: 0
-    ISPRT: 0
-  m_nPlayerHP: 0
-  m_nPlayerMP: 0
-  m_fPlayerMPRecoveryTimer: 0
-  m_nIdentityPoint: 0
-  m_fDRper: 0
+  m_nPlayerHP: 10
   CS: 0
   objTarget: {fileID: 0}
-  vecMovePoint: {x: 0, y: 0, z: 0}
-  m_bProtectBuff: 0
-  m_bSuperArmor: 0
-  m_bTaunt: 0
-  m_bCheck: 
-  itemSlots: []
-  m_fSkillCoolTimer: []
-  m_bSkillOn: 
-  m_bSkillUsing: 
-  m_nTargetLayer: 
-  m_nActionIdx: 0
-  strActionAniName: 
+--- !u!114 &5631856585598765688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5631856585591474327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ace79889ef65e49b684836715697e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5631856585591474635
 GameObject:
   m_ObjectHideFlags: 0

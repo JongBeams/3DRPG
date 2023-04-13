@@ -3,27 +3,31 @@
     "ID": 1,
     "Name": "사제",
     "PFL": "Prefabs/Character/Healer",
-    "ATK": 4,
+    "ATK": 2,
     "DEF": 5,
     "HP": 20,
     "MP": 200,
     "SPD": 4,
-    "MPRP": 30,
+    "MPRP": 3,
     "TYP": 9,
-    "SID": [ 0,1,2 ]
+    "S0ID": 0,
+    "S1ID": 1,
+    "S2ID": 2
   },
   {
     "ID": 2,
     "Name": "도적",
     "PFL": "Prefabs/Character/Thief",
-    "ATK": 10,
+    "ATK": 4,
     "DEF": 5,
     "HP": 20,
     "MP": 100,
     "SPD": 4,
-    "MPRP": 30,
+    "MPRP": 3,
     "TYP": 9,
-    "SID": [ 3, 4, 5 ]
+    "S0ID": 3,
+    "S1ID": 4,
+    "S2ID": 5
   },
   {
     "ID": 3,
@@ -32,10 +36,12 @@
     "ATK": 10,
     "DEF": 5,
     "HP": 20,
-    "MP": 200,
+    "MP": 1000,
     "SPD": 4,
-    "MPRP": 50,
+    "MPRP": 3,
     "TYP": 9,
-    "SID": [ 0, 16, 17 ]
+    "S0ID": 0,
+    "S1ID": 16,
+    "S2ID": 17
   }
 ]

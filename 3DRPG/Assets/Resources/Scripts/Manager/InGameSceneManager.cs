@@ -46,9 +46,9 @@ public class InGameSceneManager : MonoBehaviour
 
     public bool CharAllDeathCheck()
     {
-        if(GameManager.Instance.objPlayer.GetComponent<Char_Base>().CS == CharState.Death &&
-            PInfo[0].objPartner.GetComponent<Char_Base>().CS == CharState.Death &&
-            PInfo[1].objPartner.GetComponent<Char_Base>().CS == CharState.Death)
+        if(GameManager.Instance.objPlayer.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
+            PInfo[0].objPartner.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death &&
+            PInfo[1].objPartner.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death)
         {
             return true;
         }
@@ -84,7 +84,6 @@ public class InGameSceneManager : MonoBehaviour
         Player_Inventory.Instance.InventoryLoad();
 
         getInstanceChar();
-        GameManager.Instance.m_nScreenIdx = SceneManager.GetActiveScene().buildIndex;
     }
 
 
@@ -92,35 +91,35 @@ public class InGameSceneManager : MonoBehaviour
     {
         m_nEnemyID = PlayerPrefs.GetInt("Enemy");
         //
-        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[PlayerPrefs.GetInt("Player")].PFL), new Vector3(0, 0, -15), Quaternion.identity);
-        GameObject Partner1Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")].PFL), new Vector3(5, 0, -17), Quaternion.identity);
-        GameObject Partner2Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")].PFL), new Vector3(-5, 0, -17), Quaternion.identity);
-        GameObject EnemyObj = Instantiate(Resources.Load<GameObject>(DBManager.EnemyData[m_nEnemyID].PFL), new Vector3(0, 0, 15), Quaternion.identity);
+        GameObject PlayerObj = Instantiate(Resources.Load<GameObject>(DBManager.PlayerData[PlayerPrefs.GetInt("Player")].getObjPrefab()), new Vector3(0, 0, -15), Quaternion.identity);
+        GameObject Partner1Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")].getObjPrefab()), new Vector3(5, 0, -17), Quaternion.identity);
+        GameObject Partner2Obj = Instantiate(Resources.Load<GameObject>(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")].getObjPrefab()), new Vector3(-5, 0, -17), Quaternion.identity);
+        GameObject EnemyObj = Instantiate(Resources.Load<GameObject>(DBManager.EnemyData[m_nEnemyID].getObjPrefab()), new Vector3(0, 0, 15), Quaternion.identity);
 
         GameManager.Instance.objPlayer = PlayerObj;
         PInfo[0].objPartner = Partner1Obj;
         PInfo[1].objPartner = Partner2Obj;
         objEnemy = EnemyObj;
 
-        GameManager.Instance.objPlayer.GetComponent<Char_Base>().CharStatus=(DBManager.PlayerData[PlayerPrefs.GetInt("Player")]);
-        PInfo[0].objPartner.GetComponent<Char_Base>().CharStatus=DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")];
-        PInfo[1].objPartner.GetComponent<Char_Base>().CharStatus=DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")];
+        GameManager.Instance.objPlayer.GetComponent<Char_Status>().CharStatusSetting(DBManager.PlayerData[PlayerPrefs.GetInt("Player")]);
+        PInfo[0].objPartner.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner1")]);
+        PInfo[1].objPartner.GetComponent<Char_Status>().CharStatusSetting(DBManager.PartnerData[PlayerPrefs.GetInt("Partner2")]);
 
-        GameManager.Instance.objPlayer.GetComponent<Char_Base>().itemSlots=new ItemSlot[Player_Inventory.Instance.getPlayerSlot()];
-        PInfo[0].objPartner.GetComponent<Char_Base>().itemSlots = new ItemSlot[Player_Inventory.Instance.getPartner1Slot()];
-        PInfo[1].objPartner.GetComponent<Char_Base>().itemSlots = new ItemSlot[Player_Inventory.Instance.getPartner2Slot()];
+        GameManager.Instance.objPlayer.GetComponent<Char_Status>().setItemSlotsNum(Player_Inventory.Instance.getPlayerSlot());
+        PInfo[0].objPartner.GetComponent<Char_Status>().setItemSlotsNum(Player_Inventory.Instance.getPartner1Slot());
+        PInfo[1].objPartner.GetComponent<Char_Status>().setItemSlotsNum(Player_Inventory.Instance.getPartner2Slot());
 
-        GameManager.Instance.objPlayer.GetComponent<Char_Base>().itemSlots[0]= Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor)];
-        GameManager.Instance.objPlayer.GetComponent<Char_Base>().itemSlots[1]= Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + 1];
+        GameManager.Instance.objPlayer.GetComponent<Char_Status>().setItemSlots(0, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor)]);
+        GameManager.Instance.objPlayer.GetComponent<Char_Status>().setItemSlots(1, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + 1]);
 
-        PInfo[0].objPartner.GetComponent<Char_Base>().itemSlots[0]= Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot()];
-        PInfo[0].objPartner.GetComponent<Char_Base>().itemSlots[1]= Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot() + 1];
+        PInfo[0].objPartner.GetComponent<Char_Status>().setItemSlots(0, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot()]);
+        PInfo[0].objPartner.GetComponent<Char_Status>().setItemSlots(1, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot() + 1]);
 
-        PInfo[1].objPartner.GetComponent<Char_Base>().itemSlots[0]= Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot() + Player_Inventory.Instance.getPartner1Slot()];
-        PInfo[1].objPartner.GetComponent<Char_Base>().itemSlots[1]= Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot() + Player_Inventory.Instance.getPartner1Slot() + 1];
+        PInfo[1].objPartner.GetComponent<Char_Status>().setItemSlots(0, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot() + Player_Inventory.Instance.getPartner1Slot()]);
+        PInfo[1].objPartner.GetComponent<Char_Status>().setItemSlots(1, Player_Inventory.Instance.m_lSlot[(Player_Inventory.Instance.ver * Player_Inventory.Instance.hor) + Player_Inventory.Instance.getPlayerSlot() + Player_Inventory.Instance.getPartner1Slot() + 1]);
 
-        objEnemy.GetComponent<Char_Base>().CharStatus=(DBManager.EnemyData[m_nEnemyID]);
-        objEnemy.GetComponent<Char_Base>().m_bSuperArmor=true;
+        objEnemy.GetComponent<Char_Status>().CharStatusSetting(DBManager.EnemyData[m_nEnemyID]);
+        objEnemy.GetComponent<Char_Status>().SetSuperArmor(true);
 
         PInfo[0].PartnerCam.transform.parent = Partner1Obj.transform;
         PInfo[0].PartnerCam.transform.localPosition = new Vector3(0, 1.4f, 1.5f);
@@ -135,56 +134,49 @@ public class InGameSceneManager : MonoBehaviour
 
     void UpdateUI()
     {
+        Char_Status CS = GameManager.Instance.objPlayer.GetComponent<Char_Status>();
+
+        //Player
+        PlayerHPBar.value = CS.getHP();
+        PlayerMPBar.value = CS.getMP();
+        PlayerShieldBar.value = CS.getIdentityPoint();
+        PlayerHPBar.maxValue = CS.getHPMax();
+        PlayerMPBar.maxValue = CS.getMPMax();
+        PlayerShieldBar.maxValue = CS.getIdentityPointMax();
+
+        PlayerSkillCoolTime[0].value = 100 - CS.getSkill1CoolTimer() / 5 * 100;
+        PlayerSkillCoolTime[1].value = 100 - CS.getSkill2CoolTimer() / 7 * 100;
+        PlayerSkillCoolTime[2].value = 100 - CS.getSkill3CoolTimer() / 15 * 100;
+        PlayerSkillCoolTime[3].value = 100 - CS.getSkill4CoolTimer() / 5 * 100;
+
+        PlayerSkillCoolTime[0].maxValue = 100;
+        PlayerSkillCoolTime[1].maxValue = 100;
+        PlayerSkillCoolTime[2].maxValue = 100;
+        PlayerSkillCoolTime[3].maxValue = 100;
+
+        //Partner1
+        PInfo[0].PartnerHPBar.value = PInfo[0].objPartner.GetComponent<Char_Status>().getHP();
+        PInfo[0].PartnerHPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Status>().getHPMax();
+
+        PInfo[0].PartnerMPBar.value = PInfo[0].objPartner.GetComponent<Char_Status>().getMP();
+        PInfo[0].PartnerMPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Status>().getMPMax();
+
+
+        //Partner2
+        PInfo[1].PartnerHPBar.value = PInfo[1].objPartner.GetComponent<Char_Status>().getHP();
+        PInfo[1].PartnerHPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Status>().getHPMax();
+
+        PInfo[1].PartnerMPBar.value = PInfo[1].objPartner.GetComponent<Char_Status>().getMP();
+        PInfo[1].PartnerMPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Status>().getMPMax();
+
+        //Enemy
+        EnemyHPBar.value = objEnemy.GetComponent<Char_Status>().getHP();
+        EnemyHPBar.maxValue = objEnemy.GetComponent<Char_Status>().getHPMax();
+        if (objEnemy.GetComponent<Char_Status>().getObjTarget() != null)
+            Target.text = "Target : " + objEnemy.GetComponent<Char_Status>().objTarget.GetComponent<Char_Status>().getName()
+                + "\n NextPattern : " + objEnemy.GetComponent<Char_Status>().getCS();
+
         
-        Char_Base CS = GameManager.Instance.objPlayer.GetComponent<Char_Base>();
-
-        if (CS != null)
-        {
-
-            //Player
-            PlayerHPBar.value = CS.m_nPlayerHP;
-            PlayerMPBar.value = CS.m_nPlayerMP;
-            PlayerShieldBar.value = CS.m_nIdentityPoint;
-            PlayerHPBar.maxValue = CS.CharStatus.HP;
-            PlayerMPBar.maxValue = CS.CharStatus.MP;
-            PlayerShieldBar.maxValue = CS.CharStatus.ISP;
-
-
-            PlayerSkillCoolTime[0].value = 100 - CS.m_fSkillCoolTimer[1] / 5 * 100;
-            PlayerSkillCoolTime[1].value = 100 - CS.m_fSkillCoolTimer[2] / 7 * 100;
-            PlayerSkillCoolTime[2].value = 100 - CS.m_fSkillCoolTimer[3] / 15 * 100;
-            PlayerSkillCoolTime[3].value = 100 - CS.m_fSkillCoolTimer[4] / 5 * 100;
-
-            PlayerSkillCoolTime[0].maxValue = 100;
-            PlayerSkillCoolTime[1].maxValue = 100;
-            PlayerSkillCoolTime[2].maxValue = 100;
-            PlayerSkillCoolTime[3].maxValue = 100;
-
-            //Partner1
-            PInfo[0].PartnerHPBar.value = PInfo[0].objPartner.GetComponent<Char_Base>().m_nPlayerHP;
-            PInfo[0].PartnerHPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Base>().CharStatus.HP;
-
-            PInfo[0].PartnerMPBar.value = PInfo[0].objPartner.GetComponent<Char_Base>().m_nPlayerMP;
-            PInfo[0].PartnerMPBar.maxValue = PInfo[0].objPartner.GetComponent<Char_Base>().CharStatus.MP;
-
-
-            //Partner2
-            PInfo[1].PartnerHPBar.value = PInfo[1].objPartner.GetComponent<Char_Base>().m_nPlayerHP;
-            PInfo[1].PartnerHPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Base>().CharStatus.HP;
-
-            PInfo[1].PartnerMPBar.value = PInfo[1].objPartner.GetComponent<Char_Base>().m_nPlayerMP;
-            PInfo[1].PartnerMPBar.maxValue = PInfo[1].objPartner.GetComponent<Char_Base>().CharStatus.MP;
-
-            //Enemy
-            EnemyHPBar.value = objEnemy.GetComponent<Char_Base>().m_nPlayerHP;
-            EnemyHPBar.maxValue = objEnemy.GetComponent<Char_Base>().CharStatus.HP;
-            if (objEnemy.GetComponent<Char_Base>().objTarget != null)
-                Target.text = "Target : " + objEnemy.GetComponent<Char_Base>().objTarget.GetComponent<Char_Base>().CharStatus.Name
-                    + "\n NextPattern : " + objEnemy.GetComponent<Char_Base>().CS;
-
-        }
-
-
     }
 
 
@@ -196,7 +188,7 @@ public class InGameSceneManager : MonoBehaviour
             objGameEnd.SetActive(true);
             objGameEndMessage.text = "Game Over";
         }
-        if (objEnemy.GetComponent<Char_Base>().CS == CharState.Death)
+        if (objEnemy.GetComponent<Char_Status>().getCS() == GameManager.CharState.Death)
         {
             m_bGameEnd = true;
             //objGameEnd.SetActive(true);
@@ -229,9 +221,8 @@ public class InGameSceneManager : MonoBehaviour
 
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        
         UpdateUI();
 
         GameEndText();

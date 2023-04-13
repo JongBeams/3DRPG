@@ -14,7 +14,6 @@ public class DropItemInfo : MonoBehaviour
     int ID = 0;
 
     float rotate = 0;
-    bool getidem = false;
 
     // Start is called before the first frame update
     void Start()
@@ -46,22 +45,14 @@ public class DropItemInfo : MonoBehaviour
         {
             rotate = 0;
         }
-
-        float dis = Vector3.Distance(GameManager.Instance.objPlayer.transform.position, this.transform.position);
-
-        if (!getidem&&dis < 1f)
-        {
-            Player_Inventory.Instance.AddItem(ID);
-            Destroy(this.gameObject, 0.1f);
-            getidem = true;
-        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.layer==LayerMask.NameToLayer("Player"))
         {
-            
+            Player_Inventory.Instance.AddItem(ID);
+            Destroy(this.gameObject, 0.1f);
         }
     }
 

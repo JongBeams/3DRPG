@@ -87,7 +87,7 @@ public class TradeUI : MonoBehaviour
         for (i = 0; i < m_lSlot.Count; i++)
         {
             //            Debug.Log((i+1)+"¹øÂ° Ä­ ItemID : "+slotScripts[i].item.ItemID);
-            if (m_lSlot[i].item.ID == 0)
+            if (m_lSlot[i].item.getID() == 0)
             {
                 m_lSlot[i].item = DBManager.ItemData[itmeID];
                 ItemImageChange(m_lSlot[i].transform);
@@ -104,12 +104,12 @@ public class TradeUI : MonoBehaviour
 
     void ItemImageChange(Transform _slot)
     {
-        if (_slot.GetComponent<ItemSlot>().item.ID == 0)
+        if (_slot.GetComponent<ItemSlot>().item.getID() == 0)
             _slot.GetChild(0).gameObject.SetActive(false);
         else
         {
             _slot.GetChild(0).gameObject.SetActive(true);
-            _slot.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>(_slot.GetComponent<ItemSlot>().item.IMG);
+            _slot.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>(_slot.GetComponent<ItemSlot>().item.getItemSprite());
             _slot.GetChild(0).GetComponent<RectTransform>().sizeDelta = _slot.GetComponent<RectTransform>().sizeDelta;
         }
     }
@@ -121,7 +121,7 @@ public class TradeUI : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                if (GameManager.Instance.UIObj.tag == "TItemSlot"&& GameManager.Instance.UIObj.GetComponent<ItemSlot>().item.TYP!=0)
+                if (GameManager.Instance.UIObj.tag == "TItemSlot"&& GameManager.Instance.UIObj.GetComponent<ItemSlot>().item.getTYP()!=0)
                 {
                     //Debug.Log(GameManager.Instance.UIObj.transform);
                     if (TradeItem == GameManager.Instance.UIObj.transform)
@@ -141,7 +141,7 @@ public class TradeUI : MonoBehaviour
                 }
 
 
-                if (GameManager.Instance.UIObj.tag == "ItemSlot" && GameManager.Instance.UIObj.GetComponent<ItemSlot>().item.TYP != 0)
+                if (GameManager.Instance.UIObj.tag == "ItemSlot" && GameManager.Instance.UIObj.GetComponent<ItemSlot>().item.getTYP() != 0)
                 {
                     if (TradeItem == GameManager.Instance.UIObj.transform)
                     {
@@ -171,7 +171,7 @@ public class TradeUI : MonoBehaviour
         {
             if (GameManager.Instance.m_nGold >= TradeItem.gameObject.GetComponent<ItemSlot>().item.BG)
             {
-                Player_Inventory.Instance.AddItem(TradeItem.gameObject.GetComponent<ItemSlot>().item.ID);
+                Player_Inventory.Instance.AddItem(TradeItem.gameObject.GetComponent<ItemSlot>().item.getID());
                 GameManager.Instance.m_nGold -= TradeItem.gameObject.GetComponent<ItemSlot>().item.BG;
             }
             

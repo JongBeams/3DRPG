@@ -41,8 +41,6 @@ public class MainScenceManager : MonoBehaviour
         DBManager.Instance.CallDBManager();
         //GameManager.Instance.
         SetResolution();
-
-        //GameManager.Instance.m_nScreenIdx = SceneManager.GetActiveScene().buildIndex;
     }
 
     // Update is called once per frame
