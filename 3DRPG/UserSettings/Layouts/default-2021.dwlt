@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 780.8
   m_ShowMode: 4
-  m_Title: Project
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 12132
+  controlID: 55
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 12133
+  controlID: 56
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 12134
+  controlID: 57
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 12135
+  controlID: 58
 --- !u!114 &9
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -295,8 +295,8 @@ MonoBehaviour:
     y: 0
     width: 319.19995
     height: 730.8
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
@@ -427,21 +427,21 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 3c46deff60fcdeff2e98dfff1e47e0ff284ce0ff9657e0ffdc64e2ff8663e4ff983ae7ff7a11eaff4a78edff1c7aefff087defffcee4effff453f0ff4860f0ff36c6f0ff582ff1ffc49ef1ffb8b2f1ffd6d8f1ff80def1ff56e0f1ff5ae0f1ff5ee0f1fffe62f2ffecc8f2ff6831f3ffcea2f3ffc2c5f3ffdec8f3ff4cd5f3ff50d5f3ffa41df4ffa81df4ff2222f4ff30bdf5fff8c8f5ff00cbf5ff4835f6ffe639f6ff9ea7f6ff88a9f8ff0e10fcff9076ffffac90ffff66a7ffff78a7ffff90a7ffff36afffff06fbfffff4ffffff0a5d0000245d00001c5f00003eb300008e5d0400b45d0400c25d0400365e0400405e04004c5e0400505e0400725e0400c85e0400d85e0400205f0400e45f0400ee5f0400a8a0040004a104003aa2040022a90400c01405000624070056890700a48c0700228f07006697070018c00700
+      m_ExpandedIDs: 9ea5fdff10fcfdff1297feff5aadfeffde58ffff06fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: PlayerSkillQ
-        m_OriginalName: PlayerSkillQ
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 541944
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 9}
       m_SearchString: 
@@ -676,9 +676,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -26.119194, y: -8.384041, z: 51.616024}
+    m_Target: {x: 23.688978, y: -83.1173, z: 37.118214}
     speed: 2
-    m_Value: {x: -26.119194, y: -8.384041, z: 51.616024}
+    m_Value: {x: 23.688978, y: -83.1173, z: 37.118214}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -725,13 +725,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.2580079, y: 0.16809247, z: -0.046813402, w: -0.9507148}
+    m_Target: {x: -0.49107555, y: -0.268681, z: 0.16064048, w: -0.81347704}
     speed: 2
-    m_Value: {x: -0.25789532, y: 0.16801913, z: -0.046792977, w: -0.9503}
+    m_Value: {x: -0.49085593, y: -0.26856083, z: 0.16056864, w: -0.8131133}
   m_Size:
-    m_Target: 49.928627
+    m_Target: 54.523308
     speed: 2
-    m_Value: 49.928627
+    m_Value: 54.523308
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1201,36 +1201,36 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Prefabs
+    - Assets/ASTROFISH_GAMES/MEDIEVAL_SERIES/POLYSTYLE_MEDIEVAL_VILLAGE/_Assets/Medieval_Ground/Prfbs
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources/Prefabs
+  - Assets/ASTROFISH_GAMES/MEDIEVAL_SERIES/POLYSTYLE_MEDIEVAL_VILLAGE/_Assets/Medieval_Ground/Prfbs
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\Beams\Desktop\3DGame\3DRPG
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 167.80002}
-    m_SelectedIDs: 946a0000
-    m_LastClickedID: 27284
-    m_ExpandedIDs: 00000000ba690000bc690000be690000c0690000c2690000c4690000c6690000c8690000ca690000cc690000ce690000946a0000a46a0000ce6b00007cc4000080c4000082c4000086c4000088c400008ac400008cc400008ec4000090c4000092c4000094c4000096c400009ac400009cc40000a0c4000000ca9a3b
+    scrollPos: {x: 0, y: 300}
+    m_SelectedIDs: e65a0100
+    m_LastClickedID: 88806
+    m_ExpandedIDs: 000000000c7900000e79000010790000127900001479000016790000187900001a7900001c79000020790000227900002479000026790000287900002a7900002c7900002e79000030790000327900003479000036790000387900003a7900003c7900003e790000407900004279000044790000707a0000867a00000c5b010000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: SkillEffect
-      m_OriginalName: SkillEffect
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 29528
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 11}
     m_SearchString: 
@@ -1244,7 +1244,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ba690000bc690000be690000c0690000c2690000c4690000ca690000cc690000ce690000806a0000a46a00007cc4000080c4000082c4000086c40000a0c4000000ca9a3b
+    m_ExpandedIDs: 000000000c7900000e79000010790000127900001479000016790000187900001a7900001c7900001e79000020790000227900002479000026790000287900002a7900002c7900002e79000030790000327900003479000036790000387900003a7900003c7900003e790000407900004279000044790000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1271,7 +1271,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000fe840000545d0000e0680000b8680000641e0300d8850200508d0200a4770000ba770000d0770000e87700000c78000030780000b2730100dc7301004ee50000b49c0000725e0000ec9d00000e540100a26900004c6a0000486a00008c6a0000007d00002a810000f0ea000098810000be84000030d4000032d4000002230000002300000000000022c00000826b0000d46b00005c6a0000526b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
